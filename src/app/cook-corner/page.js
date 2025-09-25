@@ -8,7 +8,7 @@ const Momszyka = () => {
   return (
     <div className="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden bg-background-light dark:bg-background-dark font-display text-stone-900 dark:text-stone-100">
       <div className="layout-container flex h-full grow flex-col">
-       
+
         <main className="flex flex-1 flex-col items-center">
           <div className="w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="py-16 sm:py-12">
@@ -111,21 +111,21 @@ const Momszyka = () => {
               <div className="mt-12 max-w-3xl mx-auto">
                 <Accordion type="single" collapsible className="w-full space-y-4">
                   <AccordionItem value="item-1" className="border border-stone-200 dark:border-stone-800 rounded-lg">
-                    <AccordionTrigger className="px-4 py-2">How do I become a cook?</AccordionTrigger>
+                    <AccordionTrigger className="px-4 py-2">How do I become a cook&apos;?</AccordionTrigger>
                     <AccordionContent className="px-4 py-2 text-sm text-stone-600 dark:text-stone-400">
-                      To become a cook, simply sign up on our platform, complete the onboarding process, and start creating your menu. We'll guide you every step of the way.
+                      To become a cook, simply sign up on our platform, complete the onboarding process, and start creating your menu. We&apos;ll guide you every step of the way.
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-2" className="border border-stone-200 dark:border-stone-800 rounded-lg">
                     <AccordionTrigger className="px-4 py-2">What are the requirements?</AccordionTrigger>
                     <AccordionContent className="px-4 py-2 text-sm text-stone-600 dark:text-stone-400">
-                      You'll need a clean kitchen, passion for cooking, and compliance with local food safety regulations. We provide resources to help you meet all requirements.
+                      You&apos;ll need a clean kitchen, passion for cooking, and compliance with local food safety regulations. We provide resources to help you meet all requirements.
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-3" className="border border-stone-200 dark:border-stone-800 rounded-lg">
                     <AccordionTrigger className="px-4 py-2">How do I get paid?</AccordionTrigger>
                     <AccordionContent className="px-4 py-2 text-sm text-stone-600 dark:text-stone-400">
-                      Payments are processed securely through our platform. You'll receive your earnings directly in your bank account on a weekly basis.
+                      Payments are processed securely through our platform. You&apos;ll receive your earnings directly in your bank account on a weekly basis.
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-4" className="border border-stone-200 dark:border-stone-800 rounded-lg">
@@ -136,6 +136,7 @@ const Momszyka = () => {
                   </AccordionItem>
                 </Accordion>
               </div>
+
             </section>
             <section className="py-16 sm:py-24">
               <div className="bg-primary/10 dark:bg-primary/20 rounded-xl p-8 sm:p-12 lg:p-16 text-center">
@@ -148,10 +149,10 @@ const Momszyka = () => {
                 </div>
               </div>
             </section>
-           
+
           </div>
         </main>
-       
+
       </div>
     </div>
   );
