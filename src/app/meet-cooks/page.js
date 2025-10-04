@@ -168,9 +168,9 @@ const MomszykaCooks = () => {
                             </DialogTrigger>
                             <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-lg">
                               <DialogHeader>
-                                <DialogTitle className="text-amber-800 dark:text-amber-100">Maria G.'s Menu</DialogTitle>
+                                <DialogTitle className="text-amber-800 dark:text-amber-100">Maria G.&apos;s Menu</DialogTitle>
                                 <DialogDescription className="text-gray-600 dark:text-gray-300">
-                                  Explore Maria's authentic Italian dishes, including her famous lasagna and tiramisu. Order now to enjoy a taste of Italy!
+                                  Explore Maria&apos;s authentic Italian dishes, including her famous lasagna and tiramisu. Order now to enjoy a taste of Italy!
                                 </DialogDescription>
                               </DialogHeader>
                             </DialogContent>
@@ -206,9 +206,9 @@ const MomszykaCooks = () => {
                             </DialogTrigger>
                             <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-lg">
                               <DialogHeader>
-                                <DialogTitle className="text-amber-800 dark:text-amber-100">Aisha K.'s Menu</DialogTitle>
+                                <DialogTitle className="text-amber-800 dark:text-amber-100">Aisha K.&apos;s Menu</DialogTitle>
                                 <DialogDescription className="text-gray-600 dark:text-gray-300">
-                                  Dive into Aisha's flavorful Indian dishes, from butter chicken to spicy biryani. Order now for a culinary adventure!
+                                  Dive into Aisha&apos;s flavorful Indian dishes, from butter chicken to spicy biryani. Order now for a culinary adventure!
                                 </DialogDescription>
                               </DialogHeader>
                             </DialogContent>
@@ -244,9 +244,9 @@ const MomszykaCooks = () => {
                             </DialogTrigger>
                             <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-lg">
                               <DialogHeader>
-                                <DialogTitle className="text-amber-800 dark:text-amber-100">Carlos M.'s Menu</DialogTitle>
+                                <DialogTitle className="text-amber-800 dark:text-amber-100">Carlos M.&apos;s Menu</DialogTitle>
                                 <DialogDescription className="text-gray-600 dark:text-gray-300">
-                                  Savor Carlos's bold Mexican flavors, from tacos to enchiladas. Order now for a fiesta of taste!
+                                  Savor Carlos&apos;s bold Mexican flavors, from tacos to enchiladas. Order now for a fiesta of taste!
                                 </DialogDescription>
                               </DialogHeader>
                             </DialogContent>
