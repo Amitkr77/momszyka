@@ -10,11 +10,12 @@ import {
   DialogHeader,
   DialogTitle,
   DialogFooter,
-  DialogTrigger ,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Menu } from "lucide-react";
+import { Menu, User } from "lucide-react";
+import { motion } from "framer-motion";
 
 const WaitlistFormDialog = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +24,6 @@ const WaitlistFormDialog = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Here you can add logic to submit the form data, e.g., to an API
     console.log("Submitted:", { name, email });
     alert("Thank you for joining the waitlist!");
     setOpen(false);
@@ -34,27 +34,34 @@ const WaitlistFormDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-primary text-white text-sm font-bold hover:opacity-90 transition-opacity">
-          Join Waitlist
+        <Button className="bg-amber-600 text-white text-sm font-bold hover:bg-amber-700 transition-colors rounded-full">
+          Become a Food Angel
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-amber-50 dark:bg-amber-900 rounded-lg">
         <DialogHeader>
-          <DialogTitle>Join the Waitlist</DialogTitle>
+          <DialogTitle className="text-amber-800 dark:text-amber-100">
+            Join Our Culinary Community
+          </DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="name" className="text-amber-700 dark:text-amber-200">
+              Name
+            </Label>
             <Input
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Enter your name"
               required
+              className="bg-transparent border-amber-300 dark:border-amber-700 focus:ring-amber-500 focus:border-amber-500 rounded-full"
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-amber-700 dark:text-amber-200">
+              Email
+            </Label>
             <Input
               id="email"
               type="email"
@@ -62,10 +69,13 @@ const WaitlistFormDialog = () => {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Enter your email"
               required
+              className="bg-transparent border-amber-300 dark:border-amber-700 focus:ring-amber-500 focus:border-amber-500 rounded-full"
             />
           </div>
           <DialogFooter>
-            <Button type="submit">Submit</Button>
+            <Button type="submit" className="bg-amber-600 hover:bg-amber-700 text-white rounded-full">
+              Submit
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
@@ -74,9 +84,29 @@ const WaitlistFormDialog = () => {
 };
 
 export default function Header() {
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const buttonVariants = {
+    hover: { scale: 1.05, transition: { duration: 0.2 } },
+    tap: { scale: 0.95 },
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm border-b border-primary/20 dark:border-primary/30">
-      <div className="container mx-auto px-6  flex items-center justify-between">
+    <motion.header
+      className={`sticky top-0 z-50 bg-amber-50/80 dark:bg-amber-900/80 backdrop-blur-sm border-b border-amber-200 dark:border-amber-700 transition-shadow ${isScrolled ? "shadow-md" : ""}`}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="container mx-auto px-6 flex items-center justify-between py-2">
         <Link href="/">
           <div className="flex items-center gap-3">
             <img
@@ -84,74 +114,110 @@ export default function Header() {
               alt="Momszyka Logo"
               className="w-12 h-12 md:w-16 md:h-16"
             />
+            <h1 className="text-lg font-bold text-amber-800 dark:text-amber-100">
+              Momszyka
+            </h1>
           </div>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
-          <Link
-            className="text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
-            href="/how-it-works"
-          >
-            How it Works
-          </Link>
-          <Link
-            className="text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
-            href="/cook-corner"
-          >
-            Cooks&apos; Corner
-          </Link>
-          <Link
-            href="/our-story"
-            className="text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
-          >
-            Our story
-          </Link>
-          <Link
-            href="/contact"
-            className="text-sm font-medium hover:text-primary dark:hover:text-primary transition-colors"
-          >
-            Contact
-          </Link>
+          <motion.div variants={buttonVariants} whileHover="hover">
+            <Link
+              className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
+              href="/how-it-works"
+            >
+              How It Works
+            </Link>
+          </motion.div>
+          <motion.div variants={buttonVariants} whileHover="hover">
+            <Link
+              className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
+              href="/meet-cooks"
+            >
+              Meet Our Cooks
+            </Link>
+          </motion.div>
+          <motion.div variants={buttonVariants} whileHover="hover">
+            <Link
+              className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
+              href="/subscribe"
+            >
+              Subscribe
+            </Link>
+          </motion.div>
+          <motion.div variants={buttonVariants} whileHover="hover">
+            <Link
+              className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
+              href="/our-story"
+            >
+              Our Story
+            </Link>
+          </motion.div>
+          <motion.div variants={buttonVariants} whileHover="hover">
+            <Link
+              className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
+              href="/contact"
+            >
+              Contact
+            </Link>
+          </motion.div>
         </nav>
         <div className="flex items-center gap-4">
+          
+          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+            <Button
+              variant="ghost"
+              className="p-2 text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500"
+              aria-label="User profile"
+            >
+              <User className="h-6 w-6" />
+            </Button>
+          </motion.div>
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" className="md:hidden p-2">
-                <Menu className="h-6 w-6" />
-                <span className="sr-only">Open menu</span>
+              <Button variant="ghost" className="md:hidden p-2" aria-label="Open menu">
+                <Menu className="h-6 w-6 text-amber-800 dark:text-amber-100" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-amber-50 dark:bg-amber-900">
               <nav className="flex flex-col gap-4 mt-8">
                 <Link
-                  className="text-sm font-medium hover:text-primary transition-colors"
+                  className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
                   href="/how-it-works"
                 >
-                  How it Works
+                  How It Works
                 </Link>
                 <Link
-                  className="text-sm font-medium hover:text-primary transition-colors"
-                  href="/cook-corner"
+                  className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
+                  href="/meet-cooks"
                 >
-                  Cooks&apos; Corner
+                  Meet Our Cooks
                 </Link>
                 <Link
+                  className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
+                  href="/subscribe"
+                >
+                  Subscribe
+                </Link>
+                <Link
+                  className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
                   href="/our-story"
-                  className="text-sm font-medium hover:text-primary transition-colors"
                 >
-                  Our story
+                  Our Story
                 </Link>
                 <Link
+                  className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
                   href="/contact"
-                  className="text-sm font-medium hover:text-primary transition-colors"
                 >
                   Contact
                 </Link>
               </nav>
             </SheetContent>
           </Sheet>
-          <WaitlistFormDialog />
+          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+            <WaitlistFormDialog />
+          </motion.div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }

@@ -1,63 +1,148 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Phone, Menu, Facebook, Twitter, Instagram } from "lucide-react";
+import {
+  Mail,
+  Phone,
+  MessageCircle,
+  Facebook,
+  Twitter,
+  Instagram,
+} from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 const MomszykaContact = () => {
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut", staggerChildren: 0.2 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: {
+      opacity: 1,
+      x: 0,
+      transition: { duration: 0.5, ease: "easeOut" },
+    },
+  };
+
+  const buttonVariants = {
+    hover: { scale: 1.05, transition: { duration: 0.2 } },
+    tap: { scale: 0.95 },
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormSubmitted(true);
+  };
+
   return (
-    <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark font-display text-neutral-800 dark:text-neutral-200">
+    <div className="flex flex-col min-h-screen bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800 font-display text-amber-800 dark:text-amber-100">
       <main className="max-w-7xl flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-          <div className="space-y-6">
-            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-neutral-900 dark:text-white">
-              Get in Touch
+        <motion.div
+          className="grid lg:grid-cols-2 gap-16 lg:gap-24 items-start"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div className="space-y-6" variants={itemVariants}>
+            <h2 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+              We’re Here for You
             </h2>
-            <p className="text-lg text-neutral-600 dark:text-neutral-400">
-              We're here to help! Reach out to us with any questions or
-              inquiries you may have. Our team is dedicated to providing prompt
-              and helpful assistance.
+            <p className="text-lg text-gray-600 dark:text-gray-300">
+              Have questions or ideas? Connect with our friendly team for 24/7
+              support or join our community to share your love for home-cooked
+              meals.
             </p>
             <div className="space-y-4 pt-4">
-              <div className="flex items-center gap-4">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <Mail className="w-6 h-6 text-primary" />
+              <motion.div
+                className="flex items-center gap-4"
+                variants={itemVariants}
+              >
+                <div className="bg-amber-100 dark:bg-amber-800 p-3 rounded-full">
+                  <Mail className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-neutral-900 dark:text-white">
-                    Email Us
-                  </h3>
+                  <h3 className="font-semibold">Email Us</h3>
                   <a
-                    className="text-primary hover:underline"
+                    className="text-amber-600 hover:underline underline-offset-4"
                     href="mailto:support@momszyka.com"
                   >
                     support@momszyka.com
                   </a>
                 </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="bg-primary/10 p-3 rounded-full">
-                  <Phone className="w-6 h-6 text-primary" />
+              </motion.div>
+              <motion.div
+                className="flex items-center gap-4"
+                variants={itemVariants}
+              >
+                <div className="bg-amber-100 dark:bg-amber-800 p-3 rounded-full">
+                  <Phone className="w-6 h-6 text-amber-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-neutral-900 dark:text-white">
-                    Call Us
-                  </h3>
+                  <h3 className="font-semibold">Call Us</h3>
                   <a
-                    className="text-primary hover:underline"
+                    className="text-amber-600 hover:underline underline-offset-4"
                     href="tel:5551234567"
                   >
                     (555) 123-4567
                   </a>
                 </div>
-              </div>
+              </motion.div>
+              <motion.div
+                className="flex items-center gap-4"
+                variants={itemVariants}
+              >
+                <div className="bg-amber-100 dark:bg-amber-800 p-3 rounded-full">
+                  <MessageCircle className="w-6 h-6 text-amber-600" />
+                </div>
+                <div>
+                  <h3 className="font-semibold">Live Chat</h3>
+                  <Button
+                    className="text-amber-600 hover:underline bg-transparent p-0"
+                    variant="link"
+                  >
+                    Start a Chat
+                  </Button>
+                </div>
+              </motion.div>
             </div>
-          </div>
-          <div className="bg-background-light dark:bg-background-dark p-8 rounded-xl border border-primary/20 dark:border-primary/30">
-            <form action="#" className="space-y-6">
+            <motion.div className="flex gap-4 pt-4" variants={itemVariants}>
+              <a href="#" className="text-amber-600 hover:text-amber-700">
+                <Facebook className="h-6 w-6" />
+              </a>
+              <a href="#" className="text-amber-600 hover:text-amber-700">
+                <Twitter className="h-6 w-6" />
+              </a>
+              <a href="#" className="text-amber-600 hover:text-amber-700">
+                <Instagram className="h-6 w-6" />
+              </a>
+            </motion.div>
+          </motion.div>
+          <motion.div
+            className="bg-amber-50 dark:bg-amber-900 p-8 rounded-xl border border-amber-200 dark:border-amber-700"
+            variants={itemVariants}
+          >
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label
-                  className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                  className="block text-sm font-medium text-amber-700 dark:text-amber-200"
                   htmlFor="name"
                 >
                   Your Name
@@ -68,14 +153,14 @@ const MomszykaContact = () => {
                     name="name"
                     type="text"
                     autoComplete="name"
-                    placeholder="Enter your name"
-                    className="block w-full bg-transparent border-neutral-300 dark:border-neutral-700 focus:ring-primary focus:border-primary rounded-lg"
+                    placeholder="Tell us your name"
+                    className="block w-full bg-transparent border-amber-300 dark:border-amber-700 focus:ring-amber-500 focus:border-amber-500 rounded-full"
                   />
                 </div>
               </div>
               <div>
                 <label
-                  className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                  className="block text-sm font-medium text-amber-700 dark:text-amber-200"
                   htmlFor="email"
                 >
                   Your Email
@@ -86,14 +171,14 @@ const MomszykaContact = () => {
                     name="email"
                     type="email"
                     autoComplete="email"
-                    placeholder="Enter your email"
-                    className="block w-full bg-transparent border-neutral-300 dark:border-neutral-700 focus:ring-primary focus:border-primary rounded-lg"
+                    placeholder="Share your email"
+                    className="block w-full bg-transparent border-amber-300 dark:border-amber-700 focus:ring-amber-500 focus:border-amber-500 rounded-full"
                   />
                 </div>
               </div>
               <div>
                 <label
-                  className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                  className="block text-sm font-medium text-amber-700 dark:text-amber-200"
                   htmlFor="subject"
                 >
                   Subject
@@ -103,14 +188,14 @@ const MomszykaContact = () => {
                     id="subject"
                     name="subject"
                     type="text"
-                    placeholder="Enter the subject"
-                    className="block w-full bg-transparent border-neutral-300 dark:border-neutral-700 focus:ring-primary focus:border-primary rounded-lg"
+                    placeholder="What's on your mind?"
+                    className="block w-full bg-transparent border-amber-300 dark:border-amber-700 focus:ring-amber-500 focus:border-amber-500 rounded-full"
                   />
                 </div>
               </div>
               <div>
                 <label
-                  className="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+                  className="block text-sm font-medium text-amber-700 dark:text-amber-200"
                   htmlFor="message"
                 >
                   Message
@@ -119,24 +204,58 @@ const MomszykaContact = () => {
                   <Textarea
                     id="message"
                     name="message"
-                    placeholder="Enter your message"
+                    placeholder="Tell us how we can delight you!"
                     rows={4}
-                    className="block w-full bg-transparent border-neutral-300 dark:border-neutral-700 focus:ring-primary focus:border-primary rounded-lg"
+                    className="block w-full bg-transparent border-amber-300 dark:border-amber-700 focus:ring-amber-500 focus:border-amber-500 rounded-lg"
                   />
                 </div>
               </div>
-              <div>
+              <motion.div
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+              >
                 <Button
                   type="submit"
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-full text-sm font-bold text-white bg-primary hover:bg-primary/90 focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors"
+                  className="w-full flex justify-center py-3 px-4 rounded-full text-sm font-bold text-white bg-amber-600 hover:bg-amber-700 focus:ring-2 focus:ring-offset-2 focus:ring-amber-500 transition-colors"
                 >
                   Send Message
                 </Button>
-              </div>
+              </motion.div>
             </form>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </main>
+
+      {/* Success Dialog */}
+      <Dialog open={formSubmitted} onOpenChange={setFormSubmitted}>
+        <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-lg">
+          <DialogHeader>
+            <DialogTitle className="text-amber-800 dark:text-amber-100">
+              Thank You for Reaching Out!
+            </DialogTitle>
+            <DialogDescription className="text-gray-600 dark:text-gray-300">
+              We've received your message and will get back to you within 24
+              hours. In the meantime, explore our delicious meals or join our
+              community!
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex gap-4">
+            <Button
+              className="bg-amber-600 hover:bg-amber-700 text-white rounded-full"
+              onClick={() => setFormSubmitted(false)}
+            >
+              Close
+            </Button>
+            <Button
+              className="bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700 rounded-full"
+              asChild
+            >
+              <a href="/how-it-works">Explore Meals</a>
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

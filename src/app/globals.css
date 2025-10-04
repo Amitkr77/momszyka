@@ -3,13 +3,12 @@
 
 @custom-variant dark (&:is(.dark *));
 
-.bg-primary {
-  background-color: #ec7f13;
-}
 
-
-.bg-background-light {
-  background-color: #f8f7f6;
+@theme {
+  --color-new: #ec7f13;
+  --color-light: #f8f7f6;
+  /* --color-primary: #ff000f; */
+  --color-primary: #FF8F00;
 }
 
 
