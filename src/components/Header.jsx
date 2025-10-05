@@ -114,9 +114,9 @@ export default function Header() {
               alt="Momszyka Logo"
               className="w-12 h-12 md:w-16 md:h-16"
             />
-            <h1 className="text-lg font-bold text-amber-800 dark:text-amber-100">
+            {/* <h1 className="text-lg font-bold text-amber-800 dark:text-amber-100">
               Momszyka
-            </h1>
+            </h1> */}
           </div>
         </Link>
         <nav className="hidden md:flex items-center gap-8">
