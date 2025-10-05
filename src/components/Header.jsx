@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Menu, User } from "lucide-react";
 import { motion } from "framer-motion";
+import Form from "./Form";
 
 const WaitlistFormDialog = () => {
   const [open, setOpen] = useState(false);
@@ -46,7 +47,10 @@ const WaitlistFormDialog = () => {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-amber-700 dark:text-amber-200">
+            <Label
+              htmlFor="name"
+              className="text-amber-700 dark:text-amber-200"
+            >
               Name
             </Label>
             <Input
@@ -59,7 +63,10 @@ const WaitlistFormDialog = () => {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-amber-700 dark:text-amber-200">
+            <Label
+              htmlFor="email"
+              className="text-amber-700 dark:text-amber-200"
+            >
               Email
             </Label>
             <Input
@@ -73,7 +80,10 @@ const WaitlistFormDialog = () => {
             />
           </div>
           <DialogFooter>
-            <Button type="submit" className="bg-amber-600 hover:bg-amber-700 text-white rounded-full">
+            <Button
+              type="submit"
+              className="bg-amber-600 hover:bg-amber-700 text-white rounded-full"
+            >
               Submit
             </Button>
           </DialogFooter>
@@ -101,7 +111,9 @@ export default function Header() {
 
   return (
     <motion.header
-      className={`sticky top-0 z-50 bg-amber-50/80 dark:bg-amber-900/80 backdrop-blur-sm border-b border-amber-200 dark:border-amber-700 transition-shadow ${isScrolled ? "shadow-md" : ""}`}
+      className={`sticky top-0 z-50 bg-amber-50/80 dark:bg-amber-900/80 backdrop-blur-sm border-b border-amber-200 dark:border-amber-700 transition-shadow ${
+        isScrolled ? "shadow-md" : ""
+      }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
@@ -162,8 +174,7 @@ export default function Header() {
           </motion.div>
         </nav>
         <div className="flex items-center gap-4">
-          
-          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+          {/* <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
             <Button
               variant="ghost"
               className="p-2 text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500"
@@ -171,14 +182,21 @@ export default function Header() {
             >
               <User className="h-6 w-6" />
             </Button>
-          </motion.div>
+          </motion.div> */}
           <Sheet>
             <SheetTrigger asChild>
-              <Button variant="ghost" className="md:hidden p-2" aria-label="Open menu">
+              <Button
+                variant="ghost"
+                className="md:hidden p-2"
+                aria-label="Open menu"
+              >
                 <Menu className="h-6 w-6 text-amber-800 dark:text-amber-100" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] bg-amber-50 dark:bg-amber-900">
+            <SheetContent
+              side="right"
+              className="w-[300px] sm:w-[400px] bg-amber-50 dark:bg-amber-900"
+            >
               <nav className="flex flex-col gap-4 mt-8">
                 <Link
                   className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
@@ -213,8 +231,13 @@ export default function Header() {
               </nav>
             </SheetContent>
           </Sheet>
-          <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-            <WaitlistFormDialog />
+          <motion.div
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+          >
+            {/* <WaitlistFormDialog /> */}
+            <Form />
           </motion.div>
         </div>
       </div>

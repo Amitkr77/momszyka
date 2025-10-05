@@ -34,7 +34,7 @@ export default function Footer() {
     <footer className="bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800 border-t border-amber-200 dark:border-amber-700">
       <div className="container  mx-auto px-6 py-10">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16"
+          className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 border-b-2 pb-10"
           variants={sectionVariants}
           initial="hidden"
           animate="visible"
@@ -166,11 +166,10 @@ export default function Footer() {
                 </Button>
               </motion.div>
             </div>
-           
           </motion.div>
         </motion.div>
         <motion.p
-          className="mt-12 text-center text-sm text-gray-600 dark:text-gray-300"
+          className="mt-5 text-center text-sm text-gray-600 dark:text-gray-300"
           variants={itemVariants}
         >
           © {new Date().getFullYear()} Momszyka. All rights reserved.

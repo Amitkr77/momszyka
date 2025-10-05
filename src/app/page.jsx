@@ -108,10 +108,10 @@ const Momszyka = () => {
 
   // Sample kitchen images
   const kitchenImages = [
-    "https://example.com/kitchen1.jpg",
-    "https://example.com/kitchen2.jpg",
-    "https://example.com/kitchen3.jpg",
-    "https://example.com/kitchen4.jpg",
+    "./kitchen/first_image.jpg",
+    "./kitchen/second_image.jpg",
+    "./kitchen/third_image.jpg",
+    "./kitchen/fourth_image.jpg",
   ];
 
   // Sample testimonials
@@ -268,11 +268,11 @@ const Momszyka = () => {
       <main className="flex-grow">
         {/* Hero Section */}
         <section
-          className="relative h-[80vh] min-h-[480px] bg-cover bg-center"
+          className="relative h-[90vh] min-h-[480px] bg-cover bg-center"
           style={{ backgroundImage: "url('./hero_image.png')" }}
         >
-          <div className="absolute inset-0 gradient-overlay"></div>
-          <div className="relative z-10 container mx-auto px-6 h-full flex flex-col items-center justify-center text-center text-white">
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="relative z-10 container mx-auto px-6 h-full flex flex-col items-center justify-center text-center text-white tracking-wider">
             <motion.h1
               className="text-4xl md:text-6xl font-black leading-tight tracking-tight max-w-3xl"
               initial={{ opacity: 0, y: 20 }}
@@ -299,8 +299,18 @@ const Momszyka = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <Button className="mt-8 bg-amber-600 text-white text-base font-bold hover:bg-amber-700 transition-colors">
-                Get Started
+              <Button
+                className="mt-8 bg-amber-600 text-white text-base font-bold hover:bg-amber-700 transition-colors"
+                onClick={() => {
+                  const message = encodeURIComponent(
+                    "Hi, I'm interested in getting started!"
+                  );
+                  const whatsappNumber = "919304531876"; // Indian number format: 91 + 9304531876
+                  const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
+                  window.open(whatsappURL, "_blank");
+                }}
+              >
+                Order now
               </Button>
             </motion.div>
           </div>
@@ -330,7 +340,7 @@ const Momszyka = () => {
                       <img
                         src={src}
                         alt={`Kitchen ${index + 1}`}
-                        className="w-full h-[400px] object-cover rounded-lg shadow-lg"
+                        className="w-full h-[600px] object-cover object-center rounded-lg shadow-lg"
                       />
                     </motion.div>
                   </CarouselItem>
@@ -433,18 +443,20 @@ const Momszyka = () => {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <motion.div
-                  className="bg-white dark:bg-amber-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-amber-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex justify-between"
                   variants={cardVariants}
                   initial="hidden"
                   animate="visible"
                 >
-                  <h3 className="text-xl font-semibold text-amber-700 dark:text-amber-200 flex items-center gap-2">
-                    <Salad className="w-6 h-6 text-green-500" />
-                    Trial Meal - Veg
-                  </h3>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-200 my-2">
-                    ₹180
-                  </p>
+                  <div>
+                    <h3 className="text-xl font-semibold text-amber-700 dark:text-amber-200 flex items-center gap-2">
+                      <Salad className="w-6 h-6 text-green-500" />
+                      Trial Meal - Veg
+                    </h3>
+                    <p className="text-2xl font-bold text-gray-800 dark:text-gray-200 my-2">
+                      ₹180
+                    </p>
+                  </div>
                   <Dialog>
                     <DialogTrigger asChild>
                       <motion.div
@@ -452,8 +464,8 @@ const Momszyka = () => {
                         whileHover="hover"
                         whileTap="tap"
                       >
-                        <Button className="w-full bg-green-500 hover:bg-green-600 text-white rounded-full">
-                          Add to Cart
+                        <Button className="w-full bg-green-500 hover:bg-green-600 text-white rounded-full  -tracking-tighter">
+                          Order now!
                         </Button>
                       </motion.div>
                     </DialogTrigger>
@@ -500,18 +512,20 @@ const Momszyka = () => {
                   </Dialog>
                 </motion.div>
                 <motion.div
-                  className="bg-white dark:bg-amber-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                  className="bg-white dark:bg-amber-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex justify-between"
                   variants={cardVariants}
                   initial="hidden"
                   animate="visible"
                 >
-                  <h3 className="text-xl font-semibold text-amber-700 dark:text-amber-200 flex items-center gap-2">
-                    <Drumstick className="w-6 h-6 text-red-500" />
-                    Trial Meal - Non Veg
-                  </h3>
-                  <p className="text-2xl font-bold text-gray-800 dark:text-gray-200 my-2">
-                    ₹220
-                  </p>
+                  <div>
+                    <h3 className="text-xl font-semibold text-amber-700 dark:text-amber-200 flex items-center gap-2">
+                      <Drumstick className="w-6 h-6 text-red-500" />
+                      Trial Meal - Non Veg
+                    </h3>
+                    <p className="text-2xl font-bold text-gray-800 dark:text-gray-200 my-2 ">
+                      ₹220
+                    </p>
+                  </div>
                   <Dialog>
                     <DialogTrigger asChild>
                       <motion.div
@@ -519,8 +533,8 @@ const Momszyka = () => {
                         whileHover="hover"
                         whileTap="tap"
                       >
-                        <Button className="w-full bg-red-500 hover:bg-red-600 text-white rounded-full">
-                          Add to Cart
+                        <Button className="w-full bg-red-500 hover:bg-red-600 text-white rounded-full -tracking-tighter">
+                          Order now!
                         </Button>
                       </motion.div>
                     </DialogTrigger>
@@ -570,7 +584,7 @@ const Momszyka = () => {
 
             {/* Referral Section */}
             <motion.div
-              className="bg-amber-100 dark:bg-amber-900 p-8 rounded-lg text-center"
+              className="bg-amber-200/50 dark:bg-amber-900 p-8 rounded-lg text-center border-amber-900 border"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
