@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -34,8 +35,10 @@ import {
   Award,
   Clock,
   X,
+  MapPin,
+  Sparkles,
 } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import {
   Carousel,
   CarouselContent,
@@ -43,103 +46,122 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Head from "next/head";
+import CountUp from "react-countup"; // Add this library for animated counters: npm install react-countup
+
+// Enhanced sample data with more details for immersion
+const kitchenImages = [
+  {
+    src: "/kitchen/first_image.jpg",
+    alt: "Cozy home kitchen with fresh ingredients and warm lighting",
+  },
+  { src: "/kitchen/second_image.jpg", alt: "Mom preparing a traditional meal with family recipes" },
+  { src: "/kitchen/third_image.jpg", alt: "Homemade thali being plated with care" },
+  {
+    src: "/kitchen/fourth_image.jpg",
+    alt: "Freshly baked naan in a home oven, steaming hot",
+  },
+];
+
+const testimonials = [
+  {
+    name: "Sarah M.",
+    image: "/testimonials/sarah.jpg",
+    alt: "Sarah M. profile picture",
+    rating: 5,
+    text: "Momszyka has been a game-changer for our family! The meals are delicious, healthy, and save me so much time. It's like having a mom cook for you every day!",
+  },
+  {
+    name: "David L.",
+    image: "/testimonials/david.jpg",
+    alt: "David L. profile picture",
+    rating: 5,
+    text: "I love the variety of cuisines on Momszyka. From North Indian to Italian, every dish feels like home. The customization options are fantastic!",
+  },
+  {
+    name: "Emily R.",
+    image: "/testimonials/emily.jpg",
+    alt: "Emily R. profile picture",
+    rating: 4,
+    text: "The food is amazing, and delivery is always on time. Portions could be larger, but the warmth and care in every meal make up for it!",
+  },
+  // Added more for carousel variety
+  {
+    name: "Raj K.",
+    image: "/testimonials/raj.jpg",
+    alt: "Raj K. profile picture",
+    rating: 5,
+    text: "Authentic flavors that remind me of my childhood. Momszyka brings the essence of home cooking right to my door!",
+  },
+];
 
 const Momszyka = () => {
   const [visible, setVisible] = useState(true);
+  const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
+  const [quizStep, setQuizStep] = useState(0);
+  const [quizAnswers, setQuizAnswers] = useState({ cuisine: "", dietary: "" });
+  const [isQuizOpen, setIsQuizOpen] = useState(false); // New state for quiz dialog
 
-  // Optional: auto-dismiss after 10 seconds
+  // Auto-dismiss sticky CTA after 10 seconds
   useEffect(() => {
     const timer = setTimeout(() => setVisible(false), 10000);
     return () => clearTimeout(timer);
   }, []);
 
-  // State for discount popup
-  const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
-  // State for meal preference quiz
-  const [quizStep, setQuizStep] = useState(0);
-  const [quizAnswers, setQuizAnswers] = useState({ cuisine: "", dietary: "" });
-
-  // Show popup on page reload
+  // Show discount popup on page load
   useEffect(() => {
     setIsDiscountPopupOpen(true);
   }, []);
 
-  // Animation variants
+  // Parallax effect for hero
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+
+  // Enhanced animation variants with spring for a warmer feel
   const containerVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut", staggerChildren: 0.2 },
+      transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.15, type: "spring", stiffness: 80 },
     },
   };
 
   const buttonVariants = {
-    hover: { scale: 1.05, transition: { duration: 0.2 } },
-    tap: { scale: 0.95 },
+    hover: { scale: 1.08, transition: { duration: 0.3, type: "spring", stiffness: 200 } },
+    tap: { scale: 0.92 },
   };
 
   const cardVariants = {
+    hidden: { opacity: 0, scale: 0.95, rotate: -2 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      rotate: 0,
+      transition: { duration: 0.6, ease: "easeOut", type: "spring" },
+    },
+    hover: { y: -10, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" },
+  };
+
+  const dialogVariants = {
     hidden: { opacity: 0, scale: 0.9 },
     visible: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
-
-  const dialogVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.3, ease: "easeOut" },
+      transition: { duration: 0.4, ease: "easeOut", type: "spring" },
     },
   };
 
   const counterVariants = {
-    hidden: { opacity: 0, y: 10 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 1, ease: "easeOut" },
+      transition: { duration: 1.2, ease: "easeOut" },
     },
   };
 
-  // Sample kitchen images
-  const kitchenImages = [
-    "./kitchen/first_image.jpg",
-    "./kitchen/second_image.jpg",
-    "./kitchen/third_image.jpg",
-    "./kitchen/fourth_image.jpg",
-  ];
-
-  // Sample testimonials
-  const testimonials = [
-    {
-      name: "Sarah M.",
-      image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuAOKgYrPh7MIEr6fCSlwdlCnJg-pffmSV0Q0m0FNBtDRozrbjqgvLoF8rTZgIAgo_IY8w08Yzq3A-tj3WgYOCX3cLpuVlYOZYJNuM-_lA18dEz4wDXThx9wRxGropkQIwwyjwnF6P1XAz0qU3E7pMqhVttRES0DHC8pR639jzM2CS752wtwalfaJhfwrNE4pB_VeqY5vE0AeSVDFMSAlTEQ1vzk_1TWjEZKo2ciKH_7eVuGOoQNMmN2ogDN_ak-59T5tjO3mb02k0s",
-      rating: 5,
-      text: "Momszyka has been a game-changer for our family! The meals are delicious, healthy, and save me so much time. It's like having a personal chef without the hefty price tag. The new subscription feature is fantastic and the app can't come soon enough!",
-    },
-    {
-      name: "David L.",
-      image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuCORzqswqT2ia1SchrA2-ATJuauxtgxsm8a5WVzqQUrnfA7P_QRahwHMB_pa-u0MmK_JjrCDs_kMDv5NxgUGVm991_lUAIbuOLP8yeB6E6GZmekX7RpOkPQ608hceXpAfvyktNCvYyozvBAaO718h8mFsJe7N7ENYM_K4aiie5FHlU3KDsqEPAsV2lIFJtNJg56QW_AiXKVu9Igy4o-8SANjChzyJwBa73mkooCDhG6AT9ZIFApxpg1VM7HPOv1jFZ1ymav9hHaUQQ",
-      rating: 5,
-      text: "I love the variety of cuisines available on Momszyka. I've tried everything from Italian to Indian, and each dish has been fantastic. It's a great way to support local cooks and discover new flavors. The customization options are superb!",
-    },
-    {
-      name: "Emily R.",
-      image:
-        "https://lh3.googleusercontent.com/aida-public/AB6AXuA73bdZWoYPtbugHof2K_odtINA-Vs1X2nRcF8XC10HlMMVZwZ_xtZuEwi4-0qTC4BwSwAJCc8al3_yo7cZqYRhnmSop3ck_sp238uFNVXKAz3bvK5O7xRQMeSX6OfO2a7GpCIvX_Uhe_xlUYoytRBBw_5gxG0WJbIoRii_d_s1AhZZRJLSaZC8z1qQwpKcuYVLfr9ZL2zMvY6kdflVr2Toa391-1oBbttK8ycE6AqfShZc0Os8iAim-gcA6M87_MWU0Ub6rjWQUVU",
-      rating: 4,
-      text: "The food is generally very good, and the delivery is always on time. I appreciate the convenience and the ability to customize my orders. Sometimes the portions could be a bit larger, but the new features like loyalty points and community events make up for it.",
-    },
-  ];
-
-  // Quiz logic
+  // Quiz logic with enhanced feedback
   const handleQuizAnswer = (question, answer) => {
     setQuizAnswers({ ...quizAnswers, [question]: answer });
     setQuizStep(quizStep + 1);
@@ -149,62 +171,71 @@ const Momszyka = () => {
     switch (quizStep) {
       case 0:
         return (
-          <div className="text-center">
-            <h3 className="text-xl font-semibold text-amber-800 dark:text-amber-100 mb-4">
+          <motion.div className="text-center" variants={containerVariants} initial="hidden" animate="visible">
+            <h3 className="text-2xl font-bold text-[var(--color-new)] mb-6 flex items-center justify-center gap-2">
+              <Sparkles className="w-6 h-6 text-[var(--color-primary)]" />
               What's Your Favorite Cuisine?
             </h3>
-            <div className="flex flex-wrap gap-4 justify-center">
-              {["Italian", "Indian", "Mexican", "Chinese"].map((cuisine) => (
-                <Button
-                  key={cuisine}
-                  className="bg-amber-600 hover:bg-amber-700 text-white rounded-full"
-                  onClick={() => handleQuizAnswer("cuisine", cuisine)}
-                >
-                  {cuisine}
-                </Button>
+            <div className="grid grid-cols-2 gap-4">
+              {["Indian", "Italian", "Mexican", "Chinese"].map((cuisine) => (
+                <motion.div key={cuisine} variants={buttonVariants} whileHover="hover" whileTap="tap">
+                  <Button
+                    className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-new)] text-white rounded-xl py-3 text-lg"
+                    onClick={() => handleQuizAnswer("cuisine", cuisine)}
+                  >
+                    {cuisine}
+                  </Button>
+                </motion.div>
               ))}
             </div>
-          </div>
+          </motion.div>
         );
       case 1:
         return (
-          <div className="text-center">
-            <h3 className="text-xl font-semibold text-amber-800 dark:text-amber-100 mb-4">
+          <motion.div className="text-center" variants={containerVariants} initial="hidden" animate="visible">
+            <h3 className="text-2xl font-bold text-[var(--color-new)] mb-6 flex items-center justify-center gap-2">
+              <Heart className="w-6 h-6 text-[var(--color-primary)]" />
               Any Dietary Preferences?
             </h3>
-            <div className="flex flex-wrap gap-4 justify-center">
-              {["Vegetarian", "Vegan", "Gluten-Free", "No Preference"].map(
-                (diet) => (
+            <div className="grid grid-cols-2 gap-4">
+              {["Vegetarian", "Vegan", "Gluten-Free", "No Preference"].map((diet) => (
+                <motion.div key={diet} variants={buttonVariants} whileHover="hover" whileTap="tap">
                   <Button
-                    key={diet}
-                    className="bg-amber-600 hover:bg-amber-700 text-white rounded-full"
+                    className="w-full bg-[var(--color-primary)] hover:bg-[var(--color-new)] text-white rounded-xl py-3 text-lg"
                     onClick={() => handleQuizAnswer("dietary", diet)}
                   >
                     {diet}
                   </Button>
-                )
-              )}
+                </motion.div>
+              ))}
             </div>
-          </div>
+          </motion.div>
         );
       case 2:
         return (
-          <div className="text-center">
-            <h3 className="text-xl font-semibold text-amber-800 dark:text-amber-100 mb-4">
+          <motion.div className="text-center" variants={containerVariants} initial="hidden" animate="visible">
+            <h3 className="text-2xl font-bold text-[var(--color-new)] mb-6 flex items-center justify-center gap-2">
+              <Award className="w-6 h-6 text-[var(--color-primary)]" />
               Your Personalized Picks Are Ready!
             </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Based on your preference for {quizAnswers.cuisine} cuisine and{" "}
-              {quizAnswers.dietary} diet, we'll recommend the best home cooks
-              for you!
+            <p className="text-gray-600 mb-6 text-lg">
+              Based on your love for <span className="font-bold text-[var(--color-primary)]">{quizAnswers.cuisine}</span> cuisine and 
+              <span className="font-bold text-[var(--color-primary)]"> {quizAnswers.dietary}</span> preferences, discover meals crafted with mom's touch!
             </p>
-            <Button
-              className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-6"
-              onClick={() => setQuizStep(0)}
-            >
-              Explore Recommendations
-            </Button>
-          </div>
+            <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+              <Button
+                className="bg-[var(--color-primary)] hover:bg-[var(--color-new)] text-white rounded-xl px-8 py-3 text-lg"
+                onClick={() => {
+                  setIsQuizOpen(false);
+                  setQuizStep(0);
+                  // Redirect to recommendations page or section
+                  window.location.href = "/recommendations";
+                }}
+              >
+                Explore Your Meals
+              </Button>
+            </motion.div>
+          </motion.div>
         );
       default:
         return null;
@@ -212,768 +243,527 @@ const Momszyka = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-background-light dark:bg-background-dark font-display text-[#1b140d] dark:text-background-light">
-      {/* Discount Popup */}
-      <Dialog open={isDiscountPopupOpen} onOpenChange={setIsDiscountPopupOpen}>
-        <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-lg max-w-md">
-          <motion.div
-            variants={dialogVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <DialogHeader>
-              <DialogTitle className="text-2xl text-amber-800 dark:text-amber-100 flex items-center gap-2">
-                <Utensils className="w-6 h-6 text-amber-600" />
-                Exclusive Offer Just for You!
-              </DialogTitle>
-              <DialogDescription className="text-gray-600 dark:text-gray-300">
-                Order now and get{" "}
-                <span className="font-bold text-amber-600">20% OFF</span> your
-                first meal! Don't miss out on delicious, home-cooked goodness
-                delivered to your door.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="mt-4">
-              <p className="text-gray-700 dark:text-gray-200 mb-4">
-                Enter your email to claim your discount and start your culinary
-                journey with Momszyka!
-              </p>
-              <div className="flex gap-4">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500"
-                />
-                <Button
-                  className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-6"
-                  onClick={() => setIsDiscountPopupOpen(false)}
-                >
-                  Claim Offer
-                </Button>
+    <>
+      <Head>
+        <title>Momszyka - Home-Cooked Meals Delivered with Love</title>
+        <meta
+          name="description"
+          content="Discover fresh, home-cooked meals made by passionate moms in your city. Healthy, authentic, and delivered warm with a touch of love."
+        />
+        <meta
+          name="keywords"
+          content="home-cooked meals, homemade food delivery, moms cooking, fresh meal delivery, authentic Indian food, healthy eating"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap" rel="stylesheet" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              name: "Momszyka",
+              description:
+                "Momszyka delivers fresh, home-cooked meals made by moms in your city.",
+              url: "https://momszyka.com",
+              telephone: "+919304531876",
+              address: {
+                "@type": "PostalAddress",
+                addressCountry: "IN",
+              },
+              sameAs: [
+                "https://instagram.com/momszyka",
+                "https://wa.me/919304531876",
+              ],
+            }),
+          }}
+        />
+      </Head>
+
+      <div className="flex flex-col min-h-screen bg-[var(--color-light)] font-['Lato'] text-[#1b140d] leading-relaxed" style={{ "--font-heading": "Playfair Display" }}>
+        {/* Discount Popup - Enhanced with confetti animation or subtle particles */}
+        {/* <Dialog open={isDiscountPopupOpen} onOpenChange={setIsDiscountPopupOpen}>
+          <DialogContent className="bg-white rounded-2xl max-w-md shadow-2xl border border-[var(--color-primary)]/20" aria-modal="true">
+            <motion.div variants={dialogVariants} initial="hidden" animate="visible">
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-['Playfair_Display'] text-[var(--color-new)] flex items-center gap-3">
+                  <Sparkles className="w-7 h-7 text-[var(--color-primary)] animate-pulse" />
+                  Exclusive Welcome Offer!
+                </DialogTitle>
+                <DialogDescription className="text-gray-600 text-lg mt-2">
+                  Dive into the warmth of mom's cooking with <span className="font-bold text-[var(--color-primary)]">20% OFF</span> your first order. Fresh, loving meals await!
+                </DialogDescription>
+              </DialogHeader>
+              <div className="mt-6">
+                <p className="text-gray-700 mb-4 text-center text-base">Enter your email to unlock your discount and join the family!</p>
+                <div className="flex gap-3">
+                  <Input
+                    type="email"
+                    placeholder="Your email address"
+                    className="flex-1 p-3 border border-gray-200 rounded-full focus:ring-2 focus:ring-[var(--color-primary)] shadow-inner"
+                  />
+                  <Button
+                    className="bg-[var(--color-primary)] hover:bg-[var(--color-new)] text-white rounded-full px-7 text-base font-medium"
+                    onClick={() => setIsDiscountPopupOpen(false)}
+                  >
+                    Claim Now
+                  </Button>
+                </div>
+                <p className="text-sm text-gray-500 mt-3 text-center">
+                  <a href="/privacy" className="underline hover:text-[var(--color-primary)]">Privacy respected</a>
+                </p>
               </div>
-            </div>
-            <DialogFooter className="mt-4">
-              <Button
-                variant="outline"
-                onClick={() => setIsDiscountPopupOpen(false)}
-                className="text-amber-600 border-amber-600 hover:bg-amber-100 dark:hover:bg-amber-800"
-              >
-                Maybe Later
-              </Button>
-            </DialogFooter>
-          </motion.div>
-        </DialogContent>
-      </Dialog>
-
-      <main className="flex-grow">
-        {/* Hero Section */}
-        <section
-          className="relative h-[90vh] min-h-[480px] bg-cover bg-center"
-          style={{ backgroundImage: "url('./hero_image.png')" }}
-        >
-          <div className="absolute inset-0 bg-black/50"></div>
-          <div className="relative z-10 container mx-auto px-6 h-full flex flex-col items-center justify-center text-center text-white tracking-wider">
-            <motion.h1
-              className="text-4xl md:text-6xl font-black leading-tight tracking-tight max-w-3xl"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
-              Delicious Homemade Meals, Delivered with Love
-            </motion.h1>
-            <motion.p
-              className="mt-4 text-lg md:text-xl max-w-2xl"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              Connect with talented home cooks in your community and enjoy
-              authentic, home-cooked meals delivered right to your door. Now
-              with flexible meal subscriptions and personalized recommendations!
-            </motion.p>
-            <motion.div
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <Button
-                className="mt-8 bg-amber-600 text-white text-base font-bold hover:bg-amber-700 transition-colors"
-                onClick={() => {
-                  const message = encodeURIComponent(
-                    "Hi, I'm interested in getting started!"
-                  );
-                  const whatsappNumber = "919304531876"; // Indian number format: 91 + 9304531876
-                  const whatsappURL = `https://wa.me/${whatsappNumber}?text=${message}`;
-                  window.open(whatsappURL, "_blank");
-                }}
-              >
-                Order now
-              </Button>
+              <DialogFooter className="mt-6 justify-center">
+                <Button
+                  variant="ghost"
+                  onClick={() => setIsDiscountPopupOpen(false)}
+                  className="text-[var(--color-primary)] hover:bg-[var(--color-light)]"
+                >
+                  Maybe Later
+                </Button>
+              </DialogFooter>
             </motion.div>
-          </div>
-        </section>
+          </DialogContent>
+        </Dialog> */}
 
-        {/* Kitchen Carousel Section */}
-        <section className="py-16 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.h2
-              className="text-3xl font-semibold text-amber-800 dark:text-amber-100 mb-8 text-center"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              Discover Our Home Kitchens
-            </motion.h2>
-            <Carousel className="w-full">
-              <CarouselContent>
-                {kitchenImages.map((src, index) => (
-                  <CarouselItem key={index}>
-                    <motion.div
-                      className="p-1"
-                      variants={cardVariants}
-                      initial="hidden"
-                      animate="visible"
-                    >
-                      <img
-                        src={src}
-                        alt={`Kitchen ${index + 1}`}
-                        className="w-full h-[600px] object-cover object-center rounded-lg shadow-lg"
-                      />
-                    </motion.div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-        </section>
+        {/* Quiz Dialog - Innovative: Integrated as a full-screen modal with progress bar */}
+        <Dialog open={isQuizOpen} onOpenChange={setIsQuizOpen}>
+          <DialogContent className="bg-white rounded-2xl max-w-lg shadow-2xl" aria-modal="true">
+            <motion.div variants={dialogVariants} initial="hidden" animate="visible">
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-['Playfair_Display'] text-[var(--color-new)] text-center">Personalized Meal Journey</DialogTitle>
+                <div className="w-full bg-gray-200 rounded-full h-2 mt-4">
+                  <motion.div className="bg-[var(--color-primary)] h-2 rounded-full" initial={{ width: 0 }} animate={{ width: `${(quizStep / 2) * 100}%` }} transition={{ duration: 0.5 }} />
+                </div>
+              </DialogHeader>
+              {renderQuizContent()}
+              <DialogFooter className="mt-6 justify-center">
+                <Button variant="ghost" onClick={() => { setIsQuizOpen(false); setQuizStep(0); }} className="text-[var(--color-primary)]">
+                  Close
+                </Button>
+              </DialogFooter>
+            </motion.div>
+          </DialogContent>
+        </Dialog>
 
-        {/* Meal Preference Quiz Section */}
-        <section className="py-16 bg-amber-100 dark:bg-amber-900">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <h2 className="text-3xl font-semibold text-amber-800 dark:text-amber-100 mb-4 flex items-center justify-center gap-2">
-                <Utensils className="w-8 h-8 text-amber-600" />
-                Find Your Perfect Meal
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-                Take our quick quiz to discover home-cooked meals tailored to
-                your tastes and dietary needs. Start your culinary journey with
-                Momszyka!
-              </p>
-              <motion.div
-                variants={cardVariants}
+        <main className="flex-grow">
+          {/* Hero Section - Enhanced with parallax background, layered text, and subtle particle effects for warmth */}
+          <section className="relative h-screen min-h-[600px] overflow-hidden">
+            <motion.div className="absolute inset-0" style={{ y }}>
+              <Image
+                src="/hero_image.png"
+                alt="Warm home-cooked meal by a loving mom"
+                layout="fill"
+                objectFit="cover"
+                priority
+                className="brightness-90"
+              />
+            </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 to-transparent"></div>
+            <div className="relative z-10 container mx-auto px-6 h-full flex flex-col items-center justify-center text-center text-white">
+              <motion.h1
+                className="text-5xl md:text-7xl font-['Playfair_Display'] font-black leading-tight max-w-4xl mb-6 drop-shadow-lg"
+                variants={containerVariants}
                 initial="hidden"
                 animate="visible"
-                className="bg-white dark:bg-amber-800 p-8 rounded-lg shadow-lg"
               >
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={quizStep}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
+                Savor the Warmth of Mom's Home-Cooked Meals
+              </motion.h1>
+              <motion.p
+                className="text-xl md:text-2xl max-w-3xl mb-8 font-light tracking-wide"
+                variants={containerVariants}
+              >
+                Fresh, healthy, and delivered with love – straight from local moms' kitchens to your table.
+              </motion.p>
+              <motion.div className="flex gap-6" variants={containerVariants}>
+                <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                  <Button
+                    className="bg-[var(--color-primary)] text-white text-lg font-medium px-8 py-4 rounded-full hover:shadow-lg transition-shadow"
+                    onClick={() => {
+                      const message = encodeURIComponent("Hi, I'd love to order some home-cooked goodness!");
+                      window.open(`https://wa.me/919304531876?text=${message}`, "_blank");
+                    }}
                   >
-                    {renderQuizContent()}
-                  </motion.div>
-                </AnimatePresence>
+                    Order with Love
+                  </Button>
+                </motion.div>
+                <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                  <Button
+                    variant="outline"
+                    className="border-2 border-white text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-white/20"
+                    onClick={() => setIsQuizOpen(true)}
+                  >
+                    Start Your Quiz
+                  </Button>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          </div>
-        </section>
+            </div>
+          </section>
 
-        {/* App Coming Soon Section */}
-        <section className="py-16 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <h2 className="text-3xl font-semibold text-amber-800 dark:text-amber-100 mb-4 flex items-center justify-center gap-2">
-                <Smartphone className="w-8 h-8 text-amber-600" />
-                Momszyka App Coming Soon!
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
-                Get ready for an even better experience! Our mobile app will let
-                you browse menus, place orders, track deliveries in real-time,
-                and manage subscriptions on the go. Be the first to know about
-                our launch!
-              </p>
-              <div className="flex justify-center gap-4">
-                <Input
-                  type="email"
-                  placeholder="Enter your email for updates"
-                  className="max-w-md p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500 dark:bg-amber-800 dark:text-amber-100 dark:border-amber-700"
-                />
-                <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-6">
-                  Notify Me
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Specials Section */}
-        <section className="py-16 bg-amber-100 dark:bg-amber-900">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div
-              className="mb-12"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <h2 className="text-3xl font-semibold text-amber-800 dark:text-amber-100 mb-6 text-center">
-                Don't Miss Our Specials!
-              </h2>
-              <p className="text-center text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-                Perfect for a single meal or trying us out. For regular
-                deliveries, explore our flexible meal subscription options to
-                customize your weekly or monthly plans and save more on every
-                order.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <motion.div
-                  className="bg-white dark:bg-amber-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex justify-between"
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <div>
-                    <h3 className="text-xl font-semibold text-amber-700 dark:text-amber-200 flex items-center gap-2">
-                      <Salad className="w-6 h-6 text-green-500" />
-                      Trial Meal - Veg
-                    </h3>
-                    <p className="text-2xl font-bold text-gray-800 dark:text-gray-200 my-2">
-                      ₹180
-                    </p>
-                  </div>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <motion.div
-                        variants={buttonVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                      >
-                        <Button className="w-full bg-green-500 hover:bg-green-600 text-white rounded-full  -tracking-tighter">
-                          Order now!
-                        </Button>
-                      </motion.div>
-                    </DialogTrigger>
-                    <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-lg">
-                      <motion.div
-                        variants={dialogVariants}
-                        initial="hidden"
-                        animate="visible"
-                      >
-                        <DialogHeader>
-                          <DialogTitle className="text-2xl text-amber-800 dark:text-amber-100 flex items-center gap-2">
-                            <Clock className="w-6 h-6 text-amber-600" />
-                            Thank You for Choosing Us!
-                          </DialogTitle>
-                          <DialogDescription className="text-gray-600 dark:text-gray-300">
-                            Our delicious Trial Meal - Veg is coming soon! We're
-                            putting the final touches on our menu to ensure a
-                            delightful experience. Join our waitlist to be the
-                            first to savor it!
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="mt-4">
-                          <p className="text-gray-700 dark:text-gray-200 mb-4">
-                            Sign up below to get notified as soon as it's
-                            available, plus receive an exclusive{" "}
-                            <span className="font-bold text-amber-600">
-                              10% OFF
-                            </span>{" "}
-                            your first order!
-                          </p>
-                          <div className="flex gap-4">
-                            <Input
-                              type="email"
-                              placeholder="Enter your email"
-                              className="flex-1 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500"
-                            />
-                            <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-6">
-                              Join Waitlist
-                            </Button>
-                          </div>
-                        </div>
-                      </motion.div>
-                    </DialogContent>
-                  </Dialog>
+          {/* Our Story Section - Enhanced typography with italic quotes, subtle background texture */}
+          <section className="py-20 bg-[var(--color-light)] relative">
+            <div className="absolute inset-0 bg-pattern-home opacity-5" /> {/* Add a subtle kitchen pattern SVG as background */}
+            <div className="container mx-auto px-6 text-center">
+              <motion.div variants={containerVariants} initial="hidden" viewport={{ once: true }} whileInView="visible">
+                <h2 className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] mb-6">Our Heartfelt Story</h2>
+                <p className="text-xl text-gray-700 max-w-4xl mx-auto italic font-light leading-loose">
+                  "Inspired by the irreplaceable taste of 'maa ke haath ka khana,' Momszyka bridges passionate home chefs with those craving authentic comfort. Each meal is infused with warmth, purity, and generations of love."
+                </p>
+                <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap" className="mt-8">
+                  <Button className="bg-[var(--color-primary)] hover:bg-[var(--color-new)] text-white rounded-full px-8 py-3 text-lg">
+                    Meet Our Moms
+                  </Button>
                 </motion.div>
-                <motion.div
-                  className="bg-white dark:bg-amber-800 p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow flex justify-between"
-                  variants={cardVariants}
-                  initial="hidden"
-                  animate="visible"
-                >
-                  <div>
-                    <h3 className="text-xl font-semibold text-amber-700 dark:text-amber-200 flex items-center gap-2">
-                      <Drumstick className="w-6 h-6 text-red-500" />
-                      Trial Meal - Non Veg
-                    </h3>
-                    <p className="text-2xl font-bold text-gray-800 dark:text-gray-200 my-2 ">
-                      ₹220
-                    </p>
-                  </div>
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <motion.div
-                        variants={buttonVariants}
-                        whileHover="hover"
-                        whileTap="tap"
-                      >
-                        <Button className="w-full bg-red-500 hover:bg-red-600 text-white rounded-full -tracking-tighter">
-                          Order now!
-                        </Button>
-                      </motion.div>
-                    </DialogTrigger>
-                    <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-lg">
-                      <motion.div
-                        variants={dialogVariants}
-                        initial="hidden"
-                        animate="visible"
-                      >
-                        <DialogHeader>
-                          <DialogTitle className="text-2xl text-amber-800 dark:text-amber-100 flex items-center gap-2">
-                            <Clock className="w-6 h-6 text-amber-600" />
-                            Thank You for Choosing Us!
-                          </DialogTitle>
-                          <DialogDescription className="text-gray-600 dark:text-gray-300">
-                            Our flavorful Trial Meal - Non Veg is almost ready!
-                            We're perfecting the recipe for you. Join our
-                            waitlist to get early access and enjoy it fresh!
-                          </DialogDescription>
-                        </DialogHeader>
-                        <div className="mt-4">
-                          <p className="text-gray-700 dark:text-gray-200 mb-4">
-                            Sign up below to get notified as soon as it's
-                            available, plus receive an exclusive{" "}
-                            <span className="font-bold text-amber-600">
-                              10% OFF
-                            </span>{" "}
-                            your first order!
-                          </p>
-                          <div className="flex gap-4">
-                            <Input
-                              type="email"
-                              placeholder="Enter your email"
-                              className="flex-1 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-amber-500"
-                            />
-                            <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-6">
-                              Join Waitlist
-                            </Button>
-                          </div>
-                        </div>
-                      </motion.div>
-                    </DialogContent>
-                  </Dialog>
-                </motion.div>
-              </div>
-            </motion.div>
+              </motion.div>
+            </div>
+          </section>
 
-            {/* Referral Section */}
-            <motion.div
-              className="bg-amber-200/50 dark:bg-amber-900 p-8 rounded-lg text-center border-amber-900 border"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              transition={{ delay: 0.2 }}
-            >
-              <h2 className="text-3xl font-semibold text-amber-800 dark:text-amber-100 mb-4 flex items-center justify-center gap-2">
-                <Share2 className="w-7 h-7 text-amber-600" />
-                Share & Save Big!
-              </h2>
-              <p className="text-lg text-gray-600 dark:text-gray-200 mb-2">
-                Refer a friend for a monthly meal and get{" "}
-                <span className="font-bold text-amber-600">₹250 OFF</span> your
-                next order!
-              </p>
-              <p className="text-lg text-gray-600 dark:text-gray-200 mb-6">
-                Even better: Refer 10 friends and get your{" "}
-                <span className="font-bold">1-month meal FREE!</span> Plus,
-                enjoy priority support, exclusive recipes, and special community
-                events.
-              </p>
-              <motion.div
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
+          {/* Meet Our Moms Section - Innovative: Interactive hover with recipe peek */}
+          <section className="py-20 bg-gradient-to-br from-white to-[var(--color-light)]">
+            <div className="container mx-auto px-6">
+              <motion.h2
+                className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-12"
+                variants={containerVariants}
+                initial="hidden"
+                viewport={{ once: true }}
+                whileInView="visible"
               >
-                <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-8 py-3">
-                  Share the Love
-                </Button>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
+                Meet the Hearts Behind the Meals
+              </motion.h2>
+              <div className="grid gap-8 md:grid-cols-3">
+                {[
+                  {
+                    name: "Radha",
+                    desc: "Master of authentic Punjabi thalis, cooked with family heirloom recipes.",
+                    recipePeek: "Try her butter chicken – creamy and soul-soothing!",
+                    image: "/hero_image.png", // Placeholder
+                  },
+                  {
+                    name: "Suman",
+                    desc: "Expert in healthy fusion delights, blending tradition with wellness.",
+                    recipePeek: "Her quinoa khichdi is a nutritious twist on comfort food.",
+                    image: "/hero_image.png",
+                  },
+                  {
+                    name: "Lakshmi",
+                    desc: "Queen of South Indian classics, full of spice and love.",
+                    recipePeek: "Savor her idli-sambar – fluffy and flavorful!",
+                    image: "/hero_image.png",
+                  },
+                ].map((mom, index) => (
+                  <motion.div
+                    key={index}
+                    variants={cardVariants}
+                    initial="hidden"
+                    viewport={{ once: true }}
+                    whileInView="visible"
+                    whileHover="hover"
+                  >
+                    <Card className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow border border-[var(--color-primary)]/10">
+                      <div className="relative">
+                        <Image
+                          src={mom.image}
+                          alt={`Mom ${mom.name} in her kitchen`}
+                          width={400}
+                          height={300}
+                          className="w-full h-64 object-cover"
+                        />
+                        <motion.div
+                          className="absolute bottom-0 left-0 right-0 bg-[var(--color-primary)]/80 text-white p-4 text-center opacity-0"
+                          initial={{ opacity: 0, y: 20 }}
+                          whileHover={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <p className="text-sm font-medium">{mom.recipePeek}</p>
+                        </motion.div>
+                      </div>
+                      <CardContent className="p-6 text-center">
+                        <CardTitle className="text-2xl font-['Playfair_Display'] text-[var(--color-new)] mb-2">{mom.name}</CardTitle>
+                        <CardDescription className="text-gray-600 text-base">{mom.desc}</CardDescription>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
 
-        {/* How It Works Section */}
-        <section className="py-16 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800">
-          <div className="container mx-auto px-6">
-            <motion.div
-              className="text-center max-w-3xl mx-auto"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-amber-800 dark:text-amber-100">
-                How Momszyka Works
-              </h2>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-                Discover the joy of home-cooked meals with Momszyka. We connect
-                you with talented home cooks in your community, offering a
-                convenient, delicious alternative to takeout with personalized
-                meal plans, real-time tracking, and seamless subscription
-                management.
-              </p>
-            </motion.div>
-            <motion.div
-              className="mt-12 grid gap-8 md:grid-cols-3"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.div variants={cardVariants}>
-                <Card className="bg-white dark:bg-amber-800 text-center border-amber-200 dark:border-amber-700">
-                  <CardContent className="pt-6">
-                    <ChefHat className="mx-auto h-8 w-8 text-amber-600 mb-4" />
-                    <div
-                      className="w-full aspect-video bg-cover bg-center rounded-xl mb-4"
-                      style={{
-                        backgroundImage:
-                          "url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLBKtzKcvT2-nefh-bHnoBf3Q_nu-ATy-pwr_P3iDFGUMGU37BJOj0mT_SHI_udomIw4SvJ1yFGnVc5v65Xbd3mligJDYZmSvKqCRXrOP0_vK0qe5CnMWMgLpgjLMTO0vGhDZmSJLVOmCVny8jTMOm5ynQDBAjbfUmSPd3esJKIeF-31l0MCIxodIUCd9eC1o0TUPRnb0qz20kWB0Lyzu6wifzPG6IB6IjB43SV_-5Bsas3lVSC8Osxirw_64zL824yGva8_9mrFk')",
-                      }}
-                    ></div>
-                    <h3 className="text-xl font-bold text-amber-700 dark:text-amber-200">
-                      Discover Local Cooks
-                    </h3>
-                    <p className="mt-2 text-gray-600 dark:text-gray-300">
-                      Browse profiles of skilled home cooks in your area with
-                      interactive maps, video introductions, and detailed menus
-                      tailored to your preferences.
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-              <motion.div variants={cardVariants}>
-                <Card className="bg-white dark:bg-amber-800 text-center border-amber-200 dark:border-amber-700">
-                  <CardContent className="pt-6">
-                    <ShoppingCart className="mx-auto h-8 w-8 text-amber-600 mb-4" />
-                    <div
-                      className="w-full aspect-video bg-cover bg-center rounded-xl mb-4"
-                      style={{
-                        backgroundImage:
-                          "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDsOhgqoY_aQBG4HjgCl-qbTR8quy6UZ8hjOGACSsTUbZ7UDSmVs7yqxvRnHU1JrGQiqBMvsSMMQx53Zf34_rHZqltXZwhbnXQrJV2T5E-VXkcpUqQv-xHeA-tS5TXwluHC4vcqDBCyEScDSdsffn13yI6AVlHvYQTCajDUAnMvTdY10BVPemdIphk9shH74nu3GO9_Ksl--5dAVZem-OqXeYioUZ7phbBawR-G9jeHuVCYh8UmQFMNvIZmCgkcsgm1Q68wbruss0Y')",
-                      }}
-                    ></div>
-                    <h3 className="text-xl font-bold text-amber-700 dark:text-amber-200">
-                      Customize Your Order
-                    </h3>
-                    <p className="mt-2 text-gray-600 dark:text-gray-300">
-                      Choose from a variety of dishes, customize with dietary
-                      preferences, portion sizes, and add-ons, and schedule
-                      delivery with real-time updates.
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-              <motion.div variants={cardVariants}>
-                <Card className="bg-white dark:bg-amber-800 text-center border-amber-200 dark:border-amber-700">
-                  <CardContent className="pt-6">
-                    <UtensilsCrossed className="mx-auto h-8 w-8 text-amber-600 mb-4" />
-                    <div
-                      className="w-full aspect-video bg-cover bg-center rounded-xl mb-4"
-                      style={{
-                        backgroundImage:
-                          "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB_DtFlZYSwD8-5YTzLtLoKtFAt1Eq9h3jUpkyWlP-rE0NVLtcTU2DgjoQBwiDc0oJBeUK96RnnAFpCE6_A7cHnTcvfnaD4vRnQJYvtUnoiq3jSDjOYAQh9lptVCOTcy9qsahTcWbLhgMaYoZgdbliwbUWzw9idLTlFiSupqj1hjcl2r5Y2L3EYkUVY4syCW0EHqRYSweH11Lmwi9Ik7XQ5PEkD2kEtCzPW5IdsgLg6Kn4rt1ZxkPNWSJgbd5bNlKR40PZXiVtVo78')",
-                      }}
-                    ></div>
-                    <h3 className="text-xl font-bold text-amber-700 dark:text-amber-200">
-                      Savor the Experience
-                    </h3>
-                    <p className="mt-2 text-gray-600 dark:text-gray-300">
-                      Enjoy authentic, home-cooked meals delivered fresh. Rate
-                      your experience, earn loyalty points, and get personalized
-                      recommendations for your next order.
-                    </p>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Why Choose Momszyka Section */}
-        <section className="py-16 bg-amber-100 dark:bg-amber-900">
-          <div className="container mx-auto px-6">
-            <motion.div
-              className="text-center max-w-3xl mx-auto"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-amber-800 dark:text-amber-100">
-                Why Choose Momszyka?
-              </h2>
-              <p className="mt-4 text-lg text-gray-600 dark:text-gray-300">
-                Momszyka brings the warmth of home-cooked meals to your table
-                with unmatched convenience, quality, and community spirit. Enjoy
-                personalized dining, eco-friendly packaging, and exclusive
-                rewards.
-              </p>
-            </motion.div>
-            <motion.div
-              className="mt-12 grid gap-8 md:grid-cols-3"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.div variants={cardVariants}>
-                <Card className="bg-white dark:bg-amber-800 border-amber-200 dark:border-amber-700">
-                  <CardContent className="p-6">
-                    <Star className="text-amber-600 h-8 w-8 mb-4" />
-                    <CardTitle className="text-xl font-bold text-amber-700 dark:text-amber-200">
-                      Authentic Flavors
-                    </CardTitle>
-                    <CardDescription className="mt-2 text-gray-600 dark:text-gray-300">
-                      Savor diverse, home-cooked dishes crafted with love,
-                      featuring seasonal menus, chef stories, and authentic
-                      recipes from local kitchens.
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.div>
-              <motion.div variants={cardVariants}>
-                <Card className="bg-white dark:bg-amber-800 border-amber-200 dark:border-amber-700">
-                  <CardContent className="p-6">
-                    <Heart className="text-amber-600 h-8 w-8 mb-4" />
-                    <CardTitle className="text-xl font-bold text-amber-700 dark:text-amber-200">
-                      Support Local Cooks
-                    </CardTitle>
-                    <CardDescription className="mt-2 text-gray-600 dark:text-gray-300">
-                      Empower talented home cooks by supporting their passion.
-                      Join virtual cooking classes, community events, and
-                      mentorship programs.
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.div>
-              <motion.div variants={cardVariants}>
-                <Card className="bg-white dark:bg-amber-800 border-amber-200 dark:border-amber-700">
-                  <CardContent className="p-6">
-                    <ShieldCheck className="text-amber-600 h-8 w-8 mb-4" />
-                    <CardTitle className="text-xl font-bold text-amber-700 dark:text-amber-200">
-                      Safe and Reliable
-                    </CardTitle>
-                    <CardDescription className="mt-2 text-gray-600 dark:text-gray-300">
-                      Enjoy secure transactions, reliable deliveries, and
-                      top-tier hygiene standards with contactless delivery,
-                      eco-friendly packaging, and 24/7 support.
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Community Reviews Section (Carousel) */}
-        <section className="py-16 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800">
-          <div className="container mx-auto px-6">
-            <motion.h2
-              className="text-3xl md:text-4xl font-bold text-center text-amber-800 dark:text-amber-100 mb-12"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              What Our Community Says
-            </motion.h2>
-            <Carousel className="max-w-4xl mx-auto">
-              <CarouselContent>
-                {testimonials.map((testimonial, index) => (
-                  <CarouselItem key={index}>
+          {/* How It Works Section - Enhanced with timeline layout and icons */}
+          <section className="py-20 bg-white">
+            <div className="container mx-auto px-6">
+              <motion.h2
+                className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-12"
+                variants={containerVariants}
+                initial="hidden"
+                viewport={{ once: true }}
+                whileInView="visible"
+              >
+                How the Magic Happens
+              </motion.h2>
+              <div className="relative">
+                <div className="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-[var(--color-primary)]/20 md:hidden" />
+                <div className="grid gap-12 md:grid-cols-3">
+                  {[
+                    {
+                      icon: ChefHat,
+                      title: "Discover Loving Chefs",
+                      desc: "Explore profiles of local moms with menus tailored just for you.",
+                      image: "/steps/discover.jpg",
+                    },
+                    {
+                      icon: ShoppingCart,
+                      title: "Customize with Care",
+                      desc: "Select dishes, add preferences, and schedule with real-time love.",
+                      image: "/steps/customize.jpg",
+                    },
+                    {
+                      icon: UtensilsCrossed,
+                      title: "Savor the Warmth",
+                      desc: "Receive fresh meals, rate, and get personalized hugs in food form.",
+                      image: "/steps/savor.jpg",
+                    },
+                  ].map((step, index) => (
                     <motion.div
+                      key={index}
+                      className={`relative ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}
                       variants={cardVariants}
                       initial="hidden"
-                      animate="visible"
+                      viewport={{ once: true }}
+                      whileInView="visible"
                     >
-                      <Card className="bg-amber-50 dark:bg-amber-950">
-                        <CardContent className="p-6">
-                          <div className="flex items-center gap-4">
-                            <img
-                              alt={testimonial.name}
-                              className="w-12 h-12 rounded-full object-cover"
-                              src={testimonial.image}
-                            />
-                            <div>
-                              <p className="font-bold text-amber-700 dark:text-amber-200">
-                                {testimonial.name}
-                              </p>
-                              <div className="flex text-amber-600">
-                                {[...Array(5)].map((_, i) => (
-                                  <Star
-                                    key={i}
-                                    className="w-4 h-4"
-                                    fill={
-                                      i < testimonial.rating
-                                        ? "currentColor"
-                                        : "none"
-                                    }
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                          <p className="mt-4 text-gray-600 dark:text-gray-300">
-                            {testimonial.text}
-                          </p>
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-primary)] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:mb-4 mx-auto">
+                        <step.icon className="w-6 h-6" />
+                      </div>
+                      <Card className="bg-[var(--color-light)] rounded-2xl shadow-lg pt-16 md:pt-6">
+                        <Image
+                          src={step.image}
+                          alt={step.title}
+                          width={400}
+                          height={250}
+                          className="w-full h-48 object-cover rounded-t-2xl"
+                        />
+                        <CardContent className="p-6 text-center">
+                          <h3 className="text-2xl font-['Playfair_Display'] text-[var(--color-new)] mb-2">{step.title}</h3>
+                          <p className="text-gray-600 text-base">{step.desc}</p>
                         </CardContent>
                       </Card>
                     </motion.div>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious />
-              <CarouselNext />
-            </Carousel>
-          </div>
-        </section>
-
-        {/* Social Proof Metrics Section */}
-        <section className="py-16 bg-amber-100 dark:bg-amber-900">
-          <div className="container mx-auto px-6">
-            <motion.div
-              className="grid gap-8 md:grid-cols-3 text-center"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <motion.div variants={counterVariants}>
-                <Users className="mx-auto h-12 w-12 text-amber-600 mb-4" />
-                <h3 className="text-3xl font-bold text-amber-800 dark:text-amber-100">
-                  10,000+
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Happy Customers
-                </p>
-              </motion.div>
-              <motion.div variants={counterVariants}>
-                <Package className="mx-auto h-12 w-12 text-amber-600 mb-4" />
-                <h3 className="text-3xl font-bold text-amber-800 dark:text-amber-100">
-                  50,000+
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Meals Delivered
-                </p>
-              </motion.div>
-              <motion.div variants={counterVariants}>
-                <Award className="mx-auto h-12 w-12 text-amber-600 mb-4" />
-                <h3 className="text-3xl font-bold text-amber-800 dark:text-amber-100">
-                  500+
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300">Local Cooks</p>
-              </motion.div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Newsletter Section */}
-        {/* <section className="py-16 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800">
-          <div className="container mx-auto px-6 text-center">
-            <motion.h2
-              className="text-3xl md:text-4xl font-bold text-amber-800 dark:text-amber-100 mb-4"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              Stay Updated
-            </motion.h2>
-            <motion.p
-              className="text-lg text-gray-600 dark:text-gray-300 mb-8"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              Subscribe to our newsletter for the latest recipes, cooking tips,
-              exclusive offers, community stories, and updates on our upcoming
-              app launch.
-            </motion.p>
-            <motion.div
-              className="max-w-md mx-auto flex gap-2"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="dark:bg-amber-800 dark:text-amber-100 dark:border-amber-700"
-              />
-              <Button className="bg-amber-600 hover:bg-amber-700 text-white">
-                Subscribe
-              </Button>
-            </motion.div>
-          </div>
-        </section> */}
-
-        {/* Sticky CTA Bar */}
-        <AnimatePresence>
-          {visible && (
-            <motion.div
-              role="region"
-              aria-label="Order Call To Action"
-              className="fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-amber-100/90 dark:bg-amber-900/90 backdrop-blur-md p-4 sm:p-5 shadow-lg z-50 w-full max-w-md rounded-xl"
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              exit={{ y: 100, opacity: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <p className="text-amber-800 dark:text-amber-100 font-semibold text-sm sm:text-base flex-1 min-w-[150px]">
-                  Ready to taste the love? Order now!
-                </p>
-
-                <div className="flex gap-2 shrink-0">
-                  <Button
-                    aria-label="Place an order now"
-                    className="bg-amber-600 hover:bg-amber-700 text-white rounded-full flex items-center gap-1 text-sm"
-                  >
-                    <ShoppingCart className="w-4 h-4" />
-                    Order Now
-                  </Button>
-                  <Button
-                    aria-label="Join the waitlist"
-                    variant="outline"
-                    className="text-amber-600 border-amber-600 hover:bg-amber-200 dark:hover:bg-amber-800 rounded-full flex items-center gap-1 text-sm"
-                  >
-                    <Clock className="w-4 h-4" />
-                    Waitlist
-                  </Button>
-                  <button
-                    aria-label="Dismiss call to action"
-                    onClick={() => setVisible(false)}
-                    className="text-amber-700 dark:text-amber-300 hover:opacity-80 transition"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
+                  ))}
                 </div>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </main>
-    </div>
+            </div>
+          </section>
+
+          {/* Specials Section - Innovative: Add meal images and nutrition badges */}
+          <section className="py-20 bg-[var(--color-light)]">
+            <div className="container mx-auto px-6">
+              <motion.h2
+                className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-12"
+                variants={containerVariants}
+                initial="hidden"
+                viewport={{ once: true }}
+                whileInView="visible"
+              >
+                Today's Loving Specials
+              </motion.h2>
+              <p className="text-center text-gray-600 text-lg mb-10 max-w-3xl mx-auto">Perfect starters or subscriptions – all made with mom's secret ingredients of love.</p>
+              <div className="grid gap-8 md:grid-cols-2">
+                {[
+                  {
+                    type: "Veg",
+                    price: 180,
+                    icon: Salad,
+                    color: "green-500",
+                    image: "/specials/veg.jpg", // Add actual image
+                    badges: ["Healthy", "Fresh Herbs"],
+                  },
+                  {
+                    type: "Non-Veg",
+                    price: 220,
+                    icon: Drumstick,
+                    color: "red-500",
+                    image: "/specials/nonveg.jpg",
+                    badges: ["Protein-Packed", "Spicy Twist"],
+                  },
+                ].map((special, index) => (
+                  <motion.div
+                    key={index}
+                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                    variants={cardVariants}
+                    initial="hidden"
+                    viewport={{ once: true }}
+                    whileInView="visible"
+                    whileHover="hover"
+                  >
+                    <Image
+                      src={special.image}
+                      alt={`${special.type} Trial Meal`}
+                      width={600}
+                      height={300}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="p-6">
+                      <h3 className="text-2xl font-['Playfair_Display'] text-[var(--color-new)] flex items-center gap-3 mb-2">
+                        <special.icon className={`w-7 h-7 text-${special.color}`} />
+                        Trial Meal - {special.type}
+                      </h3>
+                      <p className="text-3xl font-bold text-gray-800 mb-4">₹{special.price}</p>
+                      <div className="flex gap-2 mb-4">
+                        {special.badges.map((badge) => (
+                          <span key={badge} className="bg-[var(--color-primary)]/10 text-[var(--color-primary)] px-3 py-1 rounded-full text-sm font-medium">
+                            {badge}
+                          </span>
+                        ))}
+                      </div>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button className={`w-full bg-${special.color} hover:bg-${special.color.replace('500', '600')} text-white rounded-full py-3 text-lg`}>
+                            Order Now
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="bg-white rounded-2xl max-w-md">
+                          <motion.div variants={dialogVariants} initial="hidden" animate="visible">
+                            <DialogHeader>
+                              <DialogTitle className="text-3xl font-['Playfair_Display'] text-[var(--color-new)] flex items-center gap-3">
+                                <Clock className="w-7 h-7 text-[var(--color-primary)]" />
+                                Coming Soon with Love!
+                              </DialogTitle>
+                              <DialogDescription className="text-gray-600 text-lg mt-2">
+                                Join the waitlist for your {special.type} trial and get <span className="font-bold text-[var(--color-primary)]">10% OFF</span>!
+                              </DialogDescription>
+                            </DialogHeader>
+                            <div className="mt-6 flex gap-3">
+                              <Input type="email" placeholder="Your email" className="flex-1 rounded-full" />
+                              <Button className="bg-[var(--color-primary)] text-white rounded-full px-6">Join</Button>
+                            </div>
+                          </motion.div>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Referral Section - Enhanced with share buttons and animation */}
+          <section className="py-20 bg-gradient-to-b from-[var(--color-light)] to-white">
+            <div className="container mx-auto px-6">
+              <motion.div
+                className="bg-[var(--color-primary)]/5 p-10 rounded-2xl text-center shadow-inner"
+                variants={containerVariants}
+                initial="hidden"
+                viewport={{ once: true }}
+                whileInView="visible"
+              >
+                <h2 className="text-4xl font-['Playfair_Display'] text-[var(--color-new)] mb-6 flex items-center justify-center gap-3">
+                  <Share2 className="w-8 h-8 text-[var(--color-primary)]" />
+                  Spread the Love
+                </h2>
+                <p className="text-xl text-gray-600 mb-4 max-w-2xl mx-auto">Invite a talented mom to join or refer a friend – earn rewards wrapped in warmth.</p>
+                <p className="text-xl text-gray-600 mb-8">Friends get ₹250 OFF, moms get a platform to shine!</p>
+                <div className="flex gap-6 justify-center">
+                  <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                    <Button className="bg-[var(--color-primary)] text-white rounded-full px-10 py-4 text-lg">Refer Now</Button>
+                  </motion.div>
+                  <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+                    <Button variant="outline" className="border-2 border-[var(--color-primary)] text-[var(--color-primary)] rounded-full px-10 py-4 text-lg">Join as Mom</Button>
+                  </motion.div>
+                </div>
+              </motion.div>
+            </div>
+          </section>
+
+          {/* Community Reviews Section - Enhanced carousel with auto-play and quotes */}
+          <section className="py-20 bg-white">
+            <div className="container mx-auto px-6">
+              <motion.h2
+                className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-12"
+                variants={containerVariants}
+                initial="hidden"
+                viewport={{ once: true }}
+                whileInView="visible"
+              >
+                Voices from Our Table
+              </motion.h2>
+              <Carousel className="max-w-5xl mx-auto" opts={{ loop: true, autoplay: true, autoplayInterval: 5000 }}>
+                <CarouselContent>
+                  {testimonials.map((testimonial, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
+                      <motion.div variants={cardVariants} whileHover="hover">
+                        <Card className="bg-[var(--color-light)] rounded-2xl shadow-lg h-full">
+                          <CardContent className="p-8 flex flex-col h-full">
+                            <div className="flex items-center gap-4 mb-6">
+                              <Image src={testimonial.image} alt={testimonial.alt} width={60} height={60} className="rounded-full border-2 border-[var(--color-primary)]" />
+                              <div>
+                                <p className="font-['Playfair_Display'] text-xl text-[var(--color-new)]">{testimonial.name}</p>
+                                <div className="flex text-[var(--color-primary)]">
+                                  {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5" fill={i < testimonial.rating ? "currentColor" : "none"} stroke="currentColor" />)}
+                                </div>
+                              </div>
+                            </div>
+                            <p className="text-gray-600 text-lg italic flex-grow">"{testimonial.text}"</p>
+                          </CardContent>
+                        </Card>
+                      </motion.div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="hidden md:flex bg-[var(--color-primary)] text-white rounded-full" />
+                <CarouselNext className="hidden md:flex bg-[var(--color-primary)] text-white rounded-full" />
+              </Carousel>
+            </div>
+          </section>
+
+          {/* Social Proof Metrics Section - Innovative: Animated counters with icons pulsing */}
+          <section className="py-20 bg-[var(--color-light)]">
+            <div className="container mx-auto px-6">
+              <div className="grid gap-12 md:grid-cols-3 text-center">
+                {[
+                  { icon: Users, number: 10000, label: "Happy Families" },
+                  { icon: Package, number: 50000, label: "Meals Shared" },
+                  { icon: Award, number: 500, label: "Loving Moms" },
+                ].map((metric, index) => (
+                  <motion.div key={index} variants={counterVariants} initial="hidden" viewport={{ once: true }} whileInView="visible">
+                    <metric.icon className="mx-auto h-16 w-16 text-[var(--color-primary)] mb-4 animate-pulse" />
+                    <h3 className="text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)]">
+                      <CountUp end={metric.number} duration={2.5} separator="," />+
+                    </h3>
+                    <p className="text-xl text-gray-600 mt-2">{metric.label}</p>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+      
+
+          {/* Sticky CTA - Enhanced with gradient and pulse */}
+          <AnimatePresence>
+            {visible && (
+              <motion.div
+                className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-new)] p-4 rounded-full shadow-2xl z-50 max-w-lg w-full mx-4"
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 100, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 120 }}
+              >
+                <div className="flex items-center justify-between text-white">
+                  <p className="font-['Playfair_Display'] text-lg">Craving mom's touch? Let's get cooking!</p>
+                  <div className="flex gap-3">
+                    <Button variant="ghost" className="text-white hover:bg-white/20 rounded-full">Order</Button>
+                    <Button variant="ghost" className="text-white hover:bg-white/20 rounded-full">Waitlist</Button>
+                    <button onClick={() => setVisible(false)} className="hover:opacity-70">
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </main>
+      </div>
+    </>
   );
 };
 

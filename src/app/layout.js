@@ -15,8 +15,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Momszyka",
-  description: "Empowerment | Qulaity | Community",
+  title: "Momszyka | Homemade Meals Delivered",
+  description: "Delicious home-cooked meals prepared by local moms. Fresh, hygienic, and full of love.",
+  
 };
 
 export default function RootLayout({ children }) {
