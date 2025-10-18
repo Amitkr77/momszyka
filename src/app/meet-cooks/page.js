@@ -260,10 +260,10 @@ const MomszykaCooks = () => {
                             <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-2xl max-w-md">
                               <DialogHeader>
                                 <DialogTitle className="text-2xl font-['Playfair_Display'] text-amber-800 dark:text-amber-100">
-                                  {cook.name}'s Menu
+                                  {cook.name}  &apos;s Menu
                                 </DialogTitle>
                                 <DialogDescription className="text-gray-600 dark:text-gray-300 text-base">
-                                  Explore {cook.name}'s authentic dishes, including her famous {cook.signatureDish.toLowerCase()}. Order now for a taste of home!
+                                  Explore {cook.name}&apos;s authentic dishes, including her famous {cook.signatureDish.toLowerCase()}. Order now for a taste of home!
                                 </DialogDescription>
                               </DialogHeader>
                               <Button className="bg-amber-600 text-white rounded-full mt-4">Order Now</Button>
@@ -287,7 +287,7 @@ const MomszykaCooks = () => {
             >
               <div className="text-center max-w-3xl mx-auto">
                 <h2 className="text-4xl sm:text-5xl font-['Playfair_Display'] font-extrabold text-amber-800 dark:text-amber-100 tracking-tight mb-6">
-                  Got Questions? We're Here!
+                  Got Questions? We&apos;re Here!
                 </h2>
                 <p className="text-lg text-gray-600 dark:text-gray-300">
                   Let’s make your first step as a Momszyka cook easy and confident.
