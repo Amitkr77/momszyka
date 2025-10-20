@@ -378,7 +378,7 @@ const Momszyka = () => {
               <motion.div className="flex gap-6" variants={containerVariants}>
                 <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
                   <Button
-                    className="bg-[var(--color-primary)] text-white text-lg font-medium px-8 py-4 rounded-full hover:shadow-lg transition-shadow"
+                    className="bg-amber-600 hover:bg-amber-800 text-white text-lg font-medium px-8 py-4 rounded-full hover:shadow-lg transition-shadow"
                     onClick={() => {
                       const message = encodeURIComponent("Hi, I'd love to order some home-cooked goodness!");
                       window.open(`https://wa.me/919304531876?text=${message}`, "_blank");
@@ -390,7 +390,7 @@ const Momszyka = () => {
                 <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
                   <Button
                     variant="outline"
-                    className="border-2 border-white text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-white/20"
+                    className="border-2 border-white text-white text-lg font-medium px-8 py-4 rounded-full bg-white/20"
                     onClick={() => setIsQuizOpen(true)}
                   >
                     Start Your Quiz
@@ -402,7 +402,7 @@ const Momszyka = () => {
 
           {/* Our Story Section - Enhanced typography with italic quotes, subtle background texture */}
           <section className="py-20 bg-[var(--color-light)] relative">
-            <div className="absolute inset-0 bg-pattern-home opacity-5" /> {/* Add a subtle kitchen pattern SVG as background */}
+            <div className="absolute inset-0 bg-pattern-home opacity-5" /> 
             <div className="container mx-auto px-6 text-center">
               <motion.div variants={containerVariants} initial="hidden" viewport={{ once: true }} whileInView="visible">
                 <h2 className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] mb-6">Our Heartfelt Story</h2>
@@ -410,7 +410,7 @@ const Momszyka = () => {
                   "Inspired by the irreplaceable taste of 'maa ke haath ka khana,' Momszyka bridges passionate home chefs with those craving authentic comfort. Each meal is infused with warmth, purity, and generations of love."
                 </p>
                 <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap" className="mt-8">
-                  <Button className="bg-[var(--color-primary)] hover:bg-[var(--color-new)] text-white rounded-full px-8 py-3 text-lg">
+                  <Button className="bg-amber-600  text-white rounded-full px-8 py-3 text-lg">
                     Meet Our Moms
                   </Button>
                 </motion.div>
@@ -531,7 +531,7 @@ const Momszyka = () => {
                       viewport={{ once: true }}
                       whileInView="visible"
                     >
-                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-[var(--color-primary)] text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:mb-4 mx-auto">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-amber-600 text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 md:static md:translate-x-0 md:translate-y-0 md:mb-4 mx-auto">
                         <step.icon className="w-6 h-6" />
                       </div>
                       <Card className="bg-[var(--color-light)] rounded-2xl shadow-lg pt-16 md:pt-6">
@@ -664,7 +664,7 @@ const Momszyka = () => {
                 <p className="text-xl text-gray-600 mb-8">Friends get ₹250 OFF, moms get a platform to shine!</p>
                 <div className="flex gap-6 justify-center">
                   <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                    <Button className="bg-[var(--color-primary)] text-white rounded-full px-10 py-4 text-lg">Refer Now</Button>
+                    <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-10 py-4 text-lg">Refer Now</Button>
                   </motion.div>
                   <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
                     <Button variant="outline" className="border-2 border-[var(--color-primary)] text-[var(--color-primary)] rounded-full px-10 py-4 text-lg">Join as Mom</Button>

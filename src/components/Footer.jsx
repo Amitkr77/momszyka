@@ -1,5 +1,5 @@
 "use client";
-import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
+import { Facebook, Instagram, Mail, X } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Input } from "@/components/ui/input";
@@ -31,69 +31,69 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800 border-t border-amber-200 dark:border-amber-700">
-      <div className="container  mx-auto px-6 py-10">
+    <footer className="bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/80 dark:to-amber-800/80 border-t border-amber-200 dark:border-amber-700 shadow-lg">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16 border-b-2 pb-10"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 border-b border-amber-200 dark:border-amber-700 pb-12"
           variants={sectionVariants}
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
         >
           <motion.div className="space-y-6" variants={itemVariants}>
             <Link href="/">
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3">
                 <img
                   src="./logo.png"
                   alt="Momszyka Logo"
-                  className="w-12 h-12 lg:w-16 lg:h-16 rounded-full shadow-md"
+                  className="w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-lg ring-2 ring-amber-300 dark:ring-amber-600"
                 />
-                <h3 className="text-2xl font-extrabold text-amber-800 dark:text-amber-100 tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-extrabold text-amber-800 dark:text-amber-100 tracking-tight">
                   Momszyka
                 </h3>
               </div>
             </Link>
-            <p className="text-base lg:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-              Bringing the warmth of home-cooked meals to your table with love
-              and care. Join our community of passionate cooks and food lovers.
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed max-w-prose">
+              Delivering the heartwarming essence of home-cooked meals straight to your doorstep. Connect with our vibrant community of culinary enthusiasts and home chefs.
             </p>
-            <div className="flex gap-6">
+            <div className="flex gap-4 sm:gap-6">
               <motion.a
-                href="#"
-                className="text-amber-600 hover:text-amber-700"
+                href="https://facebook.com/momszyka"
+                className="text-amber-600 hover:text-amber-800 dark:hover:text-amber-400 transition-colors border border-amber-600 p-2 rounded-4xl"
                 variants={iconVariants}
                 whileHover="hover"
                 aria-label="Facebook"
               >
-                <Facebook className="h-6 w-6" />
+                <Facebook className="h-5 w-5 sm:h-6 sm:w-6" />
               </motion.a>
               <motion.a
-                href="#"
-                className="text-amber-600 hover:text-amber-700"
+                href="https://x.com/momszyka"
+                className="text-amber-600 hover:text-amber-800 dark:hover:text-amber-400 transition-colors border border-amber-600 p-2 rounded-4xl"
                 variants={iconVariants}
                 whileHover="hover"
-                aria-label="Twitter"
+                aria-label="X (formerly Twitter)"
               >
-                <Twitter className="h-6 w-6" />
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
               </motion.a>
               <motion.a
-                href="#"
-                className="text-amber-600 hover:text-amber-700"
+                href="https://instagram.com/momszyka"
+                className="text-amber-600 hover:text-amber-800 dark:hover:text-amber-400 transition-colors border border-amber-600 p-2 rounded-4xl "
                 variants={iconVariants}
                 whileHover="hover"
                 aria-label="Instagram"
               >
-                <Instagram className="h-6 w-6" />
+                <Instagram className="h-5 w-5 sm:h-6 sm:w-6" />
               </motion.a>
             </div>
           </motion.div>
           <motion.nav className="space-y-6" variants={itemVariants}>
-            <h4 className="text-xl font-semibold text-amber-800 dark:text-amber-100 tracking-wide">
+            <h4 className="text-lg sm:text-xl font-semibold text-amber-800 dark:text-amber-100 tracking-wide">
               Explore
             </h4>
             <ul className="space-y-3">
               <motion.li variants={itemVariants}>
                 <Link
-                  className="text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-500 transition-colors font-medium"
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
                   href="/our-story"
                 >
                   About Us
@@ -101,40 +101,63 @@ export default function Footer() {
               </motion.li>
               <motion.li variants={itemVariants}>
                 <Link
-                  className="text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-500 transition-colors font-medium"
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
                   href="/how-it-works"
                 >
                   How It Works
                 </Link>
               </motion.li>
-              {/* <motion.li variants={itemVariants}>
+              <motion.li variants={itemVariants}>
                 <Link
-                  className="text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-500 transition-colors font-medium"
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
                   href="/recipes"
                 >
                   Recipes
                 </Link>
-              </motion.li> */}
+              </motion.li>
               <motion.li variants={itemVariants}>
                 <Link
-                  className="text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-500 transition-colors font-medium"
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
+                  href="/blog"
+                >
+                  Blog
+                </Link>
+              </motion.li>
+            </ul>
+          </motion.nav>
+          <motion.nav className="space-y-6" variants={itemVariants}>
+            <h4 className="text-lg sm:text-xl font-semibold text-amber-800 dark:text-amber-100 tracking-wide">
+              Support
+            </h4>
+            <ul className="space-y-3">
+              <motion.li variants={itemVariants}>
+                <Link
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
+                  href="/faq"
+                >
+                  FAQ
+                </Link>
+              </motion.li>
+              <motion.li variants={itemVariants}>
+                <Link
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
                   href="/contact"
                 >
-                  Contact
+                  Contact Us
                 </Link>
               </motion.li>
               <motion.li variants={itemVariants}>
                 <a
-                  className="text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-500 transition-colors font-medium"
-                  href="#"
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
+                  href="/terms"
                 >
                   Terms of Service
                 </a>
               </motion.li>
               <motion.li variants={itemVariants}>
                 <a
-                  className="text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-500 transition-colors font-medium"
-                  href="#"
+                  className="text-sm sm:text-base text-gray-600 dark:text-gray-300 hover:text-amber-600 dark:hover:text-amber-400 transition-colors font-medium"
+                  href="/privacy"
                 >
                   Privacy Policy
                 </a>
@@ -142,26 +165,25 @@ export default function Footer() {
             </ul>
           </motion.nav>
           <motion.div className="space-y-6" variants={itemVariants}>
-            <h4 className="text-xl font-semibold text-amber-800 dark:text-amber-100 tracking-wide">
+            <h4 className="text-lg sm:text-xl font-semibold text-amber-800 dark:text-amber-100 tracking-wide">
               Stay Connected
             </h4>
-            <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
-              Subscribe for delicious recipes, exclusive offers, and exciting
-              app updates.
+            <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 leading-relaxed">
+              Join our newsletter for mouthwatering recipes, special promotions, and the latest updates from our app.
             </p>
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-3">
               <Input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 bg-transparent border-amber-300 dark:border-amber-700 focus:ring-amber-500 focus:border-amber-500 rounded-full text-base placeholder:text-gray-400 dark:placeholder:text-gray-500"
+                className="flex-1 bg-white dark:bg-amber-900/50 border-amber-300 dark:border-amber-600 focus:ring-amber-500 focus:border-amber-500 rounded-full text-sm sm:text-base placeholder:text-gray-400 dark:placeholder:text-gray-500 shadow-inner"
               />
               <motion.div
                 variants={buttonVariants}
                 whileHover="hover"
                 whileTap="tap"
               >
-                <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-6 text-base font-medium">
-                  <Mail className="w-5 h-5 mr-2" />
+                <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-4 sm:px-6 py-2 text-sm sm:text-base font-medium flex items-center justify-center w-full sm:w-auto shadow-md">
+                  <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                   Subscribe
                 </Button>
               </motion.div>
@@ -169,7 +191,7 @@ export default function Footer() {
           </motion.div>
         </motion.div>
         <motion.p
-          className="mt-5 text-center text-sm text-gray-600 dark:text-gray-300"
+          className="mt-6 text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400"
           variants={itemVariants}
         >
           © {new Date().getFullYear()} Momszyka. All rights reserved.
