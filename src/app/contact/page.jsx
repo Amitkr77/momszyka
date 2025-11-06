@@ -82,9 +82,9 @@ const MomszykaContact = () => {
                   <h3 className="font-semibold">Email Us</h3>
                   <a
                     className="text-amber-600 hover:underline underline-offset-4"
-                    href="mailto:support@momszyka.com"
+                    href="mailto:momszyka@gmail.com"
                   >
-                    support@momszyka.com
+                    momszyka@gmail.com
                   </a>
                 </div>
               </motion.div>
@@ -99,9 +99,9 @@ const MomszykaContact = () => {
                   <h3 className="font-semibold">Call Us</h3>
                   <a
                     className="text-amber-600 hover:underline underline-offset-4"
-                    href="tel:5551234567"
+                    href="tel:9304531876"
                   >
-                    (555) 123-4567
+                    +91 9304531876
                   </a>
                 </div>
               </motion.div>
