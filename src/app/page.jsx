@@ -65,33 +65,22 @@ const kitchenImages = [
 
 const testimonials = [
   {
-    name: "Sarah M.",
+    name: "Nishant Kumar",
+    designation: "Sr. Sub Editor",
+    company: "Prabhat Khabar",
     image: "/testimonials/sarah.jpg",
-    alt: "Sarah M. profile picture",
+    alt: "Nishant Kumar profile picture",
     rating: 5,
-    text: "Momszyka has been a game-changer for our family! The meals are delicious, healthy, and save me so much time. It's like having a mom cook for you every day!",
+    text: "I really missed home-cooked meals — but ever since I started ordering from Momszyka, it feels like Maa ke haath ka khana is just a few taps away. The food is fresh, healthy, and full of love.",
   },
   {
-    name: "David L.",
+    name: "Ashish Kumar",
+    designation: "Political Consultant",
+    company: "I-PAC",
     image: "/testimonials/david.jpg",
-    alt: "David L. profile picture",
+    alt: "Ashish Kumar profile picture",
     rating: 5,
-    text: "I love the variety of cuisines on Momszyka. From North Indian to Italian, every dish feels like home. The customization options are fantastic!",
-  },
-  {
-    name: "Emily R.",
-    image: "/testimonials/emily.jpg",
-    alt: "Emily R. profile picture",
-    rating: 4,
-    text: "The food is amazing, and delivery is always on time. Portions could be larger, but the warmth and care in every meal make up for it!",
-  },
-  // Added more for carousel variety
-  {
-    name: "Raj K.",
-    image: "/testimonials/raj.jpg",
-    alt: "Raj K. profile picture",
-    rating: 5,
-    text: "Authentic flavors that remind me of my childhood. Momszyka brings the essence of home cooking right to my door!",
+    text: "Honestly, I was tired of outside food — oily, bland, and repetitive. Momszyka se order karne ke baad mujhe feel hua ki real ghar ka khana kya hota hai. Every bite reminds me of home. Thanks to the home chefs who put love in every meal!",
   },
 ];
 
@@ -690,23 +679,43 @@ const Momszyka = () => {
                 <CarouselContent>
                   {testimonials.map((testimonial, index) => (
                     <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                      <motion.div variants={cardVariants} whileHover="hover">
-                        <Card className="bg-[var(--color-light)] rounded-2xl shadow-lg h-full">
-                          <CardContent className="p-8 flex flex-col h-full">
-                            <div className="flex items-center gap-4 mb-6">
-                              <Image src={testimonial.image} alt={testimonial.alt} width={60} height={60} className="rounded-full border-2 border-[var(--color-primary)]" />
-                              <div>
-                                <p className="font-['Playfair_Display'] text-xl text-[var(--color-new)]">{testimonial.name}</p>
-                                <div className="flex text-[var(--color-primary)]">
-                                  {[...Array(5)].map((_, i) => <Star key={i} className="w-5 h-5" fill={i < testimonial.rating ? "currentColor" : "none"} stroke="currentColor" />)}
-                                </div>
-                              </div>
-                            </div>
-                            <p className="text-gray-600 text-lg italic flex-grow">"{testimonial.text}"</p>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    </CarouselItem>
+  <motion.div variants={cardVariants} whileHover="hover">
+    <Card className="bg-[var(--color-light)] rounded-2xl shadow-lg h-full">
+      <CardContent className="p-8 flex flex-col h-full">
+        <div className="flex items-center gap-4 mb-6">
+          <Image 
+            src={testimonial.image} 
+            alt={testimonial.alt} 
+            width={60} 
+            height={60} 
+            className="rounded-full border-2 border-[var(--color-primary)]" 
+          />
+          <div>
+            <p className="font-['Playfair_Display'] text-xl text-[var(--color-new)]">
+              {testimonial.name}
+            </p>
+            <p className="text-sm text-gray-500">
+              {testimonial.designation} at <span className="font-medium text-[var(--color-primary)]">{testimonial.company}</span>
+            </p>
+            <div className="flex text-[var(--color-primary)] mt-1">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className="w-5 h-5"
+                  fill={i < testimonial.rating ? "currentColor" : "none"}
+                  stroke="currentColor"
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+        <p className="text-gray-600 text-lg italic flex-grow">
+          "{testimonial.text}"
+        </p>
+      </CardContent>
+    </Card>
+  </motion.div>
+</CarouselItem>
                   ))}
                 </CarouselContent>
                 <CarouselPrevious className="hidden md:flex bg-[var(--color-primary)] text-white rounded-full" />
