@@ -556,14 +556,14 @@ const Momszyka = () => {
                 Today's Loving Specials
               </motion.h2>
               <p className="text-center text-gray-600 text-lg mb-10 max-w-3xl mx-auto">Perfect starters or subscriptions – all made with mom's secret ingredients of love.</p>
-              <div className="grid gap-8 md:grid-cols-2">
+              <div className="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto">
                 {[
                   {
                     type: "Veg",
                     price: 180,
                     icon: Salad,
                     color: "green-500",
-                    image: "/specials/veg.jpg", // Add actual image
+                    image: "/specials/veg.jpg", 
                     badges: ["Healthy", "Fresh Herbs"],
                   },
                   {
@@ -571,7 +571,7 @@ const Momszyka = () => {
                     price: 220,
                     icon: Drumstick,
                     color: "red-500",
-                    image: "/specials/nonveg.jpg",
+                    image: "/specials/non-veg.jpg",
                     badges: ["Protein-Packed", "Spicy Twist"],
                   },
                 ].map((special, index) => (
@@ -589,7 +589,7 @@ const Momszyka = () => {
                       alt={`${special.type} Trial Meal`}
                       width={600}
                       height={300}
-                      className="w-full h-48 object-cover"
+                      className=" h-72 w-full object-cover"
                     />
                     <div className="p-6">
                       <h3 className="text-2xl font-['Playfair_Display'] text-[var(--color-new)] flex items-center gap-3 mb-2">
