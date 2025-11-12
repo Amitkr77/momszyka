@@ -16,6 +16,7 @@ import {
 import Image from "next/image";
 import Head from "next/head";
 import { Input } from "@/components/ui/input";
+import Form from "@/components/Form";
 
 // Sample cook data with refined descriptions
 const cooks = [
@@ -145,7 +146,7 @@ const MomszykaCooks = () => {
                   <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
                     <Button
                       variant="outline"
-                      className="border-2 border-white text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-white/20"
+                      className="border-2 border-white text-white text-lg font-medium px-8 py-4 rounded-full bg-white/20"
                       onClick={() => window.location.href = "/menu"}
                     >
                       Explore Our Meals
@@ -350,14 +351,15 @@ const MomszykaCooks = () => {
                 </p>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                   <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                    <Button className="bg-white text-amber-800 text-lg font-medium px-8 py-4 rounded-full hover:bg-amber-100 shadow-lg">
+                    {/* <Button  className="bg-white text-amber-800 text-lg font-medium px-8 py-4 rounded-full hover:bg-amber-100 shadow-lg">
                       Join as a Home Chef
-                    </Button>
+                    </Button> */}
+                    <Form/>
                   </motion.div>
                   <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
                     <Button
                       variant="outline"
-                      className="border-2 border-white text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-white/20"
+                      className="border-2 border-white text-white text-lg font-medium px-8 py-4 rounded-full bg-white/20"
                     >
                       Explore Our Meals
                     </Button>

@@ -18,6 +18,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import Form from "@/components/Form";
 
 const MomszykaHowItWorks = () => {
   // Animation variants
@@ -251,23 +252,16 @@ const MomszykaHowItWorks = () => {
             cook to share your culinary talents with the world.
           </p>
           <div className="mt-8 flex justify-center gap-4">
+            
             <motion.div
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
             >
-              <Button className="rounded-full bg-amber-600 px-6 py-3 text-sm font-bold text-white hover:bg-amber-700">
-                Sign Up as a Customer
-              </Button>
-            </motion.div>
-            <motion.div
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-            >
-              <Button className="rounded-full bg-amber-100 px-6 py-3 text-sm font-bold text-amber-800 hover:bg-amber-200 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700">
+              {/* <Button className="rounded-full bg-amber-100 px-6 py-3 text-sm font-bold text-amber-800 hover:bg-amber-200 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700">
                 Sign Up as a Cook
-              </Button>
+              </Button> */}
+              <Form/>
             </motion.div>
           </div>
         </motion.section>
