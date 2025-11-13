@@ -1,7 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Utensils, Salad, Drumstick, Share2, Clock, Heart } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
@@ -28,27 +33,49 @@ const Page = () => {
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.15, type: "spring", stiffness: 80 },
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        staggerChildren: 0.15,
+        type: "spring",
+        stiffness: 80,
+      },
     },
   };
 
   // Animation variants for cards
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95, rotate: -2 },
-    visible: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.6, type: "spring" } },
-    hover: { y: -10, boxShadow: "0 10px 20px rgba(0,0,0,0.1)", transition: { duration: 0.3 } },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      rotate: 0,
+      transition: { duration: 0.6, type: "spring" },
+    },
+    hover: {
+      y: -10,
+      boxShadow: "0 10px 20px rgba(0,0,0,0.1)",
+      transition: { duration: 0.3 },
+    },
   };
 
   // Animation variants for buttons
   const buttonVariants = {
-    hover: { scale: 1.08, transition: { duration: 0.3, type: "spring", stiffness: 200 } },
+    hover: {
+      scale: 1.08,
+      transition: { duration: 0.3, type: "spring", stiffness: 200 },
+    },
     tap: { scale: 0.92 },
   };
 
   // Animation variants for dialogs
   const dialogVariants = {
     hidden: { opacity: 0, scale: 0.8 },
-    visible: { opacity: 1, scale: 1, transition: { duration: 0.3, ease: "easeOut" } },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
   };
 
   return (
@@ -75,9 +102,13 @@ const Page = () => {
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Momszyka",
-              description: "Momszyka offers personalized meal plans with fresh, home-cooked meals delivered to you.",
+              description:
+                "Momszyka offers personalized meal plans with fresh, home-cooked meals delivered to you.",
               url: "https://momszyka.com/meal-plan",
-              sameAs: ["https://instagram.com/momszyka", "https://wa.me/919304531876"],
+              sameAs: [
+                "https://instagram.com/momszyka",
+                "https://wa.me/919304531876",
+              ],
             }),
           }}
         />
@@ -93,16 +124,21 @@ const Page = () => {
             animate="visible"
           >
             <motion.div className="absolute inset-0" style={{ y }}>
-              <Image
+              {/* <Image
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-JpHlz2GvfaN-ejNLHdVg6f2mn5mUy7rRNwGPmBhwe_TbCeMM-G2iREQz6qNtK-3F751LhQxbghy7adHo4z771eJg_rJZsZY7IJCjeNQPeEtueXpPGhR0y027DYI6efuNXGlhF5fuz1GM5nDLJATfVswHef5mc0C3FqhiN2mVugFkWswj74FEad6OQEEwo0t1pCbHIMDgXzs9xNqtSvQ-b7UUPyrM2taxfzlisIZ2YZzZOX04NsdNr7d4T3nNnrUJH4aPpLZNAWs"
                 alt="Warm home-cooked meal scene"
                 layout="fill"
                 objectFit="cover"
                 priority
-                className="brightness-75"
+                className=""
+              /> */}
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-JpHlz2GvfaN-ejNLHdVg6f2mn5mUy7rRNwGPmBhwe_TbCeMM-G2iREQz6qNtK-3F751LhQxbghy7adHo4z771eJg_rJZsZY7IJCjeNQPeEtueXpPGhR0y027DYI6efuNXGlhF5fuz1GM5nDLJATfVswHef5mc0C3FqhiN2mVugFkWswj74FEad6OQEEwo0t1pCbHIMDgXzs9xNqtSvQ-b7UUPyrM2taxfzlisIZ2YZzZOX04NsdNr7d4T3nNnrUJH4aPpLZNAWs"
+                alt="Warm home-cooked meal scene"
+                className="w-full h-full object-cover"
               />
             </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-b from-amber-600/40 to-amber-800/60"></div>
+            <div className="absolute inset-0 bg-black/20"></div>
             <div className="relative z-10 container mx-auto px-6 text-center">
               <motion.h1
                 className="text-4xl sm:text-5xl lg:text-6xl font-['Playfair_Display'] font-extrabold text-white tracking-tight mb-6 drop-shadow-lg"
@@ -114,16 +150,10 @@ const Page = () => {
                 className="text-lg sm:text-xl max-w-3xl mx-auto text-white/90 mb-8 font-light"
                 variants={containerVariants}
               >
-                Enjoy fresh, home-cooked meals delivered to you. Customize your plan, savor every bite, and discover the joy of meals made with care.
+                Enjoy fresh, home-cooked meals delivered to you. Customize your
+                plan, savor every bite, and discover the joy of meals made with
+                care.
               </motion.p>
-              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                <Button
-                  className="bg-amber-600 text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-amber-700 shadow-lg"
-                  asChild
-                >
-                  <a href="/create-plan">Start building your personalized meal plan today!</a>
-                </Button>
-              </motion.div>
             </div>
           </motion.section>
 
@@ -140,7 +170,8 @@ const Page = () => {
                 Featured Trial Meals – Try Before You Commit
               </h2>
               <p className="text-lg text-gray-600 dark:text-gray-300 text-center mb-12">
-                Discover our hand-picked trial meals, perfect for a single order or to explore our menu.
+                Discover our hand-picked trial meals, perfect for a single order
+                or to explore our menu.
               </p>
               <div className="grid gap-8 sm:grid-cols-2">
                 {[
@@ -163,11 +194,15 @@ const Page = () => {
                     image: "/specials/non-veg.jpg",
                   },
                 ].map((meal, index) => (
-                  <motion.div key={index} variants={cardVariants} whileHover="hover">
+                  <motion.div
+                    key={index}
+                    variants={cardVariants}
+                    whileHover="hover"
+                  >
                     <Card className="bg-white dark:bg-amber-900 border-amber-200 dark:border-amber-700 rounded-2xl overflow-hidden shadow-md">
                       <div className="relative">
                         <Image
-                          src={meal.image}                     
+                          src={meal.image}
                           alt={`${meal.title} image`}
                           width={400}
                           height={300}
@@ -191,13 +226,30 @@ const Page = () => {
                           {meal.title}
                         </CardTitle>
 
-                        <Dialog open={isDialogOpen === index} onOpenChange={(open) => setIsDialogOpen(open ? index : null)}>
+                        <Dialog
+                          open={isDialogOpen === index}
+                          onOpenChange={(open) =>
+                            setIsDialogOpen(open ? index : null)
+                          }
+                        >
                           <DialogTrigger asChild>
-                            <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
-                              <Button onClick={() => {
-                      const message = encodeURIComponent("Hi, I'd love to order some home-cooked goodness!");
-                      window.open(`https://wa.me/919304531876?text=${message}`, "_blank");
-                    }} className={`w-full ${meal.buttonColor} text-white rounded-full py-3 mt-4`}>
+                            <motion.div
+                              variants={buttonVariants}
+                              whileHover="hover"
+                              whileTap="tap"
+                            >
+                              <Button
+                                onClick={() => {
+                                  const message = encodeURIComponent(
+                                    "Hi, I'd love to order some home-cooked goodness!"
+                                  );
+                                  window.open(
+                                    `https://wa.me/919304531876?text=${message}`,
+                                    "_blank"
+                                  );
+                                }}
+                                className={`w-full ${meal.buttonColor} text-white rounded-full py-3 mt-4`}
+                              >
                                 Order now
                               </Button>
                             </motion.div>
@@ -229,17 +281,27 @@ const Page = () => {
                 Share the Joy – Reward Yourself
               </h2>
               <p className="text-lg mb-4">
-                Invite friends to join your meal plan and earn <span className="font-bold">₹250 OFF</span> your next order for every referral.
+                Invite friends to join your meal plan and earn{" "}
+                <span className="font-bold">₹250 OFF</span> your next order for
+                every referral.
               </p>
               <p className="text-lg mb-8">
-                Go big: Refer 10 friends and enjoy <span className="font-bold">1 month of free meals</span>. Good food is better when shared!
+                Go big: Refer 10 friends and enjoy{" "}
+                <span className="font-bold">1 month of free meals</span>. Good
+                food is better when shared!
               </p>
-              <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
+              <motion.div
+                variants={buttonVariants}
+                whileHover="hover"
+                whileTap="tap"
+              >
                 <Button
                   className="bg-white text-amber-800 text-lg font-medium px-8 py-4 rounded-full hover:bg-amber-100 shadow-lg"
                   asChild
                 >
-                  <a href="/refer">Spread the joy of home-cooked meals with your friends!</a>
+                  <a href="/refer">
+                    Spread the joy of home-cooked meals with your friends!
+                  </a>
                 </Button>
               </motion.div>
             </div>

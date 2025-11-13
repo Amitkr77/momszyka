@@ -21,19 +21,19 @@ const mealCategories = [
     title: "Comfort Foods",
     desc: "Hearty classics that warm the soul, from family-favorite pies to rich casseroles.",
     price: 12.99,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuB8c9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2A3B4C5D6E7F8G9H0I1J2K3L4M5N6O7P8Q9R0S1T2U3V4W5X6Y7Z8a9b0c1d2e3f4g5h6i7j8k9l0m1n2o3p4q5r6s7t8u9v0w1x2y3z4",
+    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // cozy casserole
   },
   {
     title: "Global Flavors",
     desc: "Explore international dishes lovingly prepared by home cooks who bring the world to your plate.",
     price: 14.99,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuC9d0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2A3B4C5D6E7F8G9H0I1J2K3L4M5N6O7P8Q9R0S1T2U3V4W5X6Y7Z8a9b0c1d2e3f4g5h6i7j8k9l0m1n2o3p4",
+    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // exotic restaurant spread
   },
   {
     title: "Healthy Bites",
     desc: "Nourishing and wholesome meals designed for a balanced lifestyle without compromising flavor.",
     price: 10.99,
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuD0e1f2g3h4i5j6k7l8m9n0o1p2q3r4s5t6u7v8w9x0y1z2A3B4C5D6E7F8G9H0I1J2K3L4M5N6O7P8Q9R0S1T2U3V4W5X6Y7Z8a9b0c1d2e3f4g5h6i7j8k9",
+    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // fresh salad bowl
   },
 ];
 
@@ -116,7 +116,8 @@ const MomszykaStory = () => {
                 className="brightness-75"
               />
             </motion.div>
-            <div className="absolute inset-0 bg-gradient-to-b from-amber-600/40 to-amber-800/60"></div>
+            {/* <div className="absolute inset-0 bg-gradient-to-b from-amber-600/40 to-amber-800/60"></div> */}
+            <div className="absolute inset-0 bg-black/20"></div>
             <div className="relative z-10 container mx-auto px-6 text-center">
               <motion.h1
                 className="text-4xl sm:text-5xl lg:text-6xl font-['Playfair_Display'] font-extrabold text-white tracking-tight mb-6 drop-shadow-lg"
@@ -258,14 +259,14 @@ const MomszykaStory = () => {
                           height={300}
                           className="w-full h-64 object-cover"
                         />
-                        <motion.div
+                        {/* <motion.div
                           className="absolute bottom-0 left-0 right-0 bg-amber-600/80 text-white p-3 text-center"
                           initial={{ opacity: 0, y: 20 }}
                           whileHover={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3 }}
                         >
                           <p className="text-sm font-medium">Starting at ${category.price}</p>
-                        </motion.div>
+                        </motion.div> */}
                       </div>
                       <CardContent className="p-6">
                         <CardTitle className="text-xl font-['Playfair_Display'] text-amber-800 dark:text-amber-100">{category.title}</CardTitle>
@@ -278,7 +279,7 @@ const MomszykaStory = () => {
                             className="w-full rounded-full border-amber-300 text-amber-600 hover:bg-amber-100 dark:hover:bg-amber-800"
                             asChild
                           >
-                            <a href="/menu">Explore</a>
+                            <a href="/subscribe">Explore</a>
                           </Button>
                         </div>
                       </CardContent>

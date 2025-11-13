@@ -206,7 +206,7 @@ const MomszykaCooks = () => {
             </motion.section>
 
             {/* Meet Our Home Chefs - Interactive cards with hover recipe peek */}
-            <motion.section
+            {/* <motion.section
               className="py-20 bg-gradient-to-b from-white to-amber-50 dark:from-amber-900 dark:to-amber-800"
               variants={containerVariants}
               initial="hidden"
@@ -276,7 +276,86 @@ const MomszykaCooks = () => {
                   </motion.div>
                 ))}
               </div>
-            </motion.section>
+            </motion.section> */}
+
+            {/* Meet Our Moms Section - Innovative: Interactive hover with recipe peek */}
+            <section className="py-20 bg-gradient-to-br from-white to-[var(--color-light)]">
+              <div className="container mx-auto px-6">
+                <motion.h2
+                  className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-12"
+                  variants={containerVariants}
+                  initial="hidden"
+                  viewport={{ once: true }}
+                  whileInView="visible"
+                >
+                  Meet the Hearts Behind the Meals
+                </motion.h2>
+                <div className="grid gap-8 md:grid-cols-3">
+                  {[
+                    {
+                      name: "Radha",
+                      desc: "Master of authentic Punjabi thalis, cooked with family heirloom recipes.",
+                      recipePeek:
+                        "Try her butter chicken – creamy and soul-soothing!",
+                      image: "/hero_image.png",
+                    },
+                    {
+                      name: "Suman",
+                      desc: "Expert in healthy fusion delights, blending tradition with wellness.",
+                      recipePeek:
+                        "Her quinoa khichdi is a nutritious twist on comfort food.",
+                      image: "/hero_image.png",
+                    },
+                    {
+                      name: "Lakshmi",
+                      desc: "Queen of South Indian classics, full of spice and love.",
+                      recipePeek: "Savor her idli-sambar – fluffy and flavorful!",
+                      image: "/hero_image.png",
+                    },
+                  ].map((mom, index) => (
+                    <motion.div
+                      key={index}
+                      variants={cardVariants}
+                      initial="hidden"
+                      viewport={{ once: true }}
+                      whileInView="visible"
+                      whileHover="hover"
+                      className="cursor-pointer rounded-2xl"
+                    >
+                      <Card className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-shadow border border-[var(--color-primary)]/10 h-[450px]">
+                        <div className="relative">
+                          <Image
+                            src={mom.image}
+                            alt={`Mom ${mom.name} in her kitchen`}
+                            width={400}
+                            height={300}
+                            className="w-full h-64 object-cover"
+                          />
+                          <motion.div
+                            className="absolute bottom-0 left-0 right-0 bg-[var(--color-primary)]/80 text-white p-4 text-center opacity-0"
+                            initial={{ opacity: 0, y: 20 }}
+                            whileHover={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                          >
+                            <p className="text-sm font-medium">
+                              {mom.recipePeek}
+                            </p>
+                          </motion.div>
+                        </div>
+                        <CardContent className="p-6 text-center">
+                          <CardTitle className="text-2xl font-['Playfair_Display'] text-[var(--color-new)] mb-2">
+                            {mom.name}
+                          </CardTitle>
+                          <CardDescription className="text-gray-600 text-base">
+                            {mom.desc}
+                          </CardDescription>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </section>
 
             {/* FAQ Section - Warm, human tone with accordion */}
             <motion.section
@@ -354,7 +433,7 @@ const MomszykaCooks = () => {
                     {/* <Button  className="bg-white text-amber-800 text-lg font-medium px-8 py-4 rounded-full hover:bg-amber-100 shadow-lg">
                       Join as a Home Chef
                     </Button> */}
-                    <Form/>
+                    <Form />
                   </motion.div>
                   <motion.div variants={buttonVariants} whileHover="hover" whileTap="tap">
                     <Button

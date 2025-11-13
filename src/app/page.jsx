@@ -443,19 +443,19 @@ const Momszyka = () => {
                       icon: ChefHat,
                       title: "Discover Loving Chefs",
                       desc: "Explore profiles of local moms with menus tailored just for you.",
-                      image: "/steps/discover.jpg",
+                      image: "/steps/discover.png",
                     },
                     {
                       icon: ShoppingCart,
                       title: "Customize with Care",
                       desc: "Select dishes, add preferences, and schedule with real-time love.",
-                      image: "/steps/customize.jpg",
+                      image: "/steps/customize.png",
                     },
                     {
                       icon: UtensilsCrossed,
                       title: "Savor the Warmth",
                       desc: "Receive fresh meals, rate, and get personalized hugs in food form.",
-                      image: "/steps/savor.jpg",
+                      image: "/steps/savor.png",
                     },
                   ].map((step, index) => (
                     <motion.div
