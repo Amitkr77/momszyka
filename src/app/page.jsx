@@ -460,9 +460,7 @@ const Momszyka = () => {
                   ].map((step, index) => (
                     <motion.div
                       key={index}
-                      className={`relative ${
-                        index % 2 === 0 ? "md:pr-12" : "md:pl-12"
-                      }`}
+                      className={`relative `}
                       variants={cardVariants}
                       initial="hidden"
                       viewport={{ once: true }}
