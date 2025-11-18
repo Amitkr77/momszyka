@@ -296,6 +296,11 @@ const Momszyka = () => {
             Or tap to call:{' '}
             <span className="font-medium text-white">+91 93045 31876</span>
           </motion.p>
+          <motion.p>
+            <span className="mt-2 text-sm text-white ">
+             Patna || Gaya 
+            </span>
+          </motion.p>
         </motion.div>
       </div>
 
