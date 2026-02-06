@@ -40,6 +40,7 @@ import {
 } from "@/components/ui/carousel";
 import Head from "next/head";
 import CountUp from "react-countup"; 
+import AboutMomszyka from "@/components/About";
 
 const testimonials = [
   {
@@ -350,7 +351,7 @@ const Momszyka = () => {
           </section>
 
           {/* Meet Our Moms Section - Innovative: Interactive hover with recipe peek */}
-          <section className="py-20 bg-gradient-to-br from-white to-[var(--color-light)]">
+          {/* <section className="py-20 bg-gradient-to-br from-white to-[var(--color-light)]">
             <div className="container mx-auto px-6">
               <motion.h2
                 className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-12"
@@ -426,7 +427,10 @@ const Momszyka = () => {
                 ))}
               </div>
             </div>
-          </section>
+          </section> */}
+
+          {/* About Section */}
+          <AboutMomszyka />
 
           {/* How It Works Section - Enhanced with timeline layout and icons */}
           <section className="py-20 bg-white">
