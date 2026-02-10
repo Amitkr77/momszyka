@@ -40,7 +40,7 @@ import {
 } from "@/components/ui/carousel";
 import Head from "next/head";
 import CountUp from "react-countup"; 
-import AboutMomszyka from "@/components/About";
+import { AboutMomszyka } from "@/components/About";
 
 const testimonials = [
   {
@@ -430,7 +430,8 @@ const Momszyka = () => {
           </section> */}
 
           {/* About Section */}
-          <AboutMomszyka />
+          <AboutMomszyka/>
+          
 
           {/* How It Works Section - Enhanced with timeline layout and icons */}
           <section className="py-20 bg-white">
