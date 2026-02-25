@@ -1,13 +1,13 @@
 export const frequentOrders = [
   {
     id: 1,
-    name: "Veg & Non Veg Thali",
+    name: "Veg Thali",
     price: 99,
     category: "Thali",
     image: "🍛",
     imageUrl: "/popular/veg_1.jpg",
     description: "Complete thali with dal, sabzi, rice, roti, and dessert.",
-    isVeg: false,
+    isVeg: true,
   },
   {
     id: 2,
