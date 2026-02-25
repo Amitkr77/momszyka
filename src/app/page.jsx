@@ -207,7 +207,7 @@ const Momszyka = () => {
             {/* Parallax Background */}
             <motion.div className="absolute inset-0" style={{ y }}>
               <Image
-                src="/hero_image.png"
+                src="/hero_image.jpeg"
                 alt="Warm home-cooked meal by a loving mom"
                 fill
                 priority
@@ -311,7 +311,7 @@ const Momszyka = () => {
                 </motion.p>
                 <motion.p>
                   <span className="mt-2 text-sm text-white ">
-                    Patna || Gaya
+                    Patna
                   </span>
                 </motion.p>
               </motion.div>

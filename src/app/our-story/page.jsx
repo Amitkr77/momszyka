@@ -237,7 +237,7 @@ const AboutMomszyka = () => {
                   <div className="absolute -inset-4 bg-gradient-to-br from-[#f25c41]/30 to-[#f79e33]/30 rounded-[3rem] blur-2xl"></div>
                   <div className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/3]">
                     <Image
-                      src="/about_img.png"
+                      src="/about/about_img.jpeg"
                       alt="Home-style meal"
                       fill
                       className="object-cover"
