@@ -1,8 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardTitle, CardDescription } from "@/components/ui/card";
-import { Utensils, ChefHat, Users, Heart, Sparkles } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import {
   Dialog,
@@ -14,54 +11,66 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import Head from "next/head";
+import { Heart, ChefHat, Truck, PackageCheck } from "lucide-react";
+import { JoinAsMomDialog } from "@/components/Form";
 
-// Sample meal category images (replace with actual URLs in production)
-const mealCategories = [
-  {
-    title: "Comfort Foods",
-    desc: "Hearty classics that warm the soul, from family-favorite pies to rich casseroles.",
-    price: 12.99,
-    image: "https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // cozy casserole
-  },
-  {
-    title: "Global Flavors",
-    desc: "Explore international dishes lovingly prepared by home cooks who bring the world to your plate.",
-    price: 14.99,
-    image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // exotic restaurant spread
-  },
-  {
-    title: "Healthy Bites",
-    desc: "Nourishing and wholesome meals designed for a balanced lifestyle without compromising flavor.",
-    price: 10.99,
-    image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", // fresh salad bowl
-  },
-];
-
-const MomszykaStory = () => {
+const AboutMomszyka = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [joinOpen, setJoinOpen] = useState(false);
 
-  // Parallax effect for hero
   const { scrollYProgress } = useScroll();
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
-  // Animation variants with spring for warmth
+  const features = [
+    {
+      icon: ChefHat,
+      title: "Truly Home-Style Meals",
+      description:
+        "Inspired by everyday Indian kitchens — simple, soulful, and satisfying. No restaurant-style heaviness, only honest flavors.",
+      gradient: "from-[#f25c41] to-[#f79e33]",
+    },
+    {
+      icon: Truck,
+      title: "Reliable Daily Delivery",
+      description:
+        "We understand your routine. We ensure on-time delivery so your meals fit perfectly into your day without stress.",
+      gradient: "from-[#f79e33] to-[#f25c41]",
+    },
+    {
+      icon: PackageCheck,
+      title: "Clean & Safe Packaging",
+      description:
+        "Hygiene is non-negotiable. Every tiffin is packed in food-grade, sealed containers to maintain freshness and safety.",
+      gradient: "from-[#f25c41] to-[#f79e33]",
+    },
+  ];
+
+  const values = [
+    { emoji: "❤️", text: "Made with love, just like home" },
+    { emoji: "🌿", text: "Fresh ingredients, every single day" },
+    { emoji: "🧑‍🍳", text: "FSSAI certified" },
+  ];
+
   const containerVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.15, type: "spring", stiffness: 80 },
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        staggerChildren: 0.15,
+        type: "spring",
+        stiffness: 80,
+      },
     },
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95, rotate: -2 },
-    visible: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.6, type: "spring" } },
-    hover: { y: -10, boxShadow: "0 10px 20px rgba(0,0,0,0.1)", transition: { duration: 0.3 } },
-  };
-
   const buttonVariants = {
-    hover: { scale: 1.08, transition: { duration: 0.3, type: "spring", stiffness: 200 } },
+    hover: {
+      scale: 1.08,
+      transition: { duration: 0.3, type: "spring", stiffness: 200 },
+    },
     tap: { scale: 0.92 },
   };
 
@@ -89,9 +98,13 @@ const MomszykaStory = () => {
               "@context": "https://schema.org",
               "@type": "Organization",
               name: "Momszyka",
-              description: "Momszyka connects home cooks with food lovers, celebrating authentic, home-cooked meals.",
+              description:
+                "Momszyka connects home cooks with food lovers, celebrating authentic, home-cooked meals.",
               url: "https://momszyka.com",
-              sameAs: ["https://instagram.com/momszyka", "https://wa.me/919304531876"],
+              sameAs: [
+                "https://instagram.com/momszyka",
+                "https://wa.me/919304531876",
+              ],
             }),
           }}
         />
@@ -99,7 +112,7 @@ const MomszykaStory = () => {
 
       <div className="flex flex-col min-h-screen bg-gradient-to-b from-amber-50 to-white dark:from-amber-900 dark:to-amber-800 font-['Lato'] text-amber-800 dark:text-amber-100 leading-relaxed">
         <main className="flex-grow">
-          {/* Hero Section - Parallax with warm overlay */}
+          {/* Hero Section */}
           <motion.section
             className="relative min-h-[70vh] flex items-center justify-center overflow-hidden"
             variants={containerVariants}
@@ -116,7 +129,6 @@ const MomszykaStory = () => {
                 className="brightness-75"
               />
             </motion.div>
-            {/* <div className="absolute inset-0 bg-gradient-to-b from-amber-600/40 to-amber-800/60"></div> */}
             <div className="absolute inset-0 bg-black/20"></div>
             <div className="relative z-10 container mx-auto px-6 text-center">
               <motion.h1
@@ -129,20 +141,23 @@ const MomszykaStory = () => {
                 className="text-lg sm:text-xl max-w-3xl mx-auto text-white/90 mb-8 font-light"
                 variants={containerVariants}
               >
-                Momszyka honors the love, care, and creativity mothers bring to every meal. Join a community where passion for cooking meets the joy of sharing.
+                Momszyka honors the love, care, and creativity mothers bring to
+                every meal. Join a community where passion for cooking meets the
+                joy of sharing.
               </motion.p>
               <motion.div variants={containerVariants}>
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
-                    <Button
-                      className="bg-amber-600 text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-amber-700 shadow-lg"
+                    <motion.button
+                      className="inline-flex items-center justify-center bg-amber-600 text-white text-lg font-medium px-8 py-4 rounded-full hover:bg-amber-700 shadow-lg"
                       variants={buttonVariants}
                       whileHover="hover"
                       whileTap="tap"
                     >
                       Join Our Community
-                    </Button>
+                    </motion.button>
                   </DialogTrigger>
+
                   <DialogContent className="bg-amber-50 dark:bg-amber-900 rounded-2xl max-w-md">
                     <DialogHeader>
                       <DialogTitle className="text-2xl font-['Playfair_Display'] text-amber-800 dark:text-amber-100 flex items-center gap-3">
@@ -150,28 +165,38 @@ const MomszykaStory = () => {
                         Become a Part of Momszyka
                       </DialogTitle>
                       <DialogDescription className="text-gray-600 dark:text-gray-300 text-base">
-                        Become part of Momszyka to explore home-cooked meals or share your culinary creations with food lovers everywhere.
+                        Become part of Momszyka to explore home-cooked meals or
+                        share your culinary creations with food lovers
+                        everywhere.
                       </DialogDescription>
                     </DialogHeader>
+
                     <div className="flex flex-col sm:flex-row gap-4 mt-6">
-                      <Button
-                        className="bg-amber-600 text-white rounded-full py-3"
-                        asChild
+                      <motion.a
+                        href="/subscribe"
+                        className="inline-flex items-center justify-center text-center bg-amber-600 text-white rounded-full py-3 px-5 font-medium hover:bg-amber-700 transition-colors shadow-sm"
                         variants={buttonVariants}
                         whileHover="hover"
                         whileTap="tap"
                       >
-                        <a href="/menu">Discover dishes crafted with love by talented home cooks.</a>
-                      </Button>
-                      <Button
-                        className="bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700 rounded-full py-3"
-                        asChild
+                        Discover dishes crafted with love by talented home
+                        cooks.
+                      </motion.a>
+
+                      <motion.button
+                        onClick={() => setJoinOpen(true)}
+                        className="inline-flex items-center justify-center text-center bg-amber-100 text-amber-800 hover:bg-amber-200 dark:bg-amber-800 dark:text-amber-100 dark:hover:bg-amber-700 rounded-full py-3 px-5 font-medium transition-colors shadow-sm"
                         variants={buttonVariants}
                         whileHover="hover"
                         whileTap="tap"
                       >
-                        <a href="/cooks">Share your recipes and turn your culinary skills into opportunities.</a>
-                      </Button>
+                        Join as Cook
+                      </motion.button>
+
+                      <JoinAsMomDialog
+                        open={joinOpen}
+                        onOpenChange={setJoinOpen}
+                      />
                     </div>
                   </DialogContent>
                 </Dialog>
@@ -179,166 +204,141 @@ const MomszykaStory = () => {
             </div>
           </motion.section>
 
-          {/* Story/About Section - Warm narrative with image */}
-          <motion.section
-            className="py-20"
-            variants={containerVariants}
-            initial="hidden"
-            viewport={{ once: true }}
-            whileInView="visible"
+          {/* About Section */}
+          <section
+            id="about"
+            className="py-4 md:py-6 relative overflow-hidden bg-[#F9FAFB]"
           >
-            <div className="container mx-auto max-w-7xl px-6">
-              <h2 className="text-4xl sm:text-5xl font-['Playfair_Display'] font-extrabold text-amber-800 dark:text-amber-100 text-center mb-12">
-                Empowering Home Cooks, One Meal at a Time
-              </h2>
-              <div className="grid gap-12 md:grid-cols-2 items-center">
-                <div className="space-y-8 prose prose-lg max-w-none text-gray-600 dark:text-gray-300">
-                  <div>
-                    <h3 className="text-2xl font-['Playfair_Display'] font-bold text-amber-800 dark:text-amber-100">Passion Meets Opportunity</h3>
-                    <p>
-                      Momszyka is designed to give mothers and home cooks a platform to showcase their culinary talent. Every recipe shared connects them with people who appreciate genuine, home-cooked food.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-['Playfair_Display'] font-bold text-amber-800 dark:text-amber-100">Community at the Core</h3>
-                    <p>
-                      Our platform is more than recipes—it’s a network where cooks and food enthusiasts inspire, learn, and celebrate together. Through shared meals and stories, every user becomes part of our family.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-['Playfair_Display'] font-bold text-amber-800 dark:text-amber-100">Supporting Quality & Sustainability</h3>
-                    <p>
-                      We encourage safe, high-quality meals made from fresh, local ingredients. Sustainable cooking practices are promoted to create a positive impact on both families and the planet.
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="text-2xl font-['Playfair_Display'] font-bold text-amber-800 dark:text-amber-100">Join the Movement</h3>
-                    <p>
-                      Whether you’re sharing your favorite dishes or savoring authentic home cooking, Momszyka invites you to take part in a movement that values care, creativity, and connection.
-                    </p>
-                  </div>
-                </div>
+            <div className="max-w-[1350px] mx-auto px-4 md:px-6 lg:px-8">
+              {/* Header */}
+              <motion.div
+                className="text-center mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <h2 className="text-5xl md:text-6xl font-['Playfair_Display'] font-bold text-[var(--color-new)] mb-4">
+                  About Momszyka
+                </h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                  At Momszyka, we believe food is more than just a meal — it's a
+                  feeling of care, comfort, and home.
+                </p>
+              </motion.div>
+
+              <div className="grid lg:grid-cols-2 gap-12 items-center mb-8">
+                {/* Image */}
                 <motion.div
-                  className="rounded-2xl overflow-hidden shadow-lg"
-                  variants={cardVariants}
-                  whileHover="hover"
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="relative"
                 >
-                  <Image
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp-BPMDWEOvMcpO8Cuo1Sad2a6S0htJIejCWFkZgw-GJDX0evBCZgklqhlm-AVkjQAHCuIels4aZnvo_wlnkU1bF0cCPiFibzOJeBTMp82HIDB07bDNUwynNJaGpBn_XOfPvXDxPWVOEG21sOjmfNQdHf6bRRKKFBPFhzdENlbkYgp9vnXaZpGUwkC4qgm77BcW83lJQrppNpHa3puS0puX_ZOwwiQia9jWwEl-DPJrntuw449-3fW_yjUy4wcZw7zNopZZRc565o"
-                    alt="A family enjoying a home-cooked meal together"
-                    width={600}
-                    height={400}
-                    className="w-full h-full object-cover"
-                  />
+                  <div className="absolute -inset-4 bg-gradient-to-br from-[#f25c41]/30 to-[#f79e33]/30 rounded-[3rem] blur-2xl"></div>
+                  <div className="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/3]">
+                    <Image
+                      src="/about_img.png"
+                      alt="Home-style meal"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </motion.div>
+
+                {/* Mission */}
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  className="space-y-4"
+                >
+                  <h3 className="text-4xl font-['Playfair_Display'] font-bold text-gray-900">
+                    Our Mission
+                  </h3>
+                  <p className="text-xl text-gray-700 leading-relaxed">
+                    Our mission is simple: to bring real home-style food to
+                    students, working professionals, and families who miss the
+                    warmth of{" "}
+                    <strong className="font-bold text-[#f25c41]">
+                      ghar ka khana
+                    </strong>
+                    .
+                  </p>
+                  <div className="bg-gradient-to-r from-[#f25c41]/10 to-[#f79e33]/10 rounded-2xl p-5 border-l-4 border-[#f25c41]">
+                    <p className="text-lg text-[#2D3A3A] font-['Yatra_One',_cursive] italic">
+                      "Every meal is prepared using fresh ingredients and
+                      traditional recipes, ensuring taste that feels familiar —
+                      just like food cooked by a mom."
+                    </p>
+                  </div>
+                  <p className="text-2xl font-['Playfair_Display'] font-bold text-[var(--color-new)]">
+                    Balanced nutrition and soulful flavors for your daily
+                    routine.
+                  </p>
+
+                  {/* Values Pills */}
+                  <div className="flex flex-nowrap gap-2.5 pt-1 overflow-x-auto">
+                    {values.map((value, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 + index * 0.1 }}
+                        className="flex items-center gap-2 bg-white px-3 py-2.5 rounded-full shadow-md border border-gray-200 hover:border-[#f25c41]/30 hover:shadow-lg transition-all whitespace-nowrap"
+                      >
+                        <span className="text-xl">{value.emoji}</span>
+                        <span className="text-gray-700 text-xs font-medium">
+                          {value.text}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
                 </motion.div>
               </div>
-            </div>
-          </motion.section>
 
-          {/* Featured Meal Categories - Interactive cards */}
-          <motion.section
-            className="py-20 bg-amber-100 dark:bg-amber-800"
-            variants={containerVariants}
-            initial="hidden"
-            viewport={{ once: true }}
-            whileInView="visible"
-          >
-            <div className="container max-w-7xl mx-auto px-6">
-              <h2 className="text-4xl sm:text-5xl font-['Playfair_Display'] font-extrabold text-amber-800 dark:text-amber-100 text-center mb-12">
-                Meals That Bring People Together
-              </h2>
-              <div className="grid gap-8 md:grid-cols-3">
-                {mealCategories.map((category, index) => (
-                  <motion.div key={index} variants={cardVariants} whileHover="hover">
-                    <Card className="bg-amber-50 dark:bg-amber-900 border-amber-200 dark:border-amber-700 rounded-2xl overflow-hidden shadow-md">
-                      <div className="relative">
-                        <Image
-                          src={category.image}
-                          alt={`${category.title} meal`}
-                          width={400}
-                          height={300}
-                          className="w-full h-64 object-cover"
-                        />
-                        {/* <motion.div
-                          className="absolute bottom-0 left-0 right-0 bg-amber-600/80 text-white p-3 text-center"
-                          initial={{ opacity: 0, y: 20 }}
-                          whileHover={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <p className="text-sm font-medium">Starting at ${category.price}</p>
-                        </motion.div> */}
+              {/* Features */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="space-y-4"
+              >
+                <h3 className="text-3xl md:text-4xl font-['Playfair_Display'] font-bold text-center text-gray-900 mb-4">
+                  What Makes Momszyka Special?
+                </h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {features.map((feature, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1 }}
+                      whileHover={{ y: -8 }}
+                      className="bg-white rounded-2xl p-4 shadow-lg hover:shadow-2xl transition-all"
+                    >
+                      <div
+                        className={`w-16 h-16 bg-gradient-to-br ${feature.gradient} rounded-2xl flex items-center justify-center text-white mb-4`}
+                      >
+                        <feature.icon size={32} />
                       </div>
-                      <CardContent className="p-6">
-                        <CardTitle className="text-xl font-['Playfair_Display'] text-amber-800 dark:text-amber-100">{category.title}</CardTitle>
-                        <CardDescription className="mt-2 text-base text-gray-600 dark:text-gray-300">
-                          {category.desc}
-                        </CardDescription>
-                        <div className="mt-4">
-                          <Button
-                            variant="outline"
-                            className="w-full rounded-full border-amber-300 text-amber-600 hover:bg-amber-100 dark:hover:bg-amber-800"
-                            asChild
-                          >
-                            <a href="/subscribe">Explore</a>
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
+                      <h4 className="text-2xl font-['Playfair_Display'] font-bold mb-3 text-gray-900">
+                        {feature.title}
+                      </h4>
+                      <p className="text-gray-600 leading-relaxed">
+                        {feature.description}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
             </div>
-          </motion.section>
-
-          {/* Why Momszyka - Clean and inviting cards */}
-          <motion.section
-            className="py-20"
-            variants={containerVariants}
-            initial="hidden"
-            viewport={{ once: true }}
-            whileInView="visible"
-          >
-            <div className="container max-w-7xl mx-auto px-6">
-              <h2 className="text-4xl sm:text-5xl font-['Playfair_Display'] font-extrabold text-amber-800 dark:text-amber-100 text-center mb-12">
-                Why Choose Momszyka?
-              </h2>
-              <div className="grid gap-8 md:grid-cols-3">
-                {[
-                  {
-                    icon: ChefHat,
-                    title: "Empowerment",
-                    desc: "Momszyka helps cooks share their culinary expertise and build confidence in their skills.",
-                  },
-                  {
-                    icon: Utensils,
-                    title: "Authenticity",
-                    desc: "We celebrate home-cooked meals made with real ingredients and genuine care.",
-                  },
-                  {
-                    icon: Users,
-                    title: "Connection",
-                    desc: "Build meaningful relationships with a community of passionate cooks and food lovers.",
-                  },
-                ].map((item, index) => (
-                  <motion.div key={index} variants={cardVariants} whileHover="hover">
-                    <Card className="bg-amber-50 dark:bg-amber-900 border-amber-200 dark:border-amber-700 rounded-2xl shadow-md">
-                      <CardContent className="p-6 text-center">
-                        <div className="p-4 bg-amber-100 dark:bg-amber-800 rounded-full text-amber-600 inline-flex mb-4">
-                          <item.icon className="h-8 w-8" />
-                        </div>
-                        <CardTitle className="text-xl font-['Playfair_Display'] text-amber-800 dark:text-amber-100">{item.title}</CardTitle>
-                        <CardDescription className="mt-2 text-base text-gray-600 dark:text-gray-300">{item.desc}</CardDescription>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.section>
+          </section>
         </main>
       </div>
     </>
   );
 };
 
-export default MomszykaStory;
+export default AboutMomszyka;
