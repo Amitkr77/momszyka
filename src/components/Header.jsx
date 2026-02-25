@@ -158,7 +158,8 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetClose,
+  SheetTitle,
+  SheetDescription,
 } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
@@ -243,12 +244,13 @@ export default function Header() {
         </nav>
 
         {/* ── Right side: CTA + mobile menu ── */}
-        <div className="flex items-center gap-4">
-          {/* CTA / Form button */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          {/* CTA / Form button — compact on mobile */}
           <motion.div
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
+            className="[&>*]:text-xs [&>*]:px-2 [&>*]:py-1.5 sm:[&>*]:text-sm sm:[&>*]:px-4 sm:[&>*]:py-2"
           >
             <Form />
           </motion.div>
@@ -261,16 +263,28 @@ export default function Header() {
                 className="md:hidden p-2 rounded-full hover:bg-amber-100 dark:hover:bg-amber-800"
                 aria-label="Open menu"
               >
-                <Menu className="h-7 w-7 text-amber-800 dark:text-amber-100" />
+                <Menu className="h-6 w-6 text-amber-800 dark:text-amber-100" />
               </Button>
             </SheetTrigger>
 
+            {/* 
+              FIX: Pass `closeButton={false}` (or the Shadcn equivalent) to suppress 
+              the default built-in X. We render our own X below for full control.
+              In newer shadcn/ui versions use: <SheetContent closeButton={false} ...>
+              In older versions, add [&>button:first-of-type]:hidden to className.
+            */}
             <SheetContent
               side="right"
-              className="w-[280px] sm:w-[340px] bg-amber-50 dark:bg-amber-900 p-0 border-l border-amber-200 dark:border-amber-700"
+              className="w-[280px] sm:w-[340px] bg-amber-50 dark:bg-amber-900 p-0 border-l border-amber-200 dark:border-amber-700 [&>button:first-of-type]:hidden"
             >
-              {/* Sheet header with logo + close button */}
-              <div className="flex items-center justify-between px-6 py-5 border-b border-amber-200 dark:border-amber-700">
+              {/* Visually hidden title + description for screen reader accessibility (required by Radix UI) */}
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <SheetDescription className="sr-only">
+                Site navigation links and contact information
+              </SheetDescription>
+
+              {/* Sheet header with logo + our custom close button (only one X) */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-amber-200 dark:border-amber-700">
                 <Link href="/" onClick={() => setMobileOpen(false)}>
                   <img
                     src="./logo.png"
@@ -294,24 +308,24 @@ export default function Header() {
               {/* Nav links with stagger animation */}
               <nav className="flex flex-col px-4 py-6 gap-1">
                 {visibleLinks.map(({ href, label }, index) => (
-                  <SheetClose asChild key={href}>
-                    <motion.div
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.07, duration: 0.3 }}
+                  <motion.div
+                    key={href}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.07, duration: 0.3 }}
+                  >
+                    <Link
+                      href={href}
+                      onClick={() => setMobileOpen(false)}
+                      className={`flex items-center w-full text-base font-semibold px-4 py-3 rounded-xl transition-all ${
+                        isActive(href)
+                          ? "bg-[#FF8F00]/10 text-[#FF8F00] border-l-4 border-[#FF8F00] pl-3"
+                          : "text-amber-800 dark:text-amber-100 hover:bg-amber-100 dark:hover:bg-amber-800 hover:text-[#FF8F00]"
+                      }`}
                     >
-                      <Link
-                        href={href}
-                        className={`flex items-center w-full text-base font-semibold px-4 py-3 rounded-xl transition-all ${
-                          isActive(href)
-                            ? "bg-[#FF8F00]/10 text-[#FF8F00] border-l-4 border-[#FF8F00] pl-3"
-                            : "text-amber-800 dark:text-amber-100 hover:bg-amber-100 dark:hover:bg-amber-800 hover:text-[#FF8F00]"
-                        }`}
-                      >
-                        {label}
-                      </Link>
-                    </motion.div>
-                  </SheetClose>
+                      {label}
+                    </Link>
+                  </motion.div>
                 ))}
               </nav>
 
