@@ -241,7 +241,7 @@
 import { Facebook, Instagram, X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import NewsletterForm from "./NewsletterForm"; // Adjust path as needed
+import NewsletterForm from "./NewsletterForm";
 
 const NAV = {
   Explore: [
@@ -259,7 +259,7 @@ const NAV = {
 
 const SOCIALS = [
   { Icon: Facebook, href: "https://facebook.com/momszyka", label: "Facebook" },
-  { Icon: X, href: "https://x.com/momszyka", label: "X" },
+  // { Icon: X, href: "https://x.com/momszyka", label: "X" },
   {
     Icon: Instagram,
     href: "https://instagram.com/momszyka",
@@ -273,22 +273,21 @@ export default function Footer() {
       {/* Decorative Top Line */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent" />
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-8 border-b border-amber-100 dark:border-amber-800/50">
-          {/* Brand Column (Spans 4 cols on large screens) */}
-          <div className="lg:col-span-4 space-y-6">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10 sm:pt-12 pb-6 sm:pb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-8 pb-8 border-b border-amber-100 dark:border-amber-800/50">
+          {/* ── Brand Column ── */}
+          <div className="sm:col-span-2 lg:col-span-4 space-y-4 sm:space-y-6">
             <Link href="/" className="inline-flex items-center gap-3 group">
-              <div className="relative w-12 h-12 rounded-full overflow-hidden shadow-sm ring-2 ring-amber-200 dark:ring-amber-700 group-hover:ring-amber-400 transition-all duration-300">
-                {/* Use Next Image for performance */}
+              <div className="relative w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden shadow-sm ring-2 ring-amber-200 dark:ring-amber-700 group-hover:ring-amber-400 transition-all duration-300 flex-shrink-0">
                 <Image
-                  src="/logo.png" // Ensure this is in your public folder
+                  src="/logo.png"
                   alt="Momszyka Logo"
                   fill
                   sizes="48px"
                   className="object-cover"
                 />
               </div>
-              <span className="text-2xl font-extrabold text-amber-900 dark:text-amber-50 tracking-tight">
+              <span className="text-xl sm:text-2xl font-extrabold text-amber-900 dark:text-amber-50 tracking-tight">
                 Momszyka
               </span>
             </Link>
@@ -299,7 +298,7 @@ export default function Footer() {
               community.
             </p>
 
-            <div className="flex gap-4">
+            <div className="flex gap-3 sm:gap-4">
               {SOCIALS.map(({ Icon, href, label }) => (
                 <a
                   key={label}
@@ -315,19 +314,19 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Navigation Columns (Span 2 cols each) */}
-          <div className="lg:col-span-4 flex flex-col sm:flex-row gap-12 sm:gap-16">
+          {/* ── Navigation Columns ── */}
+          <div className="lg:col-span-4 flex flex-row gap-8 sm:gap-16">
             {Object.entries(NAV).map(([heading, links]) => (
-              <nav key={heading} className="space-y-6">
-                <h4 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-200">
+              <nav key={heading} className="space-y-4 sm:space-y-6 flex-1">
+                <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-200">
                   {heading}
                 </h4>
-                <ul className="space-y-3">
+                <ul className="space-y-2.5 sm:space-y-3">
                   {links.map(({ label, href }) => (
                     <li key={label}>
                       <Link
                         href={href}
-                        className="text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-200 font-medium"
+                        className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 hover:text-amber-600 dark:hover:text-amber-400 transition-colors duration-200 font-medium"
                       >
                         {label}
                       </Link>
@@ -338,12 +337,12 @@ export default function Footer() {
             ))}
           </div>
 
-          {/* Newsletter Column (Spans 4 cols) */}
-          <div className="lg:col-span-4 lg:pl-8">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-200 mb-3">
+          {/* ── Newsletter Column ── */}
+          <div className="sm:col-span-2 lg:col-span-4 lg:pl-8">
+            <h4 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-900 dark:text-amber-200 mb-2 sm:mb-3">
               Stay Connected
             </h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-3 sm:mb-4">
               Get our latest recipes, exclusive promos, and weekly updates
               straight to your inbox.
             </p>
@@ -351,12 +350,13 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar */}
-        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
+        {/* ── Bottom Bar ── */}
+        <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center sm:text-left">
           <p>
-            © {new Date().getFullYear()} Momszyka | Developed by Alomonx Technology Pvt Ltd.
+            © {new Date().getFullYear()} Momszyka | Developed by Alomonx
+            Technology Pvt Ltd.
           </p>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <Link
               href="/terms"
               className="hover:text-amber-700 dark:hover:text-amber-300 transition-colors"

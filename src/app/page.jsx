@@ -42,8 +42,13 @@ import Head from "next/head";
 import CountUp from "react-countup";
 import dynamic from "next/dynamic";
 import { AboutMomszyka } from "@/components/About";
-const MealSpecialsSection = dynamic(() => import("@/components/MealSpecialSections"), { ssr: false });
-const FrequentOrders = dynamic(() => import("@/components/Frequentorders"), { ssr: false });
+const MealSpecialsSection = dynamic(
+  () => import("@/components/MealSpecialSections"),
+  { ssr: false },
+);
+const FrequentOrders = dynamic(() => import("@/components/Frequentorders"), {
+  ssr: false,
+});
 import { JoinAsMomDialog } from "@/components/Form";
 
 const testimonials = [
@@ -168,7 +173,19 @@ const Momszyka = () => {
           name="keywords"
           content="home-cooked meals, homemade food delivery, moms cooking, fresh meal delivery, authentic Indian food, healthy eating"
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* ✅ Stronger viewport — prevents Android Chrome from zooming or overflowing */}
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
+        />
+
+        {/* ✅ Theme color — colors browser chrome on Android */}
+        <meta name="theme-color" content="#FF8F00" />
+
+        {/* ✅ Prevents iOS from auto-detecting phone numbers as links */}
+        <meta name="format-detection" content="telephone=no" />
+
         <link
           href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@400;700&display=swap"
           rel="stylesheet"
@@ -310,9 +327,7 @@ const Momszyka = () => {
                   </span>
                 </motion.p>
                 <motion.p>
-                  <span className="mt-2 text-sm text-white ">
-                    Patna
-                  </span>
+                  <span className="mt-2 text-sm text-white ">Patna</span>
                 </motion.p>
               </motion.div>
             </div>
@@ -658,33 +673,34 @@ const Momszyka = () => {
           <FrequentOrders />
 
           {/* Referral Section - Enhanced with share buttons and animation */}
-          <section className="py-8 bg-gradient-to-b from-[var(--color-light)] to-white">
-            <div className="container mx-auto px-6">
+          <section className="py-6 sm:py-8 bg-gradient-to-b from-[var(--color-light)] to-white">
+            <div className="container mx-auto px-4 sm:px-6">
               <motion.div
-                className="bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/80 dark:to-amber-800/80 border-t border-amber-200 dark:border-amber-700  p-10 rounded-2xl text-center shadow-inner"
+                className="bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/80 dark:to-amber-800/80 border-t border-amber-200 dark:border-amber-700 p-6 sm:p-10 rounded-2xl text-center shadow-inner"
                 variants={containerVariants}
                 initial="hidden"
                 viewport={{ once: true }}
                 whileInView="visible"
               >
-                <h2 className="text-4xl font-['Playfair_Display'] text-[var(--color-new)] mb-6 flex items-center justify-center gap-3">
-                  <Share2 className="w-8 h-8 text-[var(--color-primary)]" />
+                <h2 className="text-2xl sm:text-4xl font-['Playfair_Display'] text-[var(--color-new)] mb-4 sm:mb-6 flex items-center justify-center gap-2 sm:gap-3">
+                  <Share2 className="w-6 h-6 sm:w-8 sm:h-8 text-[var(--color-primary)]" />
                   Spread the Love
                 </h2>
-                <p className="text-xl text-gray-600 mb-4 max-w-2xl mx-auto">
+                <p className="text-base sm:text-xl text-gray-600 mb-3 sm:mb-4 max-w-2xl mx-auto">
                   Invite a talented mom to join or refer a friend – earn rewards
                   wrapped in warmth.
                 </p>
-                <p className="text-xl text-gray-600 mb-8">
+                <p className="text-base sm:text-xl text-gray-600 mb-6 sm:mb-8">
                   Friends get ₹250 OFF, moms get a platform to shine!
                 </p>
-                <div className="flex gap-6 justify-center">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 justify-center items-center">
                   <motion.div
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
+                    className="w-full sm:w-auto"
                   >
-                    <Button className="bg-amber-600 hover:bg-amber-700 text-white rounded-full px-10 py-4 text-lg">
+                    <Button className="w-full sm:w-auto bg-amber-600 hover:bg-amber-700 text-white rounded-full px-7 sm:px-10 py-3 sm:py-4 text-base sm:text-lg">
                       Refer Now
                     </Button>
                   </motion.div>
@@ -692,10 +708,11 @@ const Momszyka = () => {
                     variants={buttonVariants}
                     whileHover="hover"
                     whileTap="tap"
+                    className="w-full sm:w-auto"
                   >
                     <Button
                       variant="outline"
-                      className="border-2 border-[var(--color-primary)] text-[var(--color-primary)] rounded-full px-10 py-4 text-lg"
+                      className="w-full sm:w-auto border-2 border-[var(--color-primary)] text-[var(--color-primary)] rounded-full px-7 sm:px-10 py-3 sm:py-4 text-base sm:text-lg"
                       onClick={() => setJoinOpen(true)}
                     >
                       Join as Mom
@@ -706,12 +723,11 @@ const Momszyka = () => {
             </div>
           </section>
           <JoinAsMomDialog open={joinOpen} onOpenChange={setJoinOpen} />
-
           {/* Community Reviews Section - Enhanced carousel with auto-play and quotes */}
-          <section className="py-12 bg-white">
-            <div className="container mx-auto px-6">
+          <section className="py-8 sm:py-12 bg-white">
+            <div className="container mx-auto px-4 sm:px-6">
               <motion.h2
-                className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-8"
+                className="text-3xl sm:text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)] text-center mb-6 sm:mb-8"
                 variants={containerVariants}
                 initial="hidden"
                 viewport={{ once: true }}
@@ -719,36 +735,30 @@ const Momszyka = () => {
               >
                 Voices from Our Table
               </motion.h2>
+
               <Carousel
-                className="max-w-5xl mx-auto  "
-                opts={{ loop: true, autoplay: true, autoplayInterval: 5000 }}
+                className="max-w-5xl mx-auto"
+                opts={{ loop: true, dragFree: true }}
               >
-                <CarouselContent>
+                <CarouselContent className="-ml-2 sm:-ml-4">
                   {testimonials.map((testimonial, index) => (
                     <CarouselItem
                       key={index}
-                      className="md:basis-1/2 lg:basis-1/3 pl-4 pr-4 pt-4 mb-8"
+                      className="basis-[85%] sm:basis-1/2 lg:basis-1/3 pl-2 sm:pl-4 pt-2 sm:pt-4 mb-4 sm:mb-8"
                     >
                       <motion.div
                         variants={cardVariants}
                         whileHover="hover"
-                        className="rounded-2xl "
+                        className="rounded-2xl h-full"
                       >
-                        <Card className="bg-[var(--color-light)] rounded-2xl shadow-lg  ">
-                          <CardContent className="p-8 flex flex-col h-96">
-                            <div className="flex items-center gap-4 mb-6">
-                              {/* <Image
-                                src={testimonial.image}
-                                alt={testimonial.alt}
-                                width={60}
-                                height={60}
-                                className="rounded-full border-2 border-[var(--color-primary)]"
-                              /> */}
+                        <Card className="bg-[var(--color-light)] rounded-2xl shadow-lg h-full">
+                          <CardContent className="p-5 sm:p-8 flex flex-col h-full min-h-[280px] sm:h-96">
+                            <div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
                               <div>
-                                <p className="font-['Playfair_Display'] text-xl text-[var(--color-new)]">
+                                <p className="font-['Playfair_Display'] text-lg sm:text-xl text-[var(--color-new)]">
                                   {testimonial.name}
                                 </p>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-xs sm:text-sm text-gray-500">
                                   {testimonial.designation} at{" "}
                                   <span className="font-medium text-[var(--color-primary)]">
                                     {testimonial.company}
@@ -758,7 +768,7 @@ const Momszyka = () => {
                                   {[...Array(5)].map((_, i) => (
                                     <Star
                                       key={i}
-                                      className="w-5 h-5"
+                                      className="w-4 h-4 sm:w-5 sm:h-5"
                                       fill={
                                         i < testimonial.rating
                                           ? "currentColor"
@@ -770,7 +780,7 @@ const Momszyka = () => {
                                 </div>
                               </div>
                             </div>
-                            <p className="text-gray-600 text-lg italic flex-grow">
+                            <p className="text-gray-600 text-base sm:text-lg italic flex-grow">
                               "{testimonial.text}"
                             </p>
                           </CardContent>
@@ -779,16 +789,23 @@ const Momszyka = () => {
                     </CarouselItem>
                   ))}
                 </CarouselContent>
+
+                {/* Show arrows on md+ only, mobile relies on swipe */}
                 <CarouselPrevious className="hidden md:flex bg-[var(--color-primary)] text-white rounded-full" />
                 <CarouselNext className="hidden md:flex bg-[var(--color-primary)] text-white rounded-full" />
               </Carousel>
+
+              {/* Mobile swipe hint */}
+              <p className="text-center text-xs text-gray-400 mt-2 sm:hidden">
+                Swipe to see more ›
+              </p>
             </div>
           </section>
 
           {/* Social Proof Metrics Section - Innovative: Animated counters with icons pulsing */}
-          <section className="py-20 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/80 dark:to-amber-800/80 border-t border-amber-200 dark:border-amber-700 ">
-            <div className="container mx-auto px-6">
-              <div className="grid gap-12 md:grid-cols-3 text-center">
+          <section className="py-12 sm:py-20 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/80 dark:to-amber-800/80 border-t border-amber-200 dark:border-amber-700">
+            <div className="container mx-auto px-4 sm:px-6">
+              <div className="grid grid-cols-3 gap-4 sm:gap-12 md:grid-cols-3 text-center">
                 {[
                   { icon: Users, number: 500, label: "Happy Families" },
                   { icon: Package, number: 1000, label: "Meals Shared" },
@@ -801,8 +818,8 @@ const Momszyka = () => {
                     viewport={{ once: true }}
                     whileInView="visible"
                   >
-                    <metric.icon className="mx-auto h-16 w-16 text-[var(--color-primary)] mb-4 animate-pulse" />
-                    <h3 className="text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)]">
+                    <metric.icon className="mx-auto h-8 w-8 sm:h-16 sm:w-16 text-[var(--color-primary)] mb-2 sm:mb-4 animate-pulse" />
+                    <h3 className="text-2xl sm:text-5xl font-['Playfair_Display'] font-bold text-[var(--color-new)]">
                       <CountUp
                         end={metric.number}
                         duration={2.5}
@@ -810,7 +827,9 @@ const Momszyka = () => {
                       />
                       +
                     </h3>
-                    <p className="text-xl text-gray-600 mt-2">{metric.label}</p>
+                    <p className="text-xs sm:text-xl text-gray-600 mt-1 sm:mt-2 leading-tight">
+                      {metric.label}
+                    </p>
                   </motion.div>
                 ))}
               </div>
@@ -821,34 +840,35 @@ const Momszyka = () => {
           <AnimatePresence>
             {visible && (
               <motion.div
-                className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-new)] p-4 rounded-full shadow-2xl z-50 max-w-lg w-full mx-4"
+                className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-new)] px-4 py-3 sm:p-4 rounded-2xl sm:rounded-full shadow-2xl z-50 w-[calc(100%-2rem)] sm:max-w-lg mx-0"
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 exit={{ y: 100, opacity: 0 }}
                 transition={{ type: "spring", stiffness: 120 }}
               >
-                <div className="flex items-center justify-between text-white">
-                  <p className="font-['Playfair_Display'] text-lg">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between text-white gap-2 sm:gap-0">
+                  <p className="font-['Playfair_Display'] text-sm sm:text-lg leading-snug">
                     Craving mom's touch? Let's get cooking!
                   </p>
-                  <div className="flex gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3 self-end sm:self-auto">
                     <Button
                       variant="ghost"
-                      className="text-white hover:bg-white/20 rounded-full"
+                      className="text-white hover:bg-white/20 rounded-full text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 h-auto"
                     >
                       Order
                     </Button>
                     <Button
                       variant="ghost"
-                      className="text-white hover:bg-white/20 rounded-full"
+                      className="text-white hover:bg-white/20 rounded-full text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 h-auto"
                     >
                       Waitlist
                     </Button>
                     <button
                       onClick={() => setVisible(false)}
-                      className="hover:opacity-70"
+                      className="hover:opacity-70 p-1 flex-shrink-0"
+                      aria-label="Dismiss"
                     >
-                      <X className="w-5 h-5" />
+                      <X className="w-4 h-4 sm:w-5 sm:h-5" />
                     </button>
                   </div>
                 </div>

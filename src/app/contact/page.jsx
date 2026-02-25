@@ -570,13 +570,13 @@ export default function MomszykaContact() {
               >
                 <Facebook className="h-5 w-5" />
               </a>
-              <a
+              {/* <a
                 href="https://x.com/momszyka"
                 aria-label="Follow us on X (Twitter)"
                 className="bg-amber-100 dark:bg-amber-800 p-2.5 rounded-full text-amber-600 hover:bg-amber-200 dark:hover:bg-amber-700 transition-colors"
               >
                 <Twitter className="h-5 w-5" />
-              </a>
+              </a> */}
               <a
                 href="https://www.instagram.com/momszyka"
                 aria-label="Follow us on Instagram"
