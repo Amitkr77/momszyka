@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://momszyka.in
+
+# Sitemaps
+Sitemap: https://momszyka.in/sitemap.xml
