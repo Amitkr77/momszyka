@@ -163,7 +163,7 @@ const Momszyka = () => {
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title>Momszyka - Home-Cooked Meals Delivered with Love</title>
         <meta
           name="description"
@@ -174,16 +174,14 @@ const Momszyka = () => {
           content="home-cooked meals, homemade food delivery, moms cooking, fresh meal delivery, authentic Indian food, healthy eating"
         />
 
-        {/* ✅ Stronger viewport — prevents Android Chrome from zooming or overflowing */}
+        
         <meta
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
         />
 
-        {/* ✅ Theme color — colors browser chrome on Android */}
         <meta name="theme-color" content="#FF8F00" />
 
-        {/* ✅ Prevents iOS from auto-detecting phone numbers as links */}
         <meta name="format-detection" content="telephone=no" />
 
         <link
@@ -199,7 +197,7 @@ const Momszyka = () => {
               name: "Momszyka",
               description:
                 "Momszyka delivers fresh, home-cooked meals made by moms in your city.",
-              url: "https://momszyka.com",
+              url: "https://momszyka.in",
               telephone: "+919304531876",
               address: {
                 "@type": "PostalAddress",
@@ -212,7 +210,7 @@ const Momszyka = () => {
             }),
           }}
         />
-      </Head>
+      </Head> */}
 
       <div
         className="flex flex-col min-h-screen bg-[var(--color-light)] font-['Lato'] text-[#1b140d] leading-relaxed"
