@@ -331,9 +331,11 @@ export default function Header() {
 
               {/* Bottom contact strip */}
               <div className="absolute bottom-0 left-0 right-0 px-6 py-5 border-t border-amber-200 dark:border-amber-700 bg-amber-100/60 dark:bg-amber-950/60">
-                <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mb-1">
-                  Need help?
-                </p>
+                <Link href="/contact">
+                  <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mb-1">
+                    Need help?
+                  </p>
+                </Link>
                 <a
                   href="mailto:momszyka@gmail.com"
                   className="text-sm font-semibold text-amber-800 dark:text-amber-100 hover:text-[#FF8F00] transition-colors"

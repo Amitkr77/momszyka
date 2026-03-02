@@ -19,14 +19,14 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: "Momszyka - Homemade Food Delivery Platform in India",
+  title: "Momszyka - Homemade Food Delivery Platform in Patna",
   description:
     "Momszyka is an online platform to order homemade meals prepared by local moms. Fresh, hygienic, and delivered to your doorstep.",
   keywords: [
     "Momszyka",
     "homemade food delivery",
     "home cooked meals",
-    "food delivery India",
+    "food delivery Patna",
     "online food ordering",
     "ghar ka khana delivery",
   ],
