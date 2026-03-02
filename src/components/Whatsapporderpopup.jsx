@@ -11,7 +11,12 @@ import {
   Loader,
 } from "lucide-react";
 
-const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
+const WhatsAppOrderPopup = ({
+  isOpen,
+  onClose,
+  orderDetails,
+  showCookingInstructions = true,
+}) => {
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -52,9 +57,56 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
     }
     setLocationState("loading");
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        setCoords({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setCoords({ lat: latitude, lng: longitude });
         setLocationState("success");
+
+        // Try to auto-fill the detailed address field using Nominatim
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&zoom=18&addressdetails=1`,
+            { headers: { "Accept-Language": "en" } },
+          );
+          const data = await res.json();
+          const a = data.address || {};
+
+          const parts = [
+            a.amenity || a.building || a.shop || a.office,
+            [a.house_number, a.road || a.pedestrian || a.footway || a.path]
+              .filter(Boolean)
+              .join(" "),
+            a.neighbourhood ||
+              a.quarter ||
+              a.suburb ||
+              a.hamlet ||
+              a.residential,
+            a.village || a.city_district || a.town || a.city,
+            a.state,
+            a.postcode,
+          ].filter(Boolean);
+
+          // Deduplicate
+          const seen = new Set();
+          const unique = parts.filter((p) => {
+            const k = p.toLowerCase().trim();
+            if (seen.has(k)) return false;
+            seen.add(k);
+            return true;
+          });
+
+          if (unique.length > 0) {
+            setForm((p) => ({
+              ...p,
+              // Only auto-fill if user hasn't already typed something
+              detailAddress: p.detailAddress.trim()
+                ? p.detailAddress
+                : unique.join(", "),
+            }));
+          }
+        } catch {
+          // Geocoding failed silently — user can type manually
+        }
       },
       (err) => {
         setLocationState(err.code === 1 ? "denied" : "error");
@@ -63,14 +115,14 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
     );
   };
 
-  // ── Validation ──────────────────────────────────────────────────────────────
+  // ── Validation ── at least one of location OR detailAddress is required ───────
   const validate = () => {
     const e = {};
     if (!form.name.trim()) e.name = "Name is required";
     if (!/^[6-9]\d{9}$/.test(form.phone.trim()))
       e.phone = "Enter a valid 10-digit number";
-    if (locationState !== "success")
-      e.location = "Please share your live location for accurate delivery";
+    if (locationState !== "success" && !form.detailAddress.trim())
+      e.location = "Please share your location or enter a delivery address";
     return e;
   };
 
@@ -87,7 +139,9 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
       ? `*Order:* ${orderDetails.name}${orderDetails.price ? ` - Rs. ${orderDetails.price}` : ""}`
       : "*Order:* (see above)";
 
-    const mapsUrl = `https://maps.google.com/?q=${coords.lat},${coords.lng}`;
+    const mapsUrl = coords
+      ? `https://maps.google.com/?q=${coords.lat},${coords.lng}`
+      : null;
 
     const msg = [
       "*New Order Request*",
@@ -99,8 +153,10 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
       `*Name:* ${form.name.trim()}`,
       `*Phone:* +91 ${form.phone.trim()}`,
       "",
-      `*Delivery Address:* ${form.detailAddress.trim()}`,
-      `*Live Location:* ${mapsUrl}`,
+      form.detailAddress.trim()
+        ? `*Delivery Address:* ${form.detailAddress.trim()}`
+        : null,
+      mapsUrl ? `*Live Location:* ${mapsUrl}` : null,
       "",
       form.instructions?.trim()
         ? `*Cooking Instructions:* ${form.instructions.trim()}`
@@ -272,10 +328,13 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
                       <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                       <div>
                         <p className="text-xs font-semibold text-gray-700">
-                          Step 1 — Share Live Location
+                          Share Live Location{" "}
+                          <span className="font-normal text-gray-400">
+                            (optional)
+                          </span>
                         </p>
                         <p className="text-xs text-gray-400 mt-0.5">
-                          Helps us reach your exact spot
+                          For most accurate delivery — or type address below
                         </p>
                       </div>
                     </div>
@@ -320,15 +379,16 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
                       border border-green-100 rounded-xl px-3 py-2"
                     >
                       <p className="text-green-700 text-xs">
-                        Live location captured successfully
+                        Location captured! Address auto-filled below — please
+                        verify &amp; add flat/floor/landmark.
                       </p>
                       <a
                         href={`https://maps.google.com/?q=${coords.lat},${coords.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-xs text-blue-600 font-semibold underline whitespace-nowrap ml-2"
+                        className="text-xs text-blue-600 font-semibold underline whitespace-nowrap ml-2 flex-shrink-0"
                       >
-                        Verify on Maps
+                        Verify Pin
                       </a>
                     </div>
                   )}
@@ -359,14 +419,15 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
                     <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-xs font-semibold text-gray-700">
-                        Detailed Address{" "}
+                        Delivery Address{" "}
                         <span className="font-normal text-gray-400">
-                          (optional)
+                          (optional if location shared)
                         </span>
                       </p>
                       <p className="text-xs text-gray-400 mt-0.5">
-                        Adding flat no., floor & landmark helps us deliver to
-                        your exact door faster
+                        {locationState === "success"
+                          ? "Auto-filled — edit & add flat no., floor, landmark"
+                          : "Enter your full address if not sharing location"}
                       </p>
                     </div>
                   </div>
@@ -386,24 +447,28 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
                 </div>
               </div>
 
-              {/* Cooking Instructions */}
-              <div>
-                <label className="text-xs font-semibold text-gray-500 flex items-center gap-1.5 mb-1.5">
-                  <ChefHat className="w-4 h-4 text-gray-400" />
-                  Cooking Instructions{" "}
-                  <span className="font-normal text-gray-400">(optional)</span>
-                </label>
-                <textarea
-                  rows={2}
-                  placeholder="e.g. Less spicy, no onion, extra gravy..."
-                  value={form.instructions || ""}
-                  onChange={handleChange("instructions")}
-                  className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-gray-50
+              {/* Cooking Instructions — hidden for subscription orders */}
+              {showCookingInstructions && (
+                <div>
+                  <label className="text-xs font-semibold text-gray-500 flex items-center gap-1.5 mb-1.5">
+                    <ChefHat className="w-4 h-4 text-gray-400" />
+                    Cooking Instructions{" "}
+                    <span className="font-normal text-gray-400">
+                      (optional)
+                    </span>
+                  </label>
+                  <textarea
+                    rows={2}
+                    placeholder="e.g. Less spicy, no onion, extra gravy..."
+                    value={form.instructions || ""}
+                    onChange={handleChange("instructions")}
+                    className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-gray-50
                     text-gray-800 placeholder:text-gray-400 resize-none
                     focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400"
-                  style={{ fontSize: "16px" }}
-                />
-              </div>
+                    style={{ fontSize: "16px" }}
+                  />
+                </div>
+              )}
 
               {/* CTA */}
               <button
@@ -426,7 +491,8 @@ const WhatsAppOrderPopup = ({ isOpen, onClose, orderDetails }) => {
                 className="text-center text-xs text-gray-400"
                 style={{ paddingBottom: "env(safe-area-inset-bottom, 12px)" }}
               >
-                Your location & any address details will be sent automatically.
+                Share location, type address, or both — at least one is
+                required.
               </p>
             </div>
           )}

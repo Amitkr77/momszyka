@@ -145,6 +145,7 @@ const SubscriptionPopup = ({ meal, isOpen, onClose }) => {
         isOpen={whatsappOpen}
         onClose={() => setWhatsappOpen(false)}
         orderDetails={orderDetails}
+        showCookingInstructions={false}
       />
     </>
   );
