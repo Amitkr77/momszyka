@@ -50,6 +50,7 @@ const FrequentOrders = dynamic(() => import("@/components/Frequentorders"), {
   ssr: false,
 });
 import { JoinAsMomDialog } from "@/components/Form";
+import Link from "next/link";
 
 const testimonials = [
   {
@@ -849,17 +850,20 @@ const Momszyka = () => {
                     Craving mom's touch? Let's get cooking!
                   </p>
                   <div className="flex items-center gap-2 sm:gap-3 self-end sm:self-auto">
+                    <Link href="/subscribe">
+                      <Button
+                        variant="ghost"
+                        className="text-white hover:bg-white/20 rounded-full text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 h-auto"
+                      >
+                        Order Now
+                      </Button>
+                    </Link>
                     <Button
                       variant="ghost"
                       className="text-white hover:bg-white/20 rounded-full text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 h-auto"
+                      onClick={() => setJoinOpen(true)}
                     >
-                      Order
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      className="text-white hover:bg-white/20 rounded-full text-xs sm:text-sm px-3 py-1.5 sm:px-4 sm:py-2 h-auto"
-                    >
-                      Waitlist
+                      Join as Cook
                     </Button>
                     <button
                       onClick={() => setVisible(false)}

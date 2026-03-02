@@ -1,19 +1,28 @@
 import React from "react";
 import { X, Clock, MapPin, Phone } from "lucide-react";
 import Image from "next/image";
+import WhatsAppOrderPopup from "./Whatsapporderpopup";
 
 const SubscriptionPopup = ({ meal, isOpen, onClose }) => {
+  const [whatsappOpen, setWhatsappOpen] = React.useState(false);
+
   if (!isOpen || !meal) return null;
 
-  const handleWhatsAppOrder = () => {
-    const message = encodeURIComponent(
-      `Hi, I'd like to subscribe to the ${meal.type} - ${meal.planType} plan!`,
-    );
-    window.open(`https://wa.me/919304531876?text=${message}`, "_blank");
-  };
+  // const handleWhatsAppOrder = () => {
+  //   const message = encodeURIComponent(
+  //     `Hi, I'd like to subscribe to the ${meal.type} - ${meal.planType} plan!`,
+  //   );
+  //   window.open(`https://wa.me/919304531876?text=${message}`, "_blank");
+  // };
 
   const handleCallOrder = () => {
     window.location.href = "tel:+919304531876";
+  };
+
+  const orderDetails = {
+    name: `${meal.type} — ${meal.planType} Plan`,
+    price: meal.price,
+    emoji: "🍱",
   };
 
   return (
@@ -123,14 +132,20 @@ const SubscriptionPopup = ({ meal, isOpen, onClose }) => {
             Call to Order
           </button>
 
+          {/* WhatsApp now opens the popup */}
           <button
-            onClick={handleWhatsAppOrder}
+            onClick={() => setWhatsappOpen(true)}
             className="flex-1 bg-[#25D366] text-white font-bold py-3.5 rounded-xl hover:bg-[#20bd5a] transition-colors shadow-sm"
           >
             WhatsApp Now
           </button>
         </div>
       </div>
+      <WhatsAppOrderPopup
+        isOpen={whatsappOpen}
+        onClose={() => setWhatsappOpen(false)}
+        orderDetails={orderDetails}
+      />
     </>
   );
 };
