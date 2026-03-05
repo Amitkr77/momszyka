@@ -347,6 +347,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Image from "next/image";
 
 // ─────────────────────────────────────────────
 // Hero Section
@@ -367,14 +368,12 @@ const HeroSection = () => {
       style={{ clipPath: "inset(0)" }}
     >
       <motion.div className="absolute inset-0 w-full h-full" style={{ y }}>
-        <img
-          // src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-JpHlz2GvfaN-ejNLHdVg6f2mn5mUy7rRNwGPmBhwe_TbCeMM-G2iREQz6qNtK-3F751LhQxbghy7adHo4z771eJg_rJZsZY7IJCjeNQPeEtueXpPGhR0y027DYI6efuNXGlhF5fuz1GM5nDLJATfVswHef5mc0C3FqhiN2mVugFkWswj74FEad6OQEEwo0t1pCbHIMDgXzs9xNqtSvQ-b7UUPyrM2taxfzlisIZ2YZzZOX04NsdNr7d4T3nNnrUJH4aPpLZNAWs"
+        <Image
           src="/Menu.jpeg"
           alt="Warm home-cooked meal scene"
-          className="w-full h-full object-cover drop-shadow-lg"
-          style={{ minHeight: "120%" }}
-          fetchPriority="high"
-          decoding="async"
+          fill
+          priority
+          className="object-cover object-center md:object-[50%_center]"
         />
       </motion.div>
 

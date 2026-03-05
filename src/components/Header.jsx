@@ -150,7 +150,7 @@
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -165,7 +165,6 @@ import { Menu, X } from "lucide-react";
 import { motion } from "framer-motion";
 import Form from "./Form";
 
-// ── Nav links defined once – edit here to update both desktop & mobile ──
 const navLinks = [
   { href: "/our-story", label: "About Us" },
   { href: "/subscribe", label: "Menu" },
@@ -174,12 +173,22 @@ const navLinks = [
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
-  React.useEffect(() => {
+  // ✅ FIX: Reset scroll state whenever the route changes
+  // On mobile, scroll position may not be 0 yet when pathname updates,
+  // so we force-check the real scroll position instead of assuming.
+  useEffect(() => {
+    // Immediately sync with actual scroll position on route change
+    setIsScrolled(window.scrollY > 0);
+    setIsHovered(false);
+  }, [pathname]);
+
+  useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -191,21 +200,27 @@ export default function Header() {
   const isActive = (href) => pathname === href;
   const isHome = pathname === "/";
 
-  // Prepend Home link only when not on the home page
   const visibleLinks = isHome
     ? navLinks
     : [{ href: "/", label: "Home" }, ...navLinks];
 
+  // On other pages: always solid. On home: transparent until hover/scroll/menu.
+  const showBackground = !isHome || isHovered || isScrolled || mobileOpen;
+
   return (
     <motion.header
-      className={`sticky top-0 z-50 bg-amber-50/90 dark:bg-amber-900/90 backdrop-blur-md border-b border-amber-200 dark:border-amber-700 transition-shadow ${
-        isScrolled ? "shadow-lg" : ""
+      className={`${isHome ? "fixed" : "sticky"} top-0 left-0 right-0 w-full z-50 border-b transition-all duration-300 ${
+        showBackground
+          ? "bg-amber-50/90 dark:bg-amber-900/90 backdrop-blur-md border-amber-200 dark:border-amber-700 shadow-lg"
+          : "bg-transparent border-transparent"
       }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between py-2">
+      <div className="container mx-auto pl-0 pr-4 sm:px-6 flex items-center justify-between py-2">
         {/* ── Logo ── */}
         <Link href="/">
           <div className="flex items-center gap-3">
@@ -234,7 +249,9 @@ export default function Header() {
                 className={`text-base font-semibold transition-colors relative pb-0.5 ${
                   isActive(href)
                     ? "text-[#FF8F00] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[#FF8F00] after:rounded-full"
-                    : "text-amber-800 dark:text-amber-100 hover:text-[#FF8F00] dark:hover:text-amber-400"
+                    : showBackground
+                      ? "text-amber-800 dark:text-amber-100 hover:text-[#FF8F00] dark:hover:text-amber-400"
+                      : "text-white drop-shadow hover:text-[#FF8F00]"
                 }`}
               >
                 {label}
@@ -245,7 +262,6 @@ export default function Header() {
 
         {/* ── Right side: CTA + mobile menu ── */}
         <div className="flex items-center gap-2 sm:gap-4">
-          {/* CTA / Form button — compact on mobile */}
           <motion.div
             variants={buttonVariants}
             whileHover="hover"
@@ -260,30 +276,28 @@ export default function Header() {
             <SheetTrigger asChild>
               <Button
                 variant="ghost"
-                className="md:hidden p-2 rounded-full hover:bg-amber-100 dark:hover:bg-amber-800"
+                className="md:hidden p-2 rounded-full hover:bg-white/20"
                 aria-label="Open menu"
               >
-                <Menu className="h-6 w-6 text-amber-800 dark:text-amber-100" />
+                <Menu
+                  className={`h-6 w-6 transition-colors ${
+                    showBackground
+                      ? "text-amber-800 dark:text-amber-100"
+                      : "text-white drop-shadow"
+                  }`}
+                />
               </Button>
             </SheetTrigger>
 
-            {/* 
-              FIX: Pass `closeButton={false}` (or the Shadcn equivalent) to suppress 
-              the default built-in X. We render our own X below for full control.
-              In newer shadcn/ui versions use: <SheetContent closeButton={false} ...>
-              In older versions, add [&>button:first-of-type]:hidden to className.
-            */}
             <SheetContent
               side="right"
               className="w-[280px] sm:w-[340px] bg-amber-50 dark:bg-amber-900 p-0 border-l border-amber-200 dark:border-amber-700 [&>button:first-of-type]:hidden"
             >
-              {/* Visually hidden title + description for screen reader accessibility (required by Radix UI) */}
               <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
               <SheetDescription className="sr-only">
                 Site navigation links and contact information
               </SheetDescription>
 
-              {/* Sheet header with logo + our custom close button (only one X) */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-amber-200 dark:border-amber-700">
                 <Link href="/" onClick={() => setMobileOpen(false)}>
                   <img
@@ -305,7 +319,6 @@ export default function Header() {
                 </Button>
               </div>
 
-              {/* Nav links with stagger animation */}
               <nav className="flex flex-col px-4 py-6 gap-1">
                 {visibleLinks.map(({ href, label }, index) => (
                   <motion.div
@@ -329,7 +342,6 @@ export default function Header() {
                 ))}
               </nav>
 
-              {/* Bottom contact strip */}
               <div className="absolute bottom-0 left-0 right-0 px-6 py-5 border-t border-amber-200 dark:border-amber-700 bg-amber-100/60 dark:bg-amber-950/60">
                 <Link href="/contact">
                   <p className="text-xs text-amber-600 dark:text-amber-400 font-medium mb-1">

@@ -221,14 +221,31 @@ const Momszyka = () => {
           {/* Hero Section - Enhanced with parallax background, layered text, and subtle particle effects for warmth */}
           <section className="relative h-screen min-h-[600px] overflow-hidden bg-gradient-to-br from-slate-900 via-amber-950/20 to-slate-900">
             {/* Parallax Background */}
-            <motion.div className="absolute inset-0" style={{ y }}>
+            {/* <motion.div className="absolute inset-0" style={{ y }}>
               <Image
-                src="/hero_image.jpeg"
+                src="/herosection_image.jpeg"
                 alt="Warm home-cooked meal by a loving mom"
                 fill
                 priority
-                className="object-cover brightness-75 scale-105"
+                className="object-cover object-[95%_center] md:object-center brightness-75 scale-105"
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+            </motion.div> */}
+            <motion.div
+              className="absolute inset-0 overflow-hidden"
+              style={{ y }}
+            >
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+                className="absolute inset-0 w-full h-full object-cover object-[40%_center] md:object-[45%_center]"
+              >
+                <source src="/hero-video.mp4" type="video/mp4" />
+              </video>
+
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
             </motion.div>
 
@@ -279,26 +296,17 @@ const Momszyka = () => {
                     whileHover="hover"
                     whileTap="tap"
                   >
-                    <Button
-                      onClick={() => {
-                        const message = encodeURIComponent(
-                          "Hi, I'd love to order some home-cooked goodness!",
-                        );
-                        window.open(
-                          `https://wa.me/919304531876?text=${message}`,
-                          "_blank",
-                        );
-                      }}
-                      className="bg-amber-600 hover:bg-amber-700 text-white font-medium text-lg px-8 py-6 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 group"
-                    >
-                      <span>Order with Love</span>
-                      <motion.span
-                        animate={{ x: [0, 4, 0] }}
-                        transition={{ repeat: Infinity, duration: 1.5 }}
-                      >
-                        <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                      </motion.span>
-                    </Button>
+                    <Link href="/subscribe">
+                      <Button className="bg-amber-600 hover:bg-amber-700 text-white font-medium text-lg px-8 py-6 rounded-full shadow-lg transition-all duration-300 flex items-center gap-2 group">
+                        <span>Order with Love</span>
+                        <motion.span
+                          animate={{ x: [0, 4, 0] }}
+                          transition={{ repeat: Infinity, duration: 1.5 }}
+                        >
+                          <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                        </motion.span>
+                      </Button>
+                    </Link>
                   </motion.div>
 
                   {/* Call Button */}
@@ -321,12 +329,12 @@ const Momszyka = () => {
                   className="mt-6 text-sm text-white/60 font-light"
                 >
                   Or tap to call:{" "}
-                  <span className="font-medium text-white">
+                  <span className="font-large text-1xl text-white">
                     +91 93045 31876
                   </span>
                 </motion.p>
                 <motion.p>
-                  <span className="mt-2 text-sm text-white ">Patna</span>
+                  <span className="mt-2 text-1xl text-white ">Patna</span>
                 </motion.p>
               </motion.div>
             </div>
