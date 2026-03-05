@@ -353,8 +353,8 @@ export default function Footer() {
         {/* ── Bottom Bar ── */}
         <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400 text-center sm:text-left">
           <p>
-            © {new Date().getFullYear()} Momszyka | Developed by Alomonx
-            Technology Pvt Ltd.
+            © {new Date().getFullYear()} Momszyka. All Rights Reserved. |
+            Developed by Alomonx Technology Pvt. Ltd.
           </p>
           <div className="flex items-center gap-4 sm:gap-6">
             <Link

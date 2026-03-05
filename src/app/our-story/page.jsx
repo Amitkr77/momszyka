@@ -125,7 +125,8 @@ const AboutMomszyka = () => {
           >
             <motion.div className="absolute inset-0" style={{ y }}>
               <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-JpHlz2GvfaN-ejNLHdVg6f2mn5mUy7rRNwGPmBhwe_TbCeMM-G2iREQz6qNtK-3F751LhQxbghy7adHo4z771eJg_rJZsZY7IJCjeNQPeEtueXpPGhR0y027DYI6efuNXGlhF5fuz1GM5nDLJATfVswHef5mc0C3FqhiN2mVugFkWswj74FEad6OQEEwo0t1pCbHIMDgXzs9xNqtSvQ-b7UUPyrM2taxfzlisIZ2YZzZOX04NsdNr7d4T3nNnrUJH4aPpLZNAWs"
+                // src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-JpHlz2GvfaN-ejNLHdVg6f2mn5mUy7rRNwGPmBhwe_TbCeMM-G2iREQz6qNtK-3F751LhQxbghy7adHo4z771eJg_rJZsZY7IJCjeNQPeEtueXpPGhR0y027DYI6efuNXGlhF5fuz1GM5nDLJATfVswHef5mc0C3FqhiN2mVugFkWswj74FEad6OQEEwo0t1pCbHIMDgXzs9xNqtSvQ-b7UUPyrM2taxfzlisIZ2YZzZOX04NsdNr7d4T3nNnrUJH4aPpLZNAWs"
+                src="/about/about_hero.jpeg"
                 alt="Warm family kitchen scene"
                 fill
                 priority
@@ -149,7 +150,7 @@ const AboutMomszyka = () => {
                 every meal. Join a community where passion for cooking meets the
                 joy of sharing.
               </motion.p>
-              <motion.div variants={containerVariants}>
+              {/* <motion.div variants={containerVariants}>
                 <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                   <DialogTrigger asChild>
                     <motion.button
@@ -204,7 +205,7 @@ const AboutMomszyka = () => {
                     </div>
                   </DialogContent>
                 </Dialog>
-              </motion.div>
+              </motion.div> */}
             </div>
           </motion.section>
 

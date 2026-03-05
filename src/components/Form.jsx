@@ -292,7 +292,7 @@ function FormContent({ onClose }) {
       </div>
 
       {/* ── Salary Expectations ── */}
-      <h3 className={sectionCls}>Salary Expectations</h3>
+      {/* <h3 className={sectionCls}>Salary Expectations</h3>
 
       <div className="space-y-1.5">
         <Label htmlFor="salary" className={labelCls}>
@@ -307,7 +307,7 @@ function FormContent({ onClose }) {
           required
           className={inputCls}
         />
-      </div>
+      </div> */}
 
       {/* ── References ── */}
       <h3 className={sectionCls}>References (Optional)</h3>
