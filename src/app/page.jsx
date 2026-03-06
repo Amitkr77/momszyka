@@ -87,6 +87,7 @@ const Momszyka = () => {
   const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
 
   const [joinOpen, setJoinOpen] = useState(false);
+  const videoRef = React.useRef(null);
 
   // Auto-dismiss sticky CTA after 10 seconds
   useEffect(() => {
@@ -162,6 +163,22 @@ const Momszyka = () => {
     setQuizStep(quizStep + 1);
   };
 
+  useEffect(() => {
+    const video = videoRef.current;
+
+    if (!video) return;
+
+    const tryPlay = async () => {
+      try {
+        await video.play();
+      } catch (err) {
+        console.warn("Autoplay blocked:", err);
+      }
+    };
+
+    tryPlay();
+  }, []);
+
   return (
     <>
       {/* <Head>
@@ -235,17 +252,27 @@ const Momszyka = () => {
               className="absolute inset-0 overflow-hidden"
               style={{ y }}
             >
+              {/* Poster Image */}
+              <img
+                src="/herosection_image.jpeg"
+                alt="Hero poster"
+                className="absolute inset-0 w-full h-full object-cover object-right md:object-[95%_center]"
+              />
+
+              {/* Video */}
               <video
+                ref={videoRef}
                 autoPlay
                 muted
                 loop
                 playsInline
-                preload="auto"
-                className="absolute inset-0 w-full h-full object-cover object-[40%_center] md:object-[45%_center]"
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover object-[45%_center] md:object-[45%_center]"
               >
-                <source src="/hero-video.mp4" type="video/mp4" />
+                <source src="/hero_video.mp4" type="video/mp4" />
               </video>
 
+              {/* Gradient overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
             </motion.div>
 
