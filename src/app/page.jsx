@@ -87,6 +87,7 @@ const Momszyka = () => {
   const [isDiscountPopupOpen, setIsDiscountPopupOpen] = useState(false);
 
   const [joinOpen, setJoinOpen] = useState(false);
+  const [videoReady, setVideoReady] = useState(false);
   const videoRef = React.useRef(null);
 
   // Auto-dismiss sticky CTA after 10 seconds
@@ -256,7 +257,9 @@ const Momszyka = () => {
               <img
                 src="/herosection_image.jpeg"
                 alt="Hero poster"
-                className="absolute inset-0 w-full h-full object-cover object-right md:object-[95%_center]"
+                className={`absolute inset-0 w-full h-full object-cover object-right md:object-[95%_center] ${
+                  videoReady ? "opacity-0" : "opacity-100"
+                } transition-opacity duration-500`}
               />
 
               {/* Video */}
@@ -267,6 +270,7 @@ const Momszyka = () => {
                 loop
                 playsInline
                 preload="metadata"
+                onPlaying={() => setVideoReady(true)}
                 className="absolute inset-0 w-full h-full object-cover object-[45%_center] md:object-[45%_center]"
               >
                 <source src="/hero_video.mp4" type="video/mp4" />
