@@ -1,7 +1,7 @@
 export const faq = [
   {
     q: "How do I place an order?",
-    a: "Select a meal category, choose the dish, add to cart, and checkout. You'll receive a confirmation email instantly.",
+    a: "Browse the menu and choose the meal or food you want. Add it to your order, then fill in your details like name, address, and phone number. After clicking 'Complete Order', you will be redirected to WhatsApp where all your order details are already filled automatically — you just need to click send.",
   },
   {
     q: "What are the delivery timings?",
@@ -17,6 +17,6 @@ export const faq = [
   },
   {
     q: "How do I cancel an order?",
-    a: "Orders can be cancelled up to 2 hours before the selected delivery slot. Contact support via email or the FAQ below.",
+    a: "If you need to cancel an order, please contact us as soon as possible through WhatsApp or our support contact. We'll do our best to help if the order has not already been prepared or dispatched.",
   },
 ];
