@@ -14,25 +14,23 @@ import {
 const WhatsAppOrderPopup = ({
   isOpen,
   onClose,
+  onOrderComplete,
   orderDetails,
   showCookingInstructions = true,
 }) => {
   const [form, setForm] = useState({
     name: "",
     phone: "",
-    // Two separate address fields — just like Zomato
-    detailAddress: "", // Flat no., Floor, Tower, Landmark (user types)
+    detailAddress: "",
   });
   const [errors, setErrors] = useState({});
-  const [step, setStep] = useState("form"); // "form" | "success"
+  const [step, setStep] = useState("form");
 
-  // Location
-  const [locationState, setLocationState] = useState("idle"); // idle | loading | success | denied | error
-  const [coords, setCoords] = useState(null); // { lat, lng }
+  const [locationState, setLocationState] = useState("idle");
+  const [coords, setCoords] = useState(null);
 
   const scrollRef = useRef(null);
 
-  // ── Prevent body scroll on iOS ──────────────────────────────────────────────
   useEffect(() => {
     if (!isOpen) return;
     const scrollY = window.scrollY;
@@ -49,7 +47,6 @@ const WhatsAppOrderPopup = ({
     };
   }, [isOpen]);
 
-  // ── Get live GPS location ───────────────────────────────────────────────────
   const handleShareLocation = () => {
     if (!navigator.geolocation) {
       setLocationState("error");
@@ -62,7 +59,6 @@ const WhatsAppOrderPopup = ({
         setCoords({ lat: latitude, lng: longitude });
         setLocationState("success");
 
-        // Try to auto-fill the detailed address field using Nominatim
         try {
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&zoom=18&addressdetails=1`,
@@ -86,7 +82,6 @@ const WhatsAppOrderPopup = ({
             a.postcode,
           ].filter(Boolean);
 
-          // Deduplicate
           const seen = new Set();
           const unique = parts.filter((p) => {
             const k = p.toLowerCase().trim();
@@ -98,14 +93,13 @@ const WhatsAppOrderPopup = ({
           if (unique.length > 0) {
             setForm((p) => ({
               ...p,
-              // Only auto-fill if user hasn't already typed something
               detailAddress: p.detailAddress.trim()
                 ? p.detailAddress
                 : unique.join(", "),
             }));
           }
         } catch {
-          // Geocoding failed silently — user can type manually
+          // Geocoding failed silently
         }
       },
       (err) => {
@@ -115,7 +109,6 @@ const WhatsAppOrderPopup = ({
     );
   };
 
-  // ── Validation ── at least one of location OR detailAddress is required ───────
   const validate = () => {
     const e = {};
     if (!form.name.trim()) e.name = "Name is required";
@@ -135,9 +128,22 @@ const WhatsAppOrderPopup = ({
     const e = validate();
     if (Object.keys(e).length) return setErrors(e);
 
-    const orderLine = orderDetails
-      ? `*Order:* ${orderDetails.name}${orderDetails.price ? ` - Rs. ${orderDetails.price}` : ""}`
-      : "*Order:* (see above)";
+    // Build itemized order block
+    let orderBlock = "";
+    if (orderDetails?.isCart && orderDetails?.items?.length) {
+      const itemLines = orderDetails.items
+        .map((item) => {
+          const variant = item.variantLabel ? ` (${item.variantLabel})` : "";
+          const lineTotal = item.price * item.qty;
+          return `  • ${item.name}${variant}  ×${item.qty}  —  ₹${lineTotal}`;
+        })
+        .join("\n");
+      orderBlock = `*Order Summary:*\n${itemLines}\n\n*Total: ₹${orderDetails.price}*`;
+    } else if (orderDetails) {
+      orderBlock = `*Order:* ${orderDetails.name}${orderDetails.price ? `  —  ₹${orderDetails.price}` : ""}`;
+    } else {
+      orderBlock = "*Order:* (see above)";
+    }
 
     const mapsUrl = coords
       ? `https://maps.google.com/?q=${coords.lat},${coords.lng}`
@@ -145,33 +151,29 @@ const WhatsAppOrderPopup = ({
 
     const msg = [
       "*New Order Request*",
-      "",
-      `_"Good food is the foundation of genuine happiness."_`,
-      "",
-      orderLine,
-      "",
+      "─────────────────────",
+      orderBlock,
+      "─────────────────────",
       `*Name:* ${form.name.trim()}`,
       `*Phone:* +91 ${form.phone.trim()}`,
-      "",
       form.detailAddress.trim()
         ? `*Delivery Address:* ${form.detailAddress.trim()}`
         : null,
       mapsUrl ? `*Live Location:* ${mapsUrl}` : null,
-      "",
       form.instructions?.trim()
-        ? `*Cooking Instructions:* ${form.instructions.trim()}`
+        ? `\n*Cooking Instructions:* ${form.instructions.trim()}`
         : null,
-      "_Thank you for ordering with us! We will confirm your order shortly._",
+      "─────────────────────",
+      "_Thank you for ordering with Momszyka! We will confirm your order shortly._",
     ]
       .filter((l) => l !== null)
       .join("\n");
 
-    // window.location.href is more reliable than window.open on mobile browsers
     window.location.href = `https://wa.me/919304531876?text=${encodeURIComponent(msg)}`;
     setStep("success");
+    if (onOrderComplete) onOrderComplete();
   };
 
-  // ── Reset & close ────────────────────────────────────────────────────────────
   const handleClose = () => {
     setStep("form");
     setForm({ name: "", phone: "", detailAddress: "" });
@@ -195,7 +197,7 @@ const WhatsAppOrderPopup = ({
         onClick={handleClose}
       />
 
-      {/* Bottom sheet on mobile / centered card on desktop */}
+      {/* Sheet */}
       <div
         className="fixed z-[9999] bg-white shadow-2xl
           bottom-0 left-0 right-0 rounded-t-2xl
@@ -210,7 +212,7 @@ const WhatsAppOrderPopup = ({
           flexDirection: "column",
         }}
       >
-        {/* Drag handle — mobile only */}
+        {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1 sm:hidden flex-shrink-0">
           <div className="w-10 h-1 rounded-full bg-gray-300" />
         </div>
@@ -251,7 +253,6 @@ const WhatsAppOrderPopup = ({
           }}
         >
           {step === "success" ? (
-            /* ── Success screen ── */
             <div className="p-8 text-center">
               <div className="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-9 h-9 text-[#25D366]" />
@@ -270,26 +271,60 @@ const WhatsAppOrderPopup = ({
               </div>
               <button
                 onClick={handleClose}
-                className="mt-6 w-full py-4 rounded-xl bg-gray-100 text-gray-700
-                  font-semibold text-base active:bg-gray-200"
+                className="mt-6 w-full py-4 rounded-xl bg-gray-100 text-gray-700 font-semibold text-base active:bg-gray-200"
                 style={{ WebkitTapHighlightColor: "transparent" }}
               >
                 Close
               </button>
             </div>
           ) : (
-            /* ── Order form ── */
             <div className="p-5 space-y-4">
-              {/* Order summary pill */}
+              {/* Order summary — itemized */}
               {orderDetails && (
-                <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
-                  <p className="font-semibold text-gray-800 text-sm truncate">
-                    {orderDetails.name}
-                  </p>
-                  {orderDetails.price && (
-                    <p className="text-amber-600 text-xs font-bold mt-0.5">
-                      Rs. {orderDetails.price}
-                    </p>
+                <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 space-y-1.5">
+                  {orderDetails.isCart && orderDetails.items?.length ? (
+                    <>
+                      {orderDetails.items.map((item) => (
+                        <div
+                          key={item.cartKey}
+                          className="flex justify-between items-center text-sm"
+                        >
+                          <span className="text-gray-700 font-medium">
+                            {item.name}
+                            {item.variantLabel && (
+                              <span className="text-gray-400 font-normal text-xs ml-1">
+                                ({item.variantLabel})
+                              </span>
+                            )}
+                            <span className="text-gray-400 font-normal ml-1">
+                              ×{item.qty}
+                            </span>
+                          </span>
+                          <span className="text-gray-800 font-semibold ml-4 flex-shrink-0">
+                            ₹{item.price * item.qty}
+                          </span>
+                        </div>
+                      ))}
+                      <div className="border-t border-amber-200 pt-1.5 mt-1 flex justify-between items-center">
+                        <span className="text-sm font-bold text-gray-800">
+                          Total
+                        </span>
+                        <span className="text-amber-600 font-extrabold text-base">
+                          ₹{orderDetails.price}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p className="font-semibold text-gray-800 text-sm">
+                        {orderDetails.name}
+                      </p>
+                      {orderDetails.price && (
+                        <p className="text-amber-600 text-xs font-bold">
+                          ₹{orderDetails.price}
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
               )}
@@ -319,9 +354,8 @@ const WhatsAppOrderPopup = ({
                 autoComplete="tel"
               />
 
-              {/* ── Location Section (like Zomato) ── */}
+              {/* Location Section */}
               <div className="rounded-2xl border border-gray-200 overflow-hidden">
-                {/* Step 1 — Share live location */}
                 <div className="p-4 border-b border-gray-100">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-start gap-2">
@@ -339,12 +373,8 @@ const WhatsAppOrderPopup = ({
                       </div>
                     </div>
 
-                    {/* Location button */}
                     {locationState === "success" ? (
-                      <div
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full
-                        bg-green-50 border border-green-300 text-green-700 text-xs font-semibold flex-shrink-0"
-                      >
+                      <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 border border-green-300 text-green-700 text-xs font-semibold flex-shrink-0">
                         <CheckCircle className="w-3.5 h-3.5" />
                         Shared
                       </div>
@@ -372,12 +402,8 @@ const WhatsAppOrderPopup = ({
                     )}
                   </div>
 
-                  {/* Location success — verify pin link */}
                   {locationState === "success" && coords && (
-                    <div
-                      className="mt-3 flex items-center justify-between bg-green-50
-                      border border-green-100 rounded-xl px-3 py-2"
-                    >
+                    <div className="mt-3 flex items-center justify-between bg-green-50 border border-green-100 rounded-xl px-3 py-2">
                       <p className="text-green-700 text-xs">
                         Location captured! Address auto-filled below — please
                         verify &amp; add flat/floor/landmark.
@@ -393,7 +419,6 @@ const WhatsAppOrderPopup = ({
                     </div>
                   )}
 
-                  {/* Error states */}
                   {locationState === "denied" && (
                     <p className="mt-2 text-xs text-red-500">
                       Location permission denied. Please enable it in your
@@ -413,7 +438,6 @@ const WhatsAppOrderPopup = ({
                   )}
                 </div>
 
-                {/* Step 2 — Type detailed address */}
                 <div className="p-4 bg-gray-50/50">
                   <div className="flex items-start gap-2 mb-2">
                     <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
@@ -447,7 +471,7 @@ const WhatsAppOrderPopup = ({
                 </div>
               </div>
 
-              {/* Cooking Instructions — hidden for subscription orders */}
+              {/* Cooking Instructions */}
               {showCookingInstructions && (
                 <div>
                   <label className="text-xs font-semibold text-gray-500 flex items-center gap-1.5 mb-1.5">
@@ -502,7 +526,6 @@ const WhatsAppOrderPopup = ({
   );
 };
 
-/* Reusable input field */
 const Field = ({
   icon,
   label,
@@ -531,11 +554,7 @@ const Field = ({
       className={`w-full px-3.5 py-3 rounded-xl border text-gray-800
         placeholder:text-gray-400 bg-gray-50
         focus:outline-none focus:ring-2 transition-all
-        ${
-          error
-            ? "border-red-400 focus:ring-red-200"
-            : "border-gray-200 focus:ring-green-300 focus:border-green-400"
-        }`}
+        ${error ? "border-red-400 focus:ring-red-200" : "border-gray-200 focus:ring-green-300 focus:border-green-400"}`}
       style={{ fontSize: "16px" }}
     />
     {error && <p className="text-red-500 text-xs mt-1">{error}</p>}

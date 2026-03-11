@@ -1,6 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
+import { useCart } from "@/services/Cartcontext";
+import { Plus, Minus } from "lucide-react";
 
 const OrderCard = ({ order, onOrderClick }) => {
+  const { addToCart, updateQty, cartItems } = useCart();
+  const [added, setAdded] = useState(false);
+
+  const simpleCartItem =
+    !order.hasVariants && !order.hasPortions
+      ? cartItems.find((i) => i.cartKey === `${order.id}`)
+      : null;
+  const totalQtyInCart = cartItems
+    .filter((i) => i.id === order.id)
+    .reduce((s, i) => s + i.qty, 0);
+
+  // For items with variants/portions, open modal to pick; otherwise add directly
+  const handleAddToCart = (e) => {
+    e.stopPropagation();
+    if (order.hasVariants || order.hasPortions) {
+      // Open modal so user can pick variant/portion first
+      onOrderClick(order);
+      return;
+    }
+    addToCart(order);
+    setAdded(true);
+    setTimeout(() => setAdded(false), 1500);
+  };
+
   const renderPrice = () => {
     if (order.hasVariants) {
       return (
@@ -32,7 +58,10 @@ const OrderCard = ({ order, onOrderClick }) => {
   return (
     <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer h-full flex flex-col">
       {/* Image Container */}
-      <div className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 h-48 group shrink-0">
+      <div
+        className="relative mb-4 rounded-xl overflow-hidden bg-gray-100 h-48 group shrink-0"
+        onClick={() => onOrderClick(order)}
+      >
         {order.imageUrl ? (
           <img
             src={order.imageUrl}
@@ -72,8 +101,12 @@ const OrderCard = ({ order, onOrderClick }) => {
 
       {/* Content Container */}
       <div className="flex flex-col flex-grow">
-        <h3 className="text-xl font-bold text-gray-800 mb-2">{order.name}</h3>
-
+        <h3
+          className="text-xl font-bold text-gray-800 mb-2 cursor-pointer"
+          onClick={() => onOrderClick(order)}
+        >
+          {order.name}
+        </h3>
         <p className="text-sm text-gray-500 line-clamp-2 mb-4">
           {order.description}
         </p>
@@ -83,15 +116,59 @@ const OrderCard = ({ order, onOrderClick }) => {
           {/* Price Block */}
           <div className="flex-1 min-w-0">{renderPrice()}</div>
 
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onOrderClick(order);
-            }}
-            className="shrink-0 whitespace-nowrap px-5 py-2.5 rounded-full font-bold text-sm text-white bg-gray-900 hover:bg-orange-500 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
-          >
-            Order Now
-          </button>
+          {(order.hasVariants || order.hasPortions) && (
+            <button
+              onClick={handleAddToCart}
+              className="relative shrink-0 whitespace-nowrap px-5 py-2.5 rounded-full font-bold text-sm text-white bg-gray-900 hover:bg-orange-500 shadow-md hover:shadow-lg transition-all duration-200 active:scale-95"
+            >
+              Choose
+              {totalQtyInCart > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-orange-500 text-white text-xs font-extrabold flex items-center justify-center border-2 border-white">
+                  {totalQtyInCart}
+                </span>
+              )}
+            </button>
+          )}
+
+          {/* Simple items: show +/- once added, else "Add to Cart" */}
+          {!order.hasVariants &&
+            !order.hasPortions &&
+            (simpleCartItem ? (
+              <div className="flex items-center gap-2 shrink-0 bg-gray-900 rounded-full px-1 py-1">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateQty(simpleCartItem.cartKey, -1);
+                  }}
+                  className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+                >
+                  <Minus className="w-3.5 h-3.5" />
+                </button>
+                <span className="text-white font-bold text-sm w-4 text-center">
+                  {simpleCartItem.qty}
+                </span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    updateQty(simpleCartItem.cartKey, 1);
+                  }}
+                  className="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-colors"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleAddToCart}
+                className={`shrink-0 whitespace-nowrap px-5 py-2.5 rounded-full font-bold text-sm shadow-md hover:shadow-lg transition-all duration-200 active:scale-95 ${
+                  added
+                    ? "bg-green-500 text-white"
+                    : "text-white bg-gray-900 hover:bg-orange-500"
+                }`}
+              >
+                {added ? "✓ Added" : "Add to Cart"}
+              </button>
+            ))}
         </div>
       </div>
     </div>
