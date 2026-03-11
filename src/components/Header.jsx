@@ -1,156 +1,6 @@
-// "use client";
-
-// import React, { useState } from "react";
-// import { Button } from "@/components/ui/button";
-// import Link from "next/link";
-// import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-
-// import { Menu } from "lucide-react";
-// import { motion } from "framer-motion";
-// import Form from "./Form";
-
-// export default function Header() {
-//   const [isScrolled, setIsScrolled] = useState(false);
-
-//   React.useEffect(() => {
-//     const handleScroll = () => {
-//       setIsScrolled(window.scrollY > 0);
-//     };
-//     window.addEventListener("scroll", handleScroll);
-//     return () => window.removeEventListener("scroll", handleScroll);
-//   }, []);
-
-//   const buttonVariants = {
-//     hover: { scale: 1.05, transition: { duration: 0.2 } },
-//     tap: { scale: 0.95 },
-//   };
-
-//   return (
-//     <motion.header
-//       className={`sticky top-0 z-50 bg-amber-50/80 dark:bg-amber-900/80 backdrop-blur-sm border-b border-amber-200 dark:border-amber-700 transition-shadow ${
-//         isScrolled ? "shadow-md" : ""
-//       }`}
-//       initial={{ y: -100 }}
-//       animate={{ y: 0 }}
-//       transition={{ duration: 0.5 }}
-//     >
-//       <div className="container mx-auto px-6 flex items-center justify-between py-2">
-//         <Link href="/">
-//           <div className="flex items-center gap-3">
-//             <img
-//               src="./logo.png"
-//               alt="Momszyka Logo"
-//               className="w-12 h-12 md:w-16 md:h-16"
-//             />
-//           </div>
-//         </Link>
-//         <nav className="hidden md:flex items-center gap-8">
-//           {/* <motion.div variants={buttonVariants} whileHover="hover">
-//             <Link
-//               className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//               href="/how-it-works"
-//             >
-//               How It Works
-//             </Link>
-//           </motion.div> */}
-//           <motion.div variants={buttonVariants} whileHover="hover">
-//             <Link
-//               className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//               href="/meet-cooks"
-//             >
-//               Meet Our Cooks
-//             </Link>
-//           </motion.div>
-//           <motion.div variants={buttonVariants} whileHover="hover">
-//             <Link
-//               className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//               href="/subscribe"
-//             >
-//               Subscribe
-//             </Link>
-//           </motion.div>
-//           <motion.div variants={buttonVariants} whileHover="hover">
-//             <Link
-//               className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//               href="/our-story"
-//             >
-//               Our Story
-//             </Link>
-//           </motion.div>
-//           <motion.div variants={buttonVariants} whileHover="hover">
-//             <Link
-//               className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//               href="/contact"
-//             >
-//               Contact
-//             </Link>
-//           </motion.div>
-//         </nav>
-//         <div className="flex items-center gap-4">
-//           <Sheet>
-//             <SheetTrigger asChild>
-//               <Button
-//                 variant="ghost"
-//                 className="md:hidden p-2"
-//                 aria-label="Open menu"
-//               >
-//                 <Menu className="h-6 w-6 text-amber-800 dark:text-amber-100" />
-//               </Button>
-//             </SheetTrigger>
-//             <SheetContent
-//               side="right"
-//               className="w-[300px] sm:w-[400px] bg-amber-50 dark:bg-amber-900"
-//             >
-//               <nav className="flex flex-col gap-4 mt-8">
-//                 <Link
-//                   className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//                   href="/how-it-works"
-//                 >
-//                   How It Works
-//                 </Link>
-//                 <Link
-//                   className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//                   href="/meet-cooks"
-//                 >
-//                   Meet Our Cooks
-//                 </Link>
-//                 <Link
-//                   className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//                   href="/subscribe"
-//                 >
-//                   Subscribe
-//                 </Link>
-//                 <Link
-//                   className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//                   href="/our-story"
-//                 >
-//                   Our Story
-//                 </Link>
-//                 <Link
-//                   className="text-sm font-medium text-amber-800 dark:text-amber-100 hover:text-amber-600 dark:hover:text-amber-500 transition-colors"
-//                   href="/contact"
-//                 >
-//                   Contact
-//                 </Link>
-//               </nav>
-//             </SheetContent>
-//           </Sheet>
-//           <motion.div
-//             variants={buttonVariants}
-//             whileHover="hover"
-//             whileTap="tap"
-//           >
-//             <Form />
-//           </motion.div>
-//         </div>
-//       </div>
-//     </motion.header>
-//   );
-// }
-
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -162,8 +12,9 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import { Menu, X } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import Form from "./Form";
+import { useCart } from "@/services/Cartcontext";
 
 const navLinks = [
   { href: "/our-story", label: "About Us" },
@@ -175,14 +26,18 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [emptyTooltip, setEmptyTooltip] = useState(false);
+  const tooltipTimer = useRef(null);
   const pathname = usePathname();
+  const { totalItems, totalPrice, setIsCartOpen } = useCart();
 
-  // ✅ FIX: Reset scroll state whenever the route changes
-  // On mobile, scroll position may not be 0 yet when pathname updates,
-  // so we force-check the real scroll position instead of assuming.
   useEffect(() => {
-    // Immediately sync with actual scroll position on route change
-    setIsScrolled(window.scrollY > 0);
+    if (pathname === "/") {
+      window.scrollTo(0, 0);
+      setIsScrolled(false);
+    } else {
+      setIsScrolled(window.scrollY > 0);
+    }
     setIsHovered(false);
   }, [pathname]);
 
@@ -191,6 +46,16 @@ export default function Header() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleCartClick = () => {
+    if (totalItems === 0) {
+      setEmptyTooltip(true);
+      clearTimeout(tooltipTimer.current);
+      tooltipTimer.current = setTimeout(() => setEmptyTooltip(false), 2500);
+    } else {
+      setIsCartOpen(true);
+    }
+  };
 
   const buttonVariants = {
     hover: { scale: 1.05, transition: { duration: 0.2 } },
@@ -204,7 +69,6 @@ export default function Header() {
     ? navLinks
     : [{ href: "/", label: "Home" }, ...navLinks];
 
-  // On other pages: always solid. On home: transparent until hover/scroll/menu.
   const showBackground = !isHome || isHovered || isScrolled || mobileOpen;
 
   return (
@@ -260,8 +124,93 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* ── Right side: CTA + mobile menu ── */}
+        {/* ── Right side: Cart + CTA + mobile menu ── */}
         <div className="flex items-center gap-2 sm:gap-4">
+          {/* ── Cart Button ── */}
+          <motion.button
+            onClick={handleCartClick}
+            variants={buttonVariants}
+            whileHover="hover"
+            whileTap="tap"
+            className={`relative flex items-center gap-2 px-3 py-2 rounded-xl font-semibold text-sm transition-all duration-200 ${
+              showBackground
+                ? "bg-amber-100 hover:bg-amber-200 text-amber-800"
+                : "bg-white/15 hover:bg-white/25 text-white backdrop-blur-sm"
+            }`}
+          >
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="9" cy="21" r="1" />
+              <circle cx="20" cy="21" r="1" />
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+            </svg>
+            {totalItems > 0 && (
+              <span className="hidden sm:inline font-bold text-[#FF8F00]">
+                ₹{totalPrice}
+              </span>
+            )}
+            {totalItems > 0 && (
+              <motion.span
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-[#FF8F00] text-white text-[10px] font-extrabold flex items-center justify-center"
+              >
+                {totalItems}
+              </motion.span>
+            )}
+          </motion.button>
+
+          {/* ── Empty Cart Tooltip ── */}
+          <AnimatePresence>
+            {emptyTooltip && (
+              <motion.div
+                initial={{ opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.2 }}
+                style={{
+                  position: "fixed",
+                  top: 68,
+                  right: 16,
+                  width: 220,
+                  zIndex: 9999,
+                }}
+              >
+                <Link
+                  href="/subscribe#popular-orders"
+                  onClick={() => setEmptyTooltip(false)}
+                  className="block rounded-2xl overflow-hidden no-underline"
+                  style={{
+                    background: "linear-gradient(135deg, #FF6B35, #FF9A3C)",
+                    boxShadow: "0 8px 24px rgba(255,107,53,0.4)",
+                    textDecoration: "none",
+                  }}
+                >
+                  <div className="px-4 py-3 flex items-center justify-between">
+                    <div>
+                      <p className="text-white font-bold text-sm m-0">
+                        Your cart is empty 🍽️
+                      </p>
+                      <p className="text-white/85 font-semibold text-xs mt-0.5">
+                        Hungry? Check out our menu →
+                      </p>
+                    </div>
+                    <span className="text-white/70 text-lg ml-3">›</span>
+                  </div>
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ── CTA ── */}
           <motion.div
             variants={buttonVariants}
             whileHover="hover"
@@ -271,7 +220,7 @@ export default function Header() {
             <Form />
           </motion.div>
 
-          {/* Mobile hamburger */}
+          {/* ── Mobile hamburger ── */}
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger asChild>
               <Button

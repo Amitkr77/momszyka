@@ -620,7 +620,9 @@ const FullMenuSection = () => {
       </div>
 
       {/* FREQUENT ORDERS COMPONENT PLACED HERE */}
-      <FrequentOrders variant="menu" />
+      <div id="popular-orders">
+        <FrequentOrders variant="menu" />
+      </div>
 
       <SubscriptionPopup
         meal={selectedMeal}
