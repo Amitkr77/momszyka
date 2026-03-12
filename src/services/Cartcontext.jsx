@@ -8,35 +8,30 @@ import React, {
   useEffect,
 } from "react";
 
-const CartContext = createContext(null);
+import { DELIVERY_CHARGE } from "@/utils/Distanceutils";
 
+const CartContext = createContext(null);
 const CART_KEY = "momszyka_cart";
 
 export const CartProvider = ({ children }) => {
-  // Always start empty on server — load from localStorage after mount
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
+  const [deliveryCharge, setDeliveryCharge] = useState(DELIVERY_CHARGE);
 
-  // Load from localStorage only on client after mount
   useEffect(() => {
     try {
       const saved = localStorage.getItem(CART_KEY);
       if (saved) setCartItems(JSON.parse(saved));
-    } catch {
-      // ignore
-    }
+    } catch {}
     setHydrated(true);
   }, []);
 
-  // Persist to localStorage on every cart change (only after hydration)
   useEffect(() => {
     if (!hydrated) return;
     try {
       localStorage.setItem(CART_KEY, JSON.stringify(cartItems));
-    } catch {
-      // ignore
-    }
+    } catch {}
   }, [cartItems, hydrated]);
 
   const addToCart = useCallback((order, selectedVariant = null) => {
@@ -44,14 +39,11 @@ export const CartProvider = ({ children }) => {
       const key = selectedVariant
         ? `${order.id}_${selectedVariant.key}`
         : `${order.id}`;
-
       const existing = prev.find((i) => i.cartKey === key);
-      if (existing) {
+      if (existing)
         return prev.map((i) =>
           i.cartKey === key ? { ...i, qty: i.qty + 1 } : i,
         );
-      }
-
       const price = selectedVariant ? selectedVariant.price : order.price;
       return [
         ...prev,
@@ -70,9 +62,11 @@ export const CartProvider = ({ children }) => {
     });
   }, []);
 
-  const removeFromCart = useCallback((cartKey) => {
-    setCartItems((prev) => prev.filter((i) => i.cartKey !== cartKey));
-  }, []);
+  const removeFromCart = useCallback(
+    (cartKey) =>
+      setCartItems((prev) => prev.filter((i) => i.cartKey !== cartKey)),
+    [],
+  );
 
   const updateQty = useCallback((cartKey, delta) => {
     setCartItems((prev) =>
@@ -85,7 +79,8 @@ export const CartProvider = ({ children }) => {
   const clearCart = useCallback(() => setCartItems([]), []);
 
   const totalItems = cartItems.reduce((s, i) => s + i.qty, 0);
-  const totalPrice = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
+  const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
+  const totalPrice = subtotal + deliveryCharge; // ← includes delivery
 
   return (
     <CartContext.Provider
@@ -96,7 +91,10 @@ export const CartProvider = ({ children }) => {
         updateQty,
         clearCart,
         totalItems,
-        totalPrice,
+        subtotal, // ← food total only
+        totalPrice, // ← food + delivery
+        deliveryCharge, // ← NEW
+        setDeliveryCharge, // ← NEW
         isCartOpen,
         setIsCartOpen,
       }}
