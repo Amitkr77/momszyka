@@ -10,6 +10,8 @@ import {
   Navigation,
   Loader,
 } from "lucide-react";
+import { useCart } from "@/services/Cartcontext";
+import { getDeliveryInfo, DELIVERY_CHARGE } from "@/utils/Distanceutils";
 
 const WhatsAppOrderPopup = ({
   isOpen,
@@ -17,19 +19,34 @@ const WhatsAppOrderPopup = ({
   onOrderComplete,
   orderDetails,
   showCookingInstructions = true,
+  prefillCoords = null, // ← passed from CartDrawer if already captured
+  prefillDeliveryInfo = null, // ← passed from CartDrawer if already calculated
 }) => {
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    detailAddress: "",
-  });
+  const { setDeliveryCharge } = useCart();
+
+  const [form, setForm] = useState({ name: "", phone: "", detailAddress: "" });
   const [errors, setErrors] = useState({});
   const [step, setStep] = useState("form");
 
-  const [locationState, setLocationState] = useState("idle");
-  const [coords, setCoords] = useState(null);
+  // Initialise from CartDrawer's data if available
+  const [locationState, setLocationState] = useState(
+    prefillCoords ? "success" : "idle",
+  );
+  const [coords, setCoords] = useState(prefillCoords);
+  const [deliveryInfo, setDeliveryInfo] = useState(prefillDeliveryInfo);
 
   const scrollRef = useRef(null);
+
+  // Sync if parent re-opens popup with updated prefill
+  useEffect(() => {
+    if (prefillCoords) {
+      setCoords(prefillCoords);
+      setLocationState("success");
+    }
+    if (prefillDeliveryInfo) {
+      setDeliveryInfo(prefillDeliveryInfo);
+    }
+  }, [prefillCoords, prefillDeliveryInfo, isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -47,6 +64,7 @@ const WhatsAppOrderPopup = ({
     };
   }, [isOpen]);
 
+  // Allow re-detection inside popup if needed
   const handleShareLocation = () => {
     if (!navigator.geolocation) {
       setLocationState("error");
@@ -59,6 +77,11 @@ const WhatsAppOrderPopup = ({
         setCoords({ lat: latitude, lng: longitude });
         setLocationState("success");
 
+        const info = getDeliveryInfo(latitude, longitude);
+        setDeliveryInfo(info);
+        setDeliveryCharge(info.deliveryCharge);
+
+        // Auto-fill address via reverse geocoding
         try {
           const res = await fetch(
             `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&zoom=18&addressdetails=1`,
@@ -66,7 +89,6 @@ const WhatsAppOrderPopup = ({
           );
           const data = await res.json();
           const a = data.address || {};
-
           const parts = [
             a.amenity || a.building || a.shop || a.office,
             [a.house_number, a.road || a.pedestrian || a.footway || a.path]
@@ -81,7 +103,6 @@ const WhatsAppOrderPopup = ({
             a.state,
             a.postcode,
           ].filter(Boolean);
-
           const seen = new Set();
           const unique = parts.filter((p) => {
             const k = p.toLowerCase().trim();
@@ -89,22 +110,16 @@ const WhatsAppOrderPopup = ({
             seen.add(k);
             return true;
           });
-
-          if (unique.length > 0) {
+          if (unique.length > 0)
             setForm((p) => ({
               ...p,
               detailAddress: p.detailAddress.trim()
                 ? p.detailAddress
                 : unique.join(", "),
             }));
-          }
-        } catch {
-          // Geocoding failed silently
-        }
+        } catch {}
       },
-      (err) => {
-        setLocationState(err.code === 1 ? "denied" : "error");
-      },
+      (err) => setLocationState(err.code === 1 ? "denied" : "error"),
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
     );
   };
@@ -119,26 +134,29 @@ const WhatsAppOrderPopup = ({
     return e;
   };
 
-  const handleChange = (field) => (ev) =>
-    setForm((p) => ({ ...p, [field]: ev.target.value })) ||
+  const handleChange = (field) => (ev) => {
+    setForm((p) => ({ ...p, [field]: ev.target.value }));
     setErrors((p) => ({ ...p, [field]: undefined }));
+  };
 
-  // ── Build & send WhatsApp message ───────────────────────────────────────────
   const handleCompleteOrder = () => {
     const e = validate();
     if (Object.keys(e).length) return setErrors(e);
 
-    // Build itemized order block
     let orderBlock = "";
     if (orderDetails?.isCart && orderDetails?.items?.length) {
       const itemLines = orderDetails.items
         .map((item) => {
           const variant = item.variantLabel ? ` (${item.variantLabel})` : "";
-          const lineTotal = item.price * item.qty;
-          return `  • ${item.name}${variant}  ×${item.qty}  —  ₹${lineTotal}`;
+          return `  • ${item.name}${variant}  ×${item.qty}  —  ₹${item.price * item.qty}`;
         })
         .join("\n");
-      orderBlock = `*Order Summary:*\n${itemLines}\n\n*Total: ₹${orderDetails.price}*`;
+      const deliveryLine = deliveryInfo
+        ? deliveryInfo.isFree
+          ? `  • Delivery  —  FREE `
+          : `  • Delivery charge  —  ₹${DELIVERY_CHARGE}`
+        : `  • Delivery charge  —  ₹${DELIVERY_CHARGE}`;
+      orderBlock = `*Order Summary:*\n${itemLines}${deliveryLine ? "\n" + deliveryLine : ""}\n\n*Total: ₹${orderDetails.price}*`;
     } else if (orderDetails) {
       orderBlock = `*Order:* ${orderDetails.name}${orderDetails.price ? `  —  ₹${orderDetails.price}` : ""}`;
     } else {
@@ -178,8 +196,7 @@ const WhatsAppOrderPopup = ({
     setStep("form");
     setForm({ name: "", phone: "", detailAddress: "" });
     setErrors({});
-    setLocationState("idle");
-    setCoords(null);
+    // Don't reset location — it came from CartDrawer, keep it
     onClose();
   };
 
@@ -187,7 +204,6 @@ const WhatsAppOrderPopup = ({
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 z-[9998]"
         style={{
@@ -197,7 +213,6 @@ const WhatsAppOrderPopup = ({
         onClick={handleClose}
       />
 
-      {/* Sheet */}
       <div
         className="fixed z-[9999] bg-white shadow-2xl
           bottom-0 left-0 right-0 rounded-t-2xl
@@ -212,7 +227,6 @@ const WhatsAppOrderPopup = ({
           flexDirection: "column",
         }}
       >
-        {/* Drag handle */}
         <div className="flex justify-center pt-3 pb-1 sm:hidden flex-shrink-0">
           <div className="w-10 h-1 rounded-full bg-gray-300" />
         </div>
@@ -234,16 +248,13 @@ const WhatsAppOrderPopup = ({
           </div>
           <button
             onClick={handleClose}
-            className="absolute top-3.5 right-4 w-9 h-9 rounded-full bg-white/20
-              flex items-center justify-center text-white"
-            style={{ WebkitTapHighlightColor: "transparent" }}
+            className="absolute top-3.5 right-4 w-9 h-9 rounded-full bg-white/20 flex items-center justify-center text-white"
             aria-label="Close"
           >
             <X className="w-4 h-4" strokeWidth={2.5} />
           </button>
         </div>
 
-        {/* Scrollable content */}
         <div
           ref={scrollRef}
           className="overflow-y-auto flex-1"
@@ -261,25 +272,24 @@ const WhatsAppOrderPopup = ({
                 WhatsApp Opened!
               </h3>
               <p className="text-gray-500 text-sm leading-relaxed">
-                Your order details have been pre-filled in the chat. Just tap{" "}
-                <strong>Send</strong> to confirm your order.
+                Your order details have been pre-filled. Just tap{" "}
+                <strong>Send</strong> to confirm.
               </p>
               <div className="mt-4 bg-green-50 border border-green-100 rounded-xl px-4 py-3">
                 <p className="text-green-700 text-sm font-medium text-center">
-                  Thank you for your order! It will be delivered to you shortly.
+                  Thank you! Your order will be delivered shortly.
                 </p>
               </div>
               <button
                 onClick={handleClose}
                 className="mt-6 w-full py-4 rounded-xl bg-gray-100 text-gray-700 font-semibold text-base active:bg-gray-200"
-                style={{ WebkitTapHighlightColor: "transparent" }}
               >
                 Close
               </button>
             </div>
           ) : (
             <div className="p-5 space-y-4">
-              {/* Order summary — itemized */}
+              {/* Order + delivery summary */}
               {orderDetails && (
                 <div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 space-y-1.5">
                   {orderDetails.isCart && orderDetails.items?.length ? (
@@ -305,6 +315,28 @@ const WhatsAppOrderPopup = ({
                           </span>
                         </div>
                       ))}
+
+                      {/* Delivery row — shown if location already known */}
+                      {deliveryInfo && (
+                        <div className="flex justify-between items-center text-sm pt-0.5">
+                          <span className="text-gray-600 flex items-center gap-1">
+                            🛵 Delivery
+                            <span className="text-xs text-gray-400 ml-1">
+                              ({deliveryInfo.distanceKm} km)
+                            </span>
+                          </span>
+                          {deliveryInfo.isFree ? (
+                            <span className="text-green-600 font-bold text-xs">
+                              FREE 🎉
+                            </span>
+                          ) : (
+                            <span className="text-gray-800 font-semibold">
+                              ₹{DELIVERY_CHARGE}
+                            </span>
+                          )}
+                        </div>
+                      )}
+
                       <div className="border-t border-amber-200 pt-1.5 mt-1 flex justify-between items-center">
                         <span className="text-sm font-bold text-gray-800">
                           Total
@@ -329,7 +361,6 @@ const WhatsAppOrderPopup = ({
                 </div>
               )}
 
-              {/* Name */}
               <Field
                 icon={<User className="w-4 h-4" />}
                 label="Full Name"
@@ -339,8 +370,6 @@ const WhatsAppOrderPopup = ({
                 error={errors.name}
                 autoComplete="name"
               />
-
-              {/* Phone */}
               <Field
                 icon={<Phone className="w-4 h-4" />}
                 label="Phone Number"
@@ -354,7 +383,7 @@ const WhatsAppOrderPopup = ({
                 autoComplete="tel"
               />
 
-              {/* Location Section */}
+              {/* Location section */}
               <div className="rounded-2xl border border-gray-200 overflow-hidden">
                 <div className="p-4 border-b border-gray-100">
                   <div className="flex items-center justify-between gap-3">
@@ -362,30 +391,28 @@ const WhatsAppOrderPopup = ({
                       <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
                       <div>
                         <p className="text-xs font-semibold text-gray-700">
-                          Share Live Location{" "}
-                          <span className="font-normal text-gray-400">
-                            (optional)
-                          </span>
+                          Live Location
+                          {locationState === "success" && (
+                            <span className="ml-1 font-normal text-gray-400">
+                              (captured in cart)
+                            </span>
+                          )}
                         </p>
                         <p className="text-xs text-gray-400 mt-0.5">
-                          For most accurate delivery — or type address below
+                          Used for delivery &amp; charge calculation
                         </p>
                       </div>
                     </div>
 
                     {locationState === "success" ? (
                       <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-50 border border-green-300 text-green-700 text-xs font-semibold flex-shrink-0">
-                        <CheckCircle className="w-3.5 h-3.5" />
-                        Shared
+                        <CheckCircle className="w-3.5 h-3.5" /> Captured
                       </div>
                     ) : (
                       <button
                         onClick={handleShareLocation}
                         disabled={locationState === "loading"}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full
-                          bg-blue-50 border border-blue-200 text-blue-600 text-xs font-semibold
-                          active:bg-blue-100 flex-shrink-0 disabled:opacity-60"
-                        style={{ WebkitTapHighlightColor: "transparent" }}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-600 text-xs font-semibold active:bg-blue-100 flex-shrink-0 disabled:opacity-60"
                       >
                         {locationState === "loading" ? (
                           <>
@@ -405,8 +432,8 @@ const WhatsAppOrderPopup = ({
                   {locationState === "success" && coords && (
                     <div className="mt-3 flex items-center justify-between bg-green-50 border border-green-100 rounded-xl px-3 py-2">
                       <p className="text-green-700 text-xs">
-                        Location captured! Address auto-filled below — please
-                        verify &amp; add flat/floor/landmark.
+                        Location ready — add flat/floor/landmark below if
+                        needed.
                       </p>
                       <a
                         href={`https://maps.google.com/?q=${coords.lat},${coords.lng}`}
@@ -418,17 +445,14 @@ const WhatsAppOrderPopup = ({
                       </a>
                     </div>
                   )}
-
                   {locationState === "denied" && (
                     <p className="mt-2 text-xs text-red-500">
-                      Location permission denied. Please enable it in your
-                      browser settings and try again.
+                      Location denied. Enable it in browser settings.
                     </p>
                   )}
                   {locationState === "error" && (
                     <p className="mt-2 text-xs text-red-500">
-                      Could not detect location. Please try again or enter
-                      address manually.
+                      Could not detect location. Enter address manually.
                     </p>
                   )}
                   {errors.location && (
@@ -441,19 +465,12 @@ const WhatsAppOrderPopup = ({
                 <div className="p-4 bg-gray-50/50">
                   <div className="flex items-start gap-2 mb-2">
                     <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
-                    <div>
-                      <p className="text-xs font-semibold text-gray-700">
-                        Delivery Address{" "}
-                        <span className="font-normal text-gray-400">
-                          (optional if location shared)
-                        </span>
-                      </p>
-                      <p className="text-xs text-gray-400 mt-0.5">
-                        {locationState === "success"
-                          ? "Auto-filled — edit & add flat no., floor, landmark"
-                          : "Enter your full address if not sharing location"}
-                      </p>
-                    </div>
+                    <p className="text-xs font-semibold text-gray-700">
+                      Delivery Address{" "}
+                      <span className="font-normal text-gray-400">
+                        (flat, floor, landmark)
+                      </span>
+                    </p>
                   </div>
                   <textarea
                     rows={3}
@@ -463,15 +480,12 @@ const WhatsAppOrderPopup = ({
                       setForm((p) => ({ ...p, detailAddress: e.target.value }))
                     }
                     autoComplete="street-address"
-                    className="w-full px-3.5 py-3 rounded-xl border border-gray-200 text-gray-800
-                      placeholder:text-gray-400 resize-none bg-white
-                      focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400 transition-all"
+                    className="w-full px-3.5 py-3 rounded-xl border border-gray-200 text-gray-800 placeholder:text-gray-400 resize-none bg-white focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400 transition-all"
                     style={{ fontSize: "16px" }}
                   />
                 </div>
               </div>
 
-              {/* Cooking Instructions */}
               {showCookingInstructions && (
                 <div>
                   <label className="text-xs font-semibold text-gray-500 flex items-center gap-1.5 mb-1.5">
@@ -486,19 +500,15 @@ const WhatsAppOrderPopup = ({
                     placeholder="e.g. Less spicy, no onion, extra gravy..."
                     value={form.instructions || ""}
                     onChange={handleChange("instructions")}
-                    className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-gray-50
-                    text-gray-800 placeholder:text-gray-400 resize-none
-                    focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400"
+                    className="w-full px-3.5 py-3 rounded-xl border border-gray-200 bg-gray-50 text-gray-800 placeholder:text-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-green-300 focus:border-green-400"
                     style={{ fontSize: "16px" }}
                   />
                 </div>
               )}
 
-              {/* CTA */}
               <button
                 onClick={handleCompleteOrder}
-                className="w-full bg-[#25D366] text-white font-bold rounded-xl
-                  flex items-center justify-center gap-2 active:opacity-90"
+                className="w-full bg-[#25D366] text-white font-bold rounded-xl flex items-center justify-center gap-2 active:opacity-90"
                 style={{
                   WebkitTapHighlightColor: "transparent",
                   fontSize: "16px",
@@ -515,8 +525,7 @@ const WhatsAppOrderPopup = ({
                 className="text-center text-xs text-gray-400"
                 style={{ paddingBottom: "env(safe-area-inset-bottom, 12px)" }}
               >
-                Share location, type address, or both — at least one is
-                required.
+                Location shared in cart · just add your flat/landmark above
               </p>
             </div>
           )}
@@ -551,10 +560,7 @@ const Field = ({
       onChange={onChange}
       maxLength={maxLength}
       autoComplete={autoComplete}
-      className={`w-full px-3.5 py-3 rounded-xl border text-gray-800
-        placeholder:text-gray-400 bg-gray-50
-        focus:outline-none focus:ring-2 transition-all
-        ${error ? "border-red-400 focus:ring-red-200" : "border-gray-200 focus:ring-green-300 focus:border-green-400"}`}
+      className={`w-full px-3.5 py-3 rounded-xl border text-gray-800 placeholder:text-gray-400 bg-gray-50 focus:outline-none focus:ring-2 transition-all ${error ? "border-red-400 focus:ring-red-200" : "border-gray-200 focus:ring-green-300 focus:border-green-400"}`}
       style={{ fontSize: "16px" }}
     />
     {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
