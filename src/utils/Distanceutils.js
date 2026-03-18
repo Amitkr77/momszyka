@@ -63,23 +63,23 @@ export function getDeliveryInfo(userLat, userLng) {
 // TESTING SECTION
 // =======================
 
-console.log("Restaurant Location:", RESTAURANT_COORDS);
-console.log("---- Delivery Tests ----");
+// console.log("Restaurant Location:", RESTAURANT_COORDS);
+// console.log("---- Delivery Tests ----");
 
-const testLocations = [
-  { name: "Very Close", lat: 25.62, lng: 85.129 },
-  { name: "User Example", lat: 25.6157, lng: 85.1652 },
-  { name: "Far Area", lat: 25.63, lng: 85.14 },
-];
+// const testLocations = [
+//   { name: "Very Close", lat: 25.62, lng: 85.129 },
+//   { name: "User Example", lat: 25.6157, lng: 85.1652 },
+//   { name: "Far Area", lat: 25.63, lng: 85.14 },
+// ];
 
-testLocations.forEach((location) => {
-  const result = getDeliveryInfo(location.lat, location.lng);
+// testLocations.forEach((location) => {
+//   const result = getDeliveryInfo(location.lat, location.lng);
 
-  console.log(`
-Location: ${location.name}
-User Coordinates: ${location.lat}, ${location.lng}
-Distance: ${result.distanceKm} km
-Free Delivery: ${result.isFree}
-Delivery Charge: ₹${result.deliveryCharge}
-`);
-});
+//   console.log(`
+// Location: ${location.name}
+// User Coordinates: ${location.lat}, ${location.lng}
+// Distance: ${result.distanceKm} km
+// Free Delivery: ${result.isFree}
+// Delivery Charge: ₹${result.deliveryCharge}
+// `);
+// });
