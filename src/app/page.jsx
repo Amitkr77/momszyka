@@ -51,6 +51,7 @@ const FrequentOrders = dynamic(() => import("@/components/Frequentorders"), {
 });
 import { JoinAsMomDialog } from "@/components/Form";
 import Link from "next/link";
+import BulkOrders from "@/components/BulkOrders";
 
 const testimonials = [
   {
@@ -709,6 +710,7 @@ const Momszyka = () => {
           </section> */}
           <MealSpecialsSection />
           <FrequentOrders />
+          <BulkOrders />
 
           {/* Referral Section - Enhanced with share buttons and animation */}
           <section className="py-6 sm:py-8 bg-gradient-to-b from-[var(--color-light)] to-white">
