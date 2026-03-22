@@ -238,7 +238,7 @@
 //   );
 // }
 
-import { Facebook, Instagram, X } from "lucide-react";
+import { Facebook, Instagram, Linkedin } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import NewsletterForm from "./NewsletterForm";
@@ -265,6 +265,11 @@ const SOCIALS = [
     href: "https://instagram.com/momszyka",
     label: "Instagram",
   },
+  {
+    Icon: Linkedin,
+    href: "https://www.linkedin.com/company/momszyka",
+    label: "LinkedIn",
+  }
 ];
 
 export default function Footer() {

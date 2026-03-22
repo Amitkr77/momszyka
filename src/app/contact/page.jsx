@@ -421,6 +421,7 @@ import {
   Facebook,
   Twitter,
   Instagram,
+  Linkedin,
   CheckCircle2,
   Loader2,
 } from "lucide-react";
@@ -583,6 +584,13 @@ export default function MomszykaContact() {
                 className="bg-amber-100 dark:bg-amber-800 p-2.5 rounded-full text-amber-600 hover:bg-amber-200 dark:hover:bg-amber-700 transition-colors"
               >
                 <Instagram className="h-5 w-5" />
+              </a>
+              <a
+                href="https://www.linkedin.com/company/momszyka/"
+                aria-label="Follow us on LinkedIn"
+                className="bg-amber-100 dark:bg-amber-800 p-2.5 rounded-full text-amber-600 hover:bg-amber-200 dark:hover:bg-amber-700 transition-colors"
+              >
+                <Linkedin className="h-5 w-5" />
               </a>
             </motion.div>
           </motion.div>
