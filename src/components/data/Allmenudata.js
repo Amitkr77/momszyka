@@ -6,7 +6,7 @@ export const ALL_MEALS = [
     badges: ["Fresh ingredients", "Home-style cooking", "Hygienic packaging"],
     meals: 7,
     description:
-      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad, curd & pickle - One meal per day",
+      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad,  & pickle - One meal per day",
     price: 600,
     pricePerMeal: 86,
     planType: "Weekly",
@@ -18,7 +18,7 @@ export const ALL_MEALS = [
     badges: ["Low calorie", "Fresh ingredients", "Nutritionist approved"],
     meals: 7,
     description:
-      "Full Thali with rice, dal, seasonal vegetables, salad, curd & pickle - One meal per day",
+      "Full Thali with rice, dal, seasonal vegetables, salad,  & pickle - One meal per day",
     price: 600,
     pricePerMeal: 86,
     planType: "Weekly",
@@ -30,7 +30,7 @@ export const ALL_MEALS = [
     badges: ["Low calorie", "Nutritionist approved", "Fresh ingredients"],
     meals: 7,
     description:
-      "Thali with 6 chapatis, dal, seasonal vegetables, salad, curd & pickle - One meal per day",
+      "Thali with 6 chapatis, dal, seasonal vegetables, salad,  & pickle - One meal per day",
     price: 600,
     pricePerMeal: 86,
     planType: "Weekly",
@@ -44,7 +44,7 @@ export const ALL_MEALS = [
     badges: ["Fresh ingredients", "Home-style cooking", "Hygienic packaging"],
     meals: 30,
     description:
-      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad, curd & pickle - One meal per day",
+      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad,  & pickle - One meal per day",
     price: 2500,
     pricePerMeal: 83,
     planType: "Monthly",
@@ -56,7 +56,7 @@ export const ALL_MEALS = [
     badges: ["Low calorie", "Fresh ingredients", "Nutritionist approved"],
     meals: 30,
     description:
-      "Full Thali with rice, dal, seasonal vegetables, salad, curd & pickle - One meal per day",
+      "Full Thali with rice, dal, seasonal vegetables, salad,  & pickle - One meal per day",
     price: 2500,
     pricePerMeal: 83,
     planType: "Monthly",
@@ -68,7 +68,7 @@ export const ALL_MEALS = [
     badges: ["Premium quality", "Extra items", "Home-style cooking"],
     meals: 30,
     description:
-      "Thali with 6 chapatis, dal, seasonal vegetables, salad, curd & pickle - One meal per day",
+      "Thali with 6 chapatis, dal, seasonal vegetables, salad,  & pickle - One meal per day",
     price: 2500,
     pricePerMeal: 83,
     planType: "Monthly",
@@ -87,7 +87,7 @@ export const ALL_MEALS = [
     ],
     meals: 14,
     description:
-      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad, curd & pickle - Two meals per day (Lunch & Dinner)",
+      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad,  & pickle - Two meals per day (Lunch & Dinner)",
     price: 1200,
     pricePerMeal: 86,
     planType: "Combo",
@@ -104,7 +104,7 @@ export const ALL_MEALS = [
     ],
     meals: 60,
     description:
-      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad, curd & pickle - Two meals per day (Lunch & Dinner)",
+      "Complete thali with rice, 2 chapatis, dal, seasonal vegetables, salad,  & pickle - Two meals per day (Lunch & Dinner)",
     price: 4000,
     pricePerMeal: 67,
     planType: "Combo",
@@ -121,7 +121,7 @@ export const ALL_MEALS = [
     ],
     meals: 14,
     description:
-      "Full Thali with rice, dal, seasonal vegetables, salad, curd & pickle - Two meals per day (Lunch & Dinner)",
+      "Full Thali with rice, dal, seasonal vegetables, salad,  & pickle - Two meals per day (Lunch & Dinner)",
     price: 1200,
     pricePerMeal: 86,
     planType: "Combo",
@@ -138,7 +138,7 @@ export const ALL_MEALS = [
     ],
     meals: 14,
     description:
-      "Thali with 6 chapatis, dal, seasonal vegetables, salad, curd & pickle - Two meals per day (Lunch & Dinner)",
+      "Thali with 6 chapatis, dal, seasonal vegetables, salad,  & pickle - Two meals per day (Lunch & Dinner)",
     price: 1200,
     pricePerMeal: 86,
     planType: "Combo",
@@ -155,7 +155,7 @@ export const ALL_MEALS = [
     ],
     meals: 60,
     description:
-      "Full Thali with rice, dal, seasonal vegetables, salad, curd & pickle - Two meals per day (Lunch & Dinner)",
+      "Full Thali with rice, dal, seasonal vegetables, salad,  & pickle - Two meals per day (Lunch & Dinner)",
     price: 4000,
     pricePerMeal: 67,
     planType: "Combo",
@@ -172,7 +172,7 @@ export const ALL_MEALS = [
     ],
     meals: 60,
     description:
-      "Thali with 6 chapatis, dal, seasonal vegetables, salad, curd & pickle - Two meals per day (Lunch & Dinner)",
+      "Thali with 6 chapatis, dal, seasonal vegetables, salad,  & pickle - Two meals per day (Lunch & Dinner)",
     price: 4000,
     pricePerMeal: 67,
     planType: "Combo",
