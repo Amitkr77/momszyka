@@ -7,7 +7,7 @@ export const frequentOrders = [
     image: "🍛",
     imageUrl: "/popular/veg_1.jpg",
     description:
-      "A complete meal with dal, seasonal sabzi, rice, roti, and a sweet dish.",
+      "A complete meal with dal, seasonal sabzi, rice and roti.",
     isVeg: true,
   },
   {
