@@ -10,7 +10,8 @@ export const RESTAURANT_COORDS = {
 
 // Delivery settings
 export const FREE_DELIVERY_LIMIT_KM = 1.5; // free delivery within 1.5 km (road distance)
-export const DELIVERY_CHARGE = 30;
+export const DELIVERY_CHARGE = 30; // for 1.5–5 km
+export const LONG_DISTANCE_CHARGE = 50; // for 5–9 km
 
 // Road factor to convert air distance → approx road distance
 const ROAD_DISTANCE_FACTOR = 1.5;
@@ -49,13 +50,37 @@ export function getDeliveryInfo(userLat, userLng) {
   // Step 2: convert to approximate road distance
   const roadDistance = airDistance * ROAD_DISTANCE_FACTOR;
 
-  // Step 3: check free delivery
-  const isFree = roadDistance <= FREE_DELIVERY_LIMIT_KM;
+  // Step 3: round distance
+  const finalDistance = Math.round(roadDistance * 100) / 100;
+
+  let deliveryCharge = 0;
+  let isFree = false;
+  let isServiceable = true;
+  let message = "";
+
+
+  // Step 4: pricing logic (UPDATED)
+  if (finalDistance <= 1.5) {
+    deliveryCharge = 0;
+    isFree = true;
+    message = "Free Delivery 🎉";
+  } else if (finalDistance <= 5) {
+    deliveryCharge = DELIVERY_CHARGE;
+    message = "Standard Delivery 🚚";
+  } else if (finalDistance <= 9) {
+    deliveryCharge = LONG_DISTANCE_CHARGE;
+    message = "Long Distance Delivery 🛵";
+  } else {
+    isServiceable = false;
+    message = "Not Deliverable ❌";
+  }
 
   return {
-    distanceKm: Math.round(roadDistance * 100) / 100,
-    deliveryCharge: isFree ? 0 : DELIVERY_CHARGE,
+    distanceKm: finalDistance,
+    deliveryCharge,
     isFree,
+    isServiceable,
+    message,
   };
 }
 
@@ -63,23 +88,27 @@ export function getDeliveryInfo(userLat, userLng) {
 // TESTING SECTION
 // =======================
 
-// console.log("Restaurant Location:", RESTAURANT_COORDS);
-// console.log("---- Delivery Tests ----");
+console.log("Restaurant Location:", RESTAURANT_COORDS);
+console.log("------ DELIVERY TESTS ------");
 
-// const testLocations = [
-//   { name: "Very Close", lat: 25.62, lng: 85.129 },
-//   { name: "User Example", lat: 25.6157, lng: 85.1652 },
-//   { name: "Far Area", lat: 25.63, lng: 85.14 },
-// ];
+const testLocations = [
+  { name: "Very Close (<1.5km)", lat: 25.62, lng: 85.129 },
+  { name: "Within 5km", lat: 25.6176, lng: 85.1451 },
+  { name: "Within 9km", lat: 25.6475, lng: 85.0820 },
+  { name: "Too Far (>9km)", lat: 25.55, lng: 85.3 },
+];
 
-// testLocations.forEach((location) => {
-//   const result = getDeliveryInfo(location.lat, location.lng);
+testLocations.forEach((location) => {
+  const result = getDeliveryInfo(location.lat, location.lng);
 
-//   console.log(`
-// Location: ${location.name}
-// User Coordinates: ${location.lat}, ${location.lng}
-// Distance: ${result.distanceKm} km
-// Free Delivery: ${result.isFree}
-// Delivery Charge: ₹${result.deliveryCharge}
-// `);
-// });
+  console.log(`
+📍 Location: ${location.name}
+Coordinates: ${location.lat}, ${location.lng}
+Distance: ${result.distanceKm} km
+Message: ${result.message}
+Free Delivery: ${result.isFree}
+Serviceable: ${result.isServiceable}
+Delivery Charge: ₹${result.deliveryCharge}
+-----------------------------------
+  `);
+});

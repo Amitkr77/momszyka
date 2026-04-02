@@ -153,9 +153,9 @@ const WhatsAppOrderPopup = ({
         .join("\n");
       const deliveryLine = deliveryInfo
         ? deliveryInfo.isFree
-          ? `  • Delivery  —  FREE `
-          : `  • Delivery charge  —  ₹${DELIVERY_CHARGE}`
-        : `  • Delivery charge  —  ₹${DELIVERY_CHARGE}`;
+          ? `  • Delivery  —  FREE 🎉`
+          : `  • Delivery charge  —  ₹${deliveryInfo.deliveryCharge} (${deliveryInfo.distanceKm} km)`
+        : `  • Delivery  —  Charge to be calculated based on your location.\n    Free (≤1.5 km)  |  ₹30 (≤5 km)  |  ₹50 (≤9 km)  |  Not deliverable beyond 9 km`;
       orderBlock = `*Order Summary:*\n${itemLines}${deliveryLine ? "\n" + deliveryLine : ""}\n\n*Total: ₹${orderDetails.price}*`;
     } else if (orderDetails) {
       orderBlock = `*Order:* ${orderDetails.name}${orderDetails.price ? `  —  ₹${orderDetails.price}` : ""}`;
@@ -331,7 +331,7 @@ const WhatsAppOrderPopup = ({
                             </span>
                           ) : (
                             <span className="text-gray-800 font-semibold">
-                              ₹{DELIVERY_CHARGE}
+                              ₹{deliveryInfo.deliveryCharge}
                             </span>
                           )}
                         </div>

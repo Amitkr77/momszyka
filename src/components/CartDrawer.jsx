@@ -18,6 +18,10 @@ const CartDrawer = () => {
     setDeliveryCharge,
     isCartOpen,
     setIsCartOpen,
+    isServiceable,
+    setIsServiceable,
+    locationConfirmed,
+    setLocationConfirmed,
   } = useCart();
 
   const [whatsappOpen, setWhatsappOpen] = useState(false);
@@ -41,6 +45,8 @@ const CartDrawer = () => {
         const info = getDeliveryInfo(latitude, longitude);
         setDeliveryInfo(info);
         setDeliveryCharge(info.deliveryCharge);
+        setIsServiceable(info.isServiceable);
+        setLocationConfirmed(true);
       },
       (err) => setLocationState(err.code === 1 ? "denied" : "error"),
       { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 },
@@ -299,9 +305,11 @@ const CartDrawer = () => {
               className={`rounded-2xl border overflow-hidden transition-colors duration-300 ${
                 locationState === "success" && deliveryInfo?.isFree
                   ? "border-green-200 bg-green-50"
-                  : locationState === "success"
-                    ? "border-orange-200 bg-orange-50"
-                    : "border-dashed border-gray-300 bg-gray-50"
+                  : locationState === "success" && !deliveryInfo?.isServiceable
+                    ? "border-red-200 bg-red-50" // ← red card for out-of-zone
+                    : locationState === "success"
+                      ? "border-orange-200 bg-orange-50"
+                      : "border-dashed border-gray-300 bg-gray-50"
               }`}
             >
               {/* idle / loading / error — show prompt */}
@@ -312,10 +320,10 @@ const CartDrawer = () => {
                       🛵 Check Delivery Charge
                     </p>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      Share location —{" "}
-                      <span className="text-green-600 font-semibold">
-                        free delivery within 1.5 km!
-                      </span>
+                      📍 Free (≤1.5 km) · ₹30 (≤5 km) · ₹50 (≤9 km)
+                    </p>
+                    <p className="text-xs text-gray-400 mt-0.5">
+                      Share location to see your exact charge
                     </p>
                     {locationState === "denied" && (
                       <p className="text-xs text-red-500 mt-1">
@@ -349,38 +357,63 @@ const CartDrawer = () => {
 
               {/* success — show result */}
               {locationState === "success" && deliveryInfo && (
-                <div className="px-4 py-3 flex items-center gap-3">
-                  <span className="text-2xl leading-none">
-                    {deliveryInfo.isFree ? "🎉" : "🛵"}
-                  </span>
-                  <div className="flex-1 min-w-0">
+                <div className="px-4 py-3">
+                  {/* Top row — emoji + retry */}
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-2xl leading-none">
+                      {deliveryInfo.isFree
+                        ? "🎉"
+                        : deliveryInfo.isServiceable
+                          ? "🛵"
+                          : "❌"}
+                    </span>
+                    <button
+                      onClick={handleShareLocation}
+                      className="text-xs text-gray-400 hover:text-blue-500 underline flex-shrink-0 transition-colors"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                  {/* Content — full width, no squishing */}
+                  <div className="w-full">
                     {deliveryInfo.isFree ? (
                       <>
                         <p className="text-green-700 font-bold text-sm">
                           Free Delivery!
                         </p>
-                        <p className="text-green-600 text-xs">
+                        <p className="text-green-600 text-xs mt-0.5">
                           {deliveryInfo.distanceKm} km away — delivery is on us
                           🙌
                         </p>
                       </>
+                    ) : !deliveryInfo.isServiceable ? (
+                      <div className="flex flex-col gap-1.5">
+                        <p className="text-red-600 font-bold text-sm">
+                          Sorry, we don't deliver this far
+                        </p>
+                        <p className="text-red-500 text-xs">
+                          {deliveryInfo.distanceKm} km away — outside our
+                          delivery zone.
+                        </p>
+                        <a
+                          href="/subscribe#bulk-orders"
+                          onClick={() => setIsCartOpen(false)}
+                          className="inline-flex items-center gap-1.5 mt-1 px-3 py-2 rounded-full bg-orange-500 text-white text-xs font-bold shadow-sm hover:bg-orange-600 transition-colors w-full justify-center"
+                        >
+                          📦 Place a Bulk Order instead →
+                        </a>
+                      </div>
                     ) : (
                       <>
                         <p className="text-orange-700 font-bold text-sm">
-                          Delivery Charge: ₹{DELIVERY_CHARGE}
+                          Delivery Charge: ₹{deliveryCharge}
                         </p>
-                        <p className="text-orange-600 text-xs">
-                          {deliveryInfo.distanceKm} km away (free within 1.5 km)
+                        <p className="text-orange-500 text-xs mt-0.5">
+                          {deliveryInfo.distanceKm} km away
                         </p>
                       </>
                     )}
                   </div>
-                  <button
-                    onClick={handleShareLocation}
-                    className="text-xs text-gray-400 hover:text-blue-500 underline flex-shrink-0 transition-colors"
-                  >
-                    Retry
-                  </button>
                 </div>
               )}
             </div>
@@ -397,9 +430,11 @@ const CartDrawer = () => {
                   className={`font-semibold ${locationState === "success" && deliveryCharge === 0 ? "text-green-600" : "text-gray-700"}`}
                 >
                   {locationState !== "success" ? (
-                    <span className="text-gray-700 font-semibold">
-                      ₹{DELIVERY_CHARGE}
+                    <span className="text-gray-400 italic text-xs">
+                      Share location
                     </span>
+                  ) : !isServiceable ? (
+                    <span className="text-red-500 font-semibold">N/A</span>
                   ) : deliveryCharge === 0 ? (
                     "FREE"
                   ) : (
@@ -423,9 +458,17 @@ const CartDrawer = () => {
               </a>
               <button
                 onClick={() => setWhatsappOpen(true)}
-                className="flex justify-center items-center py-3 rounded-full font-bold text-white bg-green-500 hover:bg-green-600 text-sm shadow-md transition-all active:scale-95"
+                disabled={locationState === "success" && !isServiceable}
+                className={`flex justify-center items-center py-3 rounded-full font-bold text-white text-sm shadow-md transition-all active:scale-95
+    ${
+      locationState === "success" && !isServiceable
+        ? "bg-gray-300 text-gray-500 shadow-none cursor-not-allowed"
+        : "bg-green-500 hover:bg-green-600"
+    }`}
               >
-                WhatsApp Order
+                {locationState === "success" && !isServiceable
+                  ? "Not Deliverable"
+                  : "WhatsApp Order"}
               </button>
             </div>
           </div>

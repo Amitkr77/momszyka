@@ -310,7 +310,9 @@ const FullMenuSection = () => {
       </div>
 
       {/* ✅ BULK ORDERS SECTION */}
-      <BulkOrders />
+      <div id="bulk-orders">
+        <BulkOrders />
+      </div>
 
       <SubscriptionPopup
         meal={selectedMeal}

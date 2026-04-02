@@ -17,7 +17,9 @@ export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [hydrated, setHydrated] = useState(false);
-  const [deliveryCharge, setDeliveryCharge] = useState(DELIVERY_CHARGE);
+  const [deliveryCharge, setDeliveryCharge] = useState(0);
+  const [isServiceable, setIsServiceable] = useState(true);
+  const [locationConfirmed, setLocationConfirmed] = useState(false);
 
   useEffect(() => {
     try {
@@ -80,7 +82,11 @@ export const CartProvider = ({ children }) => {
 
   const totalItems = cartItems.reduce((s, i) => s + i.qty, 0);
   const subtotal = cartItems.reduce((s, i) => s + i.price * i.qty, 0);
-  const totalPrice = subtotal + deliveryCharge; // ← includes delivery
+  const totalPrice = !locationConfirmed
+    ? subtotal // no location = food price only
+    : isServiceable
+      ? subtotal + deliveryCharge // serviceable = food + delivery
+      : subtotal;
 
   return (
     <CartContext.Provider
@@ -97,6 +103,10 @@ export const CartProvider = ({ children }) => {
         setDeliveryCharge, // ← NEW
         isCartOpen,
         setIsCartOpen,
+        isServiceable,
+        setIsServiceable,
+        locationConfirmed,
+        setLocationConfirmed,
       }}
     >
       {children}
