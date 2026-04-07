@@ -88,27 +88,27 @@ export function getDeliveryInfo(userLat, userLng) {
 // TESTING SECTION
 // =======================
 
-console.log("Restaurant Location:", RESTAURANT_COORDS);
-console.log("------ DELIVERY TESTS ------");
+// console.log("Restaurant Location:", RESTAURANT_COORDS);
+// console.log("------ DELIVERY TESTS ------");
 
-const testLocations = [
-  { name: "Very Close (<1.5km)", lat: 25.62, lng: 85.129 },
-  { name: "Within 5km", lat: 25.6176, lng: 85.1451 },
-  { name: "Within 9km", lat: 25.6475, lng: 85.0820 },
-  { name: "Too Far (>9km)", lat: 25.55, lng: 85.3 },
-];
+// const testLocations = [
+//   { name: "Very Close (<1.5km)", lat: 25.62, lng: 85.129 },
+//   { name: "Within 5km", lat: 25.6176, lng: 85.1451 },
+//   { name: "Within 9km", lat: 25.6475, lng: 85.0820 },
+//   { name: "Too Far (>9km)", lat: 25.55, lng: 85.3 },
+// ];
 
-testLocations.forEach((location) => {
-  const result = getDeliveryInfo(location.lat, location.lng);
+// testLocations.forEach((location) => {
+//   const result = getDeliveryInfo(location.lat, location.lng);
 
-  console.log(`
-📍 Location: ${location.name}
-Coordinates: ${location.lat}, ${location.lng}
-Distance: ${result.distanceKm} km
-Message: ${result.message}
-Free Delivery: ${result.isFree}
-Serviceable: ${result.isServiceable}
-Delivery Charge: ₹${result.deliveryCharge}
------------------------------------
-  `);
-});
+//   console.log(`
+// 📍 Location: ${location.name}
+// Coordinates: ${location.lat}, ${location.lng}
+// Distance: ${result.distanceKm} km
+// Message: ${result.message}
+// Free Delivery: ${result.isFree}
+// Serviceable: ${result.isServiceable}
+// Delivery Charge: ₹${result.deliveryCharge}
+// -----------------------------------
+//   `);
+// });
