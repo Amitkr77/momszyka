@@ -60,7 +60,19 @@ export const AboutMomszyka = () => {
             <div className="flex flex-col gap-2 text-sm text-gray-600">
               <span>❤️ Made with love, just like home</span>
               <span>🌿 Fresh ingredients, every single day</span>
-              <span>🧑‍🍳 FSSAI certified kitchen</span>
+              <span className="flex items-center gap-2 pl-3 border-l-2 border-orange-400 w-fit">
+                <Image
+                  src="/about/fssai_logo.png"
+                  alt="FSSAI"
+                  width={64}
+                  height={28}
+                  className="object-contain"
+                />
+                <span className="flex items-center gap-1 text-base font-medium text-gray-600">
+                  <span className="text-green-500 font-bold">✓</span> Certified
+                  Kitchen
+                </span>
+              </span>
             </div>
 
             <Link href="/our-story" className="inline-block">

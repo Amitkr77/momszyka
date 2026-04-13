@@ -48,7 +48,7 @@ const AboutMomszyka = () => {
   const values = [
     { emoji: "❤️", text: "Made with love, just like home" },
     { emoji: "🌿", text: "Fresh ingredients, every single day" },
-    { emoji: "🧑‍🍳", text: "FSSAI certified" },
+    { emoji: null, text: "Certified Kitchen", isFssai: true },
   ];
 
   const containerVariants = {
@@ -291,14 +291,34 @@ const AboutMomszyka = () => {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 + index * 0.1 }}
-                        className="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-md border border-gray-200 hover:border-[#f25c41]/30 hover:shadow-lg transition-all"
+                        className="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-md border border-gray-200 hover:border-[#f25c41]/30 hover:shadow-lg transition-all pl-3 border-l-2 border-l-orange-400"
                       >
-                        <span className="text-base sm:text-xl">
-                          {value.emoji}
-                        </span>
-                        <span className="text-gray-700 text-xs font-medium">
-                          {value.text}
-                        </span>
+                        {value.isFssai ? (
+                          <>
+                            <Image
+                              src="/about/fssai_logo.png"
+                              alt="FSSAI"
+                              width={52}
+                              height={22}
+                              className="object-contain"
+                            />
+                            <span className="flex items-center gap-1 text-gray-700 text-xs font-medium">
+                              <span className="text-green-500 font-bold">
+                                ✓
+                              </span>
+                              {value.text}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <span className="text-base sm:text-xl">
+                              {value.emoji}
+                            </span>
+                            <span className="text-gray-700 text-xs font-medium">
+                              {value.text}
+                            </span>
+                          </>
+                        )}
                       </motion.div>
                     ))}
                   </div>
